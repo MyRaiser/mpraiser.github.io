@@ -3,7 +3,7 @@
 
 $$\displaystyle{\vec{p}=\sum_{b\in B}\frac{\langle \vec{p},\vec{b}\rangle}{\| \vec{b}\|^2}\vec{b}}$$
 
-对于希尔伯特空间中的元素$x$（是一个函数）可以进行类似的操作：
+现在让我们忽略掉一些数学细节，对于希尔伯特空间中的元素$x$（是一个函数）可以进行类似的操作：
 
 $$\displaystyle{x=\sum_{b\in B}\frac{\langle x,b\rangle}{\|b\|^2}b}$$
 
@@ -33,18 +33,37 @@ $$\displaystyle{f(t)=\mathcal{F}^{-1}[F(j\omega)]=\frac{1}{2\pi}\int_{-\infty}^{
 对于一种变换域方法，存在逆变换的条件的条件是基底函数**正交**，否则变换域之后各维度分量存在混叠，无法进行逆变换。
 
 # 离散时间傅里叶变换（DTFT, Discrete Time Fourier Transformation）
-对于离散时间信号，连续傅里叶变换无法直接应用。我们可以把离散信号看作连续信号在时间点的抽样，记抽样间隔为$T_s$，连续信号为$f(t)$，离散序列为$x(n)$，有：
+对于离散时间信号，连续傅里叶变换无法直接应用。但是我们可以把离散信号看作连续信号在时间点的抽样，记抽样间隔为$T_s$，连续信号为$f(t)$，离散序列为$x(n)$，有：
 
-$$\displaystyle{x(n)=f(t)\bigg|_{t=nT_s}=f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)}$$
+$$\displaystyle{x(n)=f(t)\bigg|_{t=nT_s} \simeq f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)}$$
 
-通过$\delta$函数的帮助（太棒了！），我们可以将连续域与离散域无割裂的联系起来。因此我们可以直接把上式带入CTFT，有：
+通过$\delta$函数的帮助（太棒了！），我们可以将连续域与离散域无割裂的联系起来。因此我们可以直接把上式带入CTFT，为了避免混淆，我们记模拟角频率为$\Omega$，数字角频率为$\omega$，$\omega=\Omega T_s$，记频域函数为$X(e^{j\omega})$，有^[1]：
+
+[^1]:这个方法来自《数字信号处理理论算法与实现（胡广书，第3版）》P54-55，对Z变换的推导。
 
 $$\displaystyle{\begin{aligned}
-    & \int_{-\infty}^{\infty} f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)e^{-j\omega t}\,dt \\
-    & = \sum_{n=-\infty}^{\infty}\int_{-\infty}^{\infty} f(t)e^{-j\omega t} \delta(t-nT_s)\,dt \\
-    & = \sum_{n=-\infty}^{\infty} f(nT_s)  e^{j\omega nT_s} \text{(}\delta \text{函数的性质)}
-\end{aligned}}$$
+    X(e^{j\omega}) & = \int_{-\infty}^{\infty} f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)e^{-j\Omega t}\,dt \\
+    & = \sum_{n=-\infty}^{\infty}\int_{-\infty}^{\infty} f(t)e^{-j\Omega t} \delta(t-nT_s)\,dt \\
+    & = \sum_{n=-\infty}^{\infty} f(nT_s)  e^{-j\Omega T_{s}n} \text{(}\delta \text{函数的性质)} \\
+    \end{aligned}}$$
 
+其中，$f(nT_s)$即为$x(n)$，又有$\omega=\Omega T_s$，则DTFT正变换公式为：
+
+$$\displaystyle{X(e^{j\omega})=\sum_{n=-\infty}^{\infty} x(n)  e^{-j\omega n}}$$
+
+So far so good，DTFT的问题看起来就这样轻易的解决掉了，但是在细枝末节上却隐藏着各种各样的问题。为了避免混淆思维过程，在这里先直接给出正确的IDTFT形式，后文再进行细致讨论（如果有兴趣的话）。IDTFT的正确形式为：
+
+$$\displaystyle{
+    x(n)=\frac{1}{2\pi}\int_{-\pi}^{\pi} X(e^{j\omega})e^{j\omega n}\,d\omega 
+}$$
+
+对原模拟信号的抽样过程相当于将原信号频谱进行了周期搬移，所以在一个$2\pi$周期内的频谱$X(e^{j\omega})$已经包含有原信号的全部信息了，因此只需对$[-\pi,\pi]$进行积分就可以完全还原原信号。
+
+## 模拟角频率和数字角频率的关系
+类型 | 符号| 单位
+:-:|:-:|:-:
+数字角频率 | $\omega$ | rad
+模拟角频率 | $\Omega$ | rad/s
 
 # 离散傅里叶变换（DFT, Discrete Fourier Transformation）/离散时间傅里叶级数（DTFS）
 
@@ -114,6 +133,20 @@ $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 ## 帕塞瓦尔定理（Parseval's Theorem）
 基底具备完备正交性有等价命题，即**帕塞瓦尔定理**成立。如同线性空间中一个向量在不同基底表示下长度（范数）依然相同一样，傅里叶变换前后函数的能量（范数）相同，即傅里叶算符是幺正算符
 
+## 从ICTFT思考IDTFT
+使用相同的思路（从CTFT导出DTFT）来考虑IDTFT，直接带入$X(e^{j\omega})$，有：
+
+$$\displaystyle{\begin{aligned}
+    & f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s) \\
+    &=\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\Omega nT_s}\,d\Omega \\
+    &=\frac{1}{T_s}\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\omega n}\,d\omega 
+    \end{aligned}}$$
+
+
+特别需要注意的是，由于
 ## 频域函数自变量的问题
 我也不知道为什么。
 
+# 拉普拉斯变换（Laplace ）
+# Z变换
+## 从Z变换得到DFT
