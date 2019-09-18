@@ -8,7 +8,7 @@ $$\displaystyle{\vec{p}=\sum_{b\in B}\frac{\langle \vec{p},\vec{b}\rangle}{\| \v
 $$\displaystyle{x=\sum_{b\in B}\frac{\langle x,b\rangle}{\|b\|^2}b}$$
 
 这就完成了一个函数在另一组正交基底函数上的分解工作。在傅里叶变换中，基底选择的就是复指数函数$e^{j\omega t}$。
-
+ 
 # （连续时间）傅里叶变换（CTFT）
 函数的变换域是将一个域的函数，借由一组特定的基底函数，变换到另一个域，以便于分析和处理的方法。如在傅里叶变换中，完成的就是一个时域函数（变量为时间$t$）到频域（变量为角频率$\omega$）的变换。变换域的核心思想是使用一组特定的基底函数的组合去拟合原函数，即变换的过程就是求出各正交基底上幅度分量的过程。在傅里叶变换中，基底函数为所有频率的复指数函数$e^{j\omega t}$，$\omega \in[-\infty ,\infty]（通常理解为正弦函数即可，链接：欧拉公式）的集合$。
 
@@ -131,7 +131,7 @@ $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 为对应的傅里叶正变换。系数的提取仅相当于对得到的频域图形等比例缩放，在反变换时加上去即可，不会影响单独时域或者频域的分析。习惯上来说，提取系数（即逆变换带系数$\dfrac{1}{2\pi}$）的傅里叶变换公式更为常见。
 
 ## 帕塞瓦尔定理（Parseval's Theorem）
-基底具备完备正交性有等价命题，即**帕塞瓦尔定理**成立。如同线性空间中一个向量在不同基底表示下长度（范数）依然相同一样，傅里叶变换前后函数的能量（范数）相同，即傅里叶算符是幺正算符
+帕塞瓦尔定理基底具备完备正交性有等价命题，即**帕塞瓦尔定理**成立。如同线性空间中一个向量在不同基底表示下长度（范数）依然相同一样，傅里叶变换前后函数的能量（范数）相同，即傅里叶算符是幺正算符
 
 ## 从ICTFT思考IDTFT
 使用相同的思路（从CTFT导出DTFT）来考虑IDTFT，直接带入$X(e^{j\omega})$，有：
@@ -139,14 +139,37 @@ $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 $$\displaystyle{\begin{aligned}
     & f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s) \\
     &=\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\Omega nT_s}\,d\Omega \\
-    &=\frac{1}{T_s}\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\omega n}\,d\omega 
+    &=T_s\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\omega n}\,d\omega 
     \end{aligned}}$$
 
+可以观察到，该式与正确的IDTFT形式具有区别。区别有二，一是在积分区间，二是在系数。我们在上文提到DTFT频谱中在一个$2\pi$区间中，已经具备了原信号完全的信息，这个结论显然是正确的。那么为什么会产生这种看似矛盾的佯谬呢？
 
-特别需要注意的是，由于
+原因在于对模拟信号的抽样这一步：
+
+$$\displaystyle{x(n)=f(t)\bigg|_{t=nT_s} \simeq f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)}$$
+
+可以看到上文中在写抽样这一步时，没有写“$=$”，而是写了“$\simeq$”，原因在于，这两者是有细微差异的。回顾$\delta$函数的定义：
+
+$$\left\{\begin{aligned}
+    & \delta (t)=0, x\not=0\\
+    & \int_{-\infty}^{\infty} \delta (t)\, dt=1
+\end{aligned}\right.$$
+
+可见$\delta$函数在非0的位置均为0，在0的位置是一个无穷大（尽管不能简单的把它当成无穷大，但我们暂且这么表示。后文同理）。这就带来了一个问题：当使用$\delta(t-nT_s)$对$f(t)$进行抽样的时候，在$t=nT_s$处得到的并非是$f(nT_s)$的值，而是以$f(nT_s)$为系数的一个无穷大，只有当积分之后才是$f(nT_s)$本身。因此，上文的推导在带入CTFT时，实际带入的是一串带系数的冲激序列。但是最终得到的公式中的$x(n)$确实是系数的序列，仅包含$\{f(nT_s)\}$本身。这有无矛盾？其实并没有。$x(n)$本身就是对各点抽样值的一个表示，而抽样信号$\delta(t-nT_s)$被隐含了。在做离散信号分析的时候，我们关心的是离散序列本身，至于冲激我们并不关心，只需要对$x(n)$作处理就好了，因此DTFT才脱胎于CTFT。
+
+这给我们探讨IDTFT带来了一点点小麻烦，因为套用ICTFT得到的必然是带系数的冲激序列$f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)$（而我们只想关心$x(n)$），对$[-\infty,\infty]$的积分也确实会导致一个无穷大的冲激。剩下的问题只有系数$\frac{1}{T_s}$。这个系数的由来可以这么解释：
+
 ## 频域函数自变量的问题
 我也不知道为什么。
 
-# 拉普拉斯变换（Laplace ）
+# 拉普拉斯变换（LT, Laplace Transformation ）
+LT可以看作是FT的一个推广；或者说，FT是LT的一个特例，他们的区别在于基函数不同。FT的基函数是复指数函数$e^{j\omega t}$，而LT的是带常数的复指数函数$e^{\sigma+j\omega t}$，这使得LT相比于LT具有更强的分析能力，同时有极高的相似性。有：
+
+$$F(s)=\mathcal{L}[f(t)]=$$
+ 
+
 # Z变换
+采用从CTFT推导DTFT同样的方法我们可以简单的从Laplace变换得到Z变换：
+
+
 ## 从Z变换得到DFT
