@@ -7,6 +7,12 @@ $$\displaystyle{\vec{p}=\sum_{b\in B}\frac{\langle \vec{p},\vec{b}\rangle}{\| \v
 
 $$\displaystyle{x=\sum_{b\in B}\frac{\langle x,b\rangle}{\|b\|^2}b}$$
 
+其中$\langle f_i,f_j\rangle$为希尔伯特空间中的向量内积，计算公式如下。$\overline{f_j(x)}$是$f_j(x)$的复共轭。
+
+$$\displaystyle{\langle f_i(x),f_j(x)\rangle =\int_{a}^{b}f_i(x)\overline{f_j(x)}}\, dx$$
+
+
+
 这就完成了一个函数在另一组正交基底函数上的分解工作。在傅里叶变换中，基底选择的就是复指数函数$e^{j\omega t}$。
  
 # （连续时间）傅里叶变换（CTFT）
@@ -63,9 +69,11 @@ $$\displaystyle{
 数字角频率 | $\omega$ | rad
 模拟角频率 | $\Omega$ | rad/s
 
+二者关系为$\omega=\Omega T_s$。
+
 # 离散傅里叶变换（DFT, Discrete Fourier Transformation）
 
-/离散时间傅里叶级数（DTFS）
+DFS/离散时间傅里叶级数（DTFS）
 
 ## 快速傅里叶变换（FFT, Fast Fourier Transformation）
 # 再谈（连续时间）傅里叶级数（CTFS）
@@ -76,7 +84,7 @@ $$\displaystyle{
 CTFT | 连续 | 连续
 CTFS | 连续 | 离散
 DTFT | 离散 | 连续
-DFT/DTFS | 离散 |离散
+DFT | 离散 |离散
 
 # 一些数学
 ## 变换系数的小问题
@@ -91,11 +99,7 @@ $$
 \right.
 $$
 
-其中$\langle f_i,f_j\rangle$为希尔伯特空间中的向量内积，计算公式为：
 
-$$\displaystyle{\langle f_i(x),f_j(x)\rangle =\int_{a}^{b}f_i(x)\overline{f_j(x)}}\, dx$$
-
-$\overline{f_j(x)}$是$f_j(x)$的复共轭。
 
 对于傅里叶变换的正交基底复指数函数$e^{j\omega t}$，为了满足规范正交的条件，设基底系数为$k$，必须满足：
 
@@ -133,7 +137,7 @@ $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 ## 帕塞瓦尔定理（Parseval's Theorem）
 帕塞瓦尔定理基底具备完备正交性有等价命题，即**帕塞瓦尔定理**成立。如同线性空间中一个向量在不同基底表示下长度（范数）依然相同一样，傅里叶变换前后函数的能量（范数）相同，即傅里叶算符是幺正算符
 
-## 从ICTFT思考IDTFT
+## 从ICTFT到IDTFT
 使用相同的思路（从CTFT导出DTFT）来考虑IDTFT，直接带入$X(e^{j\omega})$，有：
 
 $$\displaystyle{\begin{aligned}
@@ -182,7 +186,7 @@ $$\displaystyle{\begin{aligned}
 
 \end{aligned}}$$
 
-此时你可能会突然迷惑了：绕了这么一大圈，我们的目标究竟是什么？但仔细理一理，可以发现方向并没有歪。我们的最终目标是**通过反变换求得$x(n)$**，而$x(n)$是不含无穷大的抽样冲激的那一个。因此（实质上是）通过ICTFT从$x(n)$的频域函数$X(e^{j\omega})$反求得$f(t)$，再通过$x(n)=f(t)\bigg|_{t=nT_s}$，选取$f(t)$在$t=nT_s$点上的函数值。而$\hat{F}(j\Omega)$实质上就是$X(e^{j\omega})$，至此，我们终于得到正确形式的IDTFT：
+此时你可能会突然迷惑了：绕了这么一大圈，我们的目标究竟是什么？但仔细理一理，可以发现方向并没有歪。我们的最终目标是**通过反变换求得$x(n)$**，而$x(n)$是不含无穷大的抽样冲激的那一个。因此（实质上是）通过ICTFT从$x(n)$的频域函数$X(e^{j\omega})$反求得$f(t)$，再通过$x(n)=f(t)\bigg|_{t=nT_s}$，选取$f(t)$在$t=nT_s$点上的函数值。同时$\hat{F}(j\Omega)$实质上就是$X(e^{j\omega})$，至此，我们终于得到正确形式的IDTFT：
 
 $$\displaystyle{\begin{aligned}
     f(t)\bigg|_{t=nT_s} &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} \hat{F}(j\Omega) e^{j\Omega t} \, dw \bigg|_{t=nT_s} \\
@@ -192,9 +196,15 @@ $$\displaystyle{\begin{aligned}
 \end{aligned}}$$
 
 ## 频域函数自变量的问题
+在CTFT中，频域函数通常写成$F(j\omega)$。
+
+在DTFT中，频域函数通常写成$X(e^{j\omega})$。
+
+但是在分析频谱的时候，通常都是以$\omega$为横坐标轴进行绘图。
+
 我也不知道为什么。
 
-# 拉普拉斯变换（LT, Laplace Transformation ）
+# 拉普拉斯变换（LT, Laplace Transformation）
 LT可以看作是FT的一个推广；或者说，FT是LT的一个特例，他们的区别在于基函数不同。FT的基函数是复指数函数$e^{j\omega t}$，而LT的是带常数的复指数函数$e^{\sigma+j\omega t}$，这使得LT相比于LT具有更强的分析能力，同时有极高的相似性。有：
 
 $$F(s)=\mathcal{L}[f(t)]=$$
