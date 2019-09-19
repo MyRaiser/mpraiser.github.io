@@ -39,8 +39,6 @@ $$\displaystyle{x(n)=f(t)\bigg|_{t=nT_s} \simeq f(t)\sum_{n=-\infty}^{\infty}\de
 
 通过$\delta$函数的帮助（太棒了！），我们可以将连续域与离散域无割裂的联系起来。因此我们可以直接把上式带入CTFT，为了避免混淆，我们记模拟角频率为$\Omega$，数字角频率为$\omega$，$\omega=\Omega T_s$，记频域函数为$X(e^{j\omega})$，有^[1]：
 
-[^1]:这个方法来自《数字信号处理理论算法与实现（胡广书，第3版）》P54-55，对Z变换的推导。
-
 $$\displaystyle{\begin{aligned}
     X(e^{j\omega}) & = \int_{-\infty}^{\infty} f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)e^{-j\Omega t}\,dt \\
     & = \sum_{n=-\infty}^{\infty}\int_{-\infty}^{\infty} f(t)e^{-j\Omega t} \delta(t-nT_s)\,dt \\
@@ -65,7 +63,9 @@ $$\displaystyle{
 数字角频率 | $\omega$ | rad
 模拟角频率 | $\Omega$ | rad/s
 
-# 离散傅里叶变换（DFT, Discrete Fourier Transformation）/离散时间傅里叶级数（DTFS）
+# 离散傅里叶变换（DFT, Discrete Fourier Transformation）
+
+/离散时间傅里叶级数（DTFS）
 
 ## 快速傅里叶变换（FFT, Fast Fourier Transformation）
 # 再谈（连续时间）傅里叶级数（CTFS）
@@ -139,7 +139,7 @@ $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 $$\displaystyle{\begin{aligned}
     & f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s) \\
     &=\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\Omega nT_s}\,d\Omega \\
-    &=T_s\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\omega n}\,d\omega 
+    &=\frac{1}{T_s}\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\omega n}\,d\omega 
     \end{aligned}}$$
 
 可以观察到，该式与正确的IDTFT形式具有区别。区别有二，一是在积分区间，二是在系数。我们在上文提到DTFT频谱中在一个$2\pi$区间中，已经具备了原信号完全的信息，这个结论显然是正确的。那么为什么会产生这种看似矛盾的佯谬呢？
@@ -157,7 +157,39 @@ $$\left\{\begin{aligned}
 
 可见$\delta$函数在非0的位置均为0，在0的位置是一个无穷大（尽管不能简单的把它当成无穷大，但我们暂且这么表示。后文同理）。这就带来了一个问题：当使用$\delta(t-nT_s)$对$f(t)$进行抽样的时候，在$t=nT_s$处得到的并非是$f(nT_s)$的值，而是以$f(nT_s)$为系数的一个无穷大，只有当积分之后才是$f(nT_s)$本身。因此，上文的推导在带入CTFT时，实际带入的是一串带系数的冲激序列。但是最终得到的公式中的$x(n)$确实是系数的序列，仅包含$\{f(nT_s)\}$本身。这有无矛盾？其实并没有。$x(n)$本身就是对各点抽样值的一个表示，而抽样信号$\delta(t-nT_s)$被隐含了。在做离散信号分析的时候，我们关心的是离散序列本身，至于冲激我们并不关心，只需要对$x(n)$作处理就好了，因此DTFT才脱胎于CTFT。
 
-这给我们探讨IDTFT带来了一点点小麻烦，因为套用ICTFT得到的必然是带系数的冲激序列$f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)$（而我们只想关心$x(n)$），对$[-\infty,\infty]$的积分也确实会导致一个无穷大的冲激。剩下的问题只有系数$\frac{1}{T_s}$。这个系数的由来可以这么解释：
+这给我们探讨IDTFT带来了一点点小麻烦，因为套用ICTFT得到的必然是带系数的冲激序列$f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)$（而我们只想求得$x(n)$），对$[-\infty,\infty]$的积分也确实会导致一个无穷大的冲激。剩下的问题只有系数$\frac{1}{T_s}$。这个系数的由来可以这么解释：
+
+首先我们回到$f(t)$，$f(t)$的频谱为$F(j\Omega)$。不妨记抽样序列$\displaystyle{\hat{f}(t)=f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)}$，有$\hat{f}(t)$的频谱$\hat{F}(j\Omega)=X(e^{j\omega})$。$F(j\Omega)$与$\hat{F}(j\Omega)$之间有什么关系（当然，假设前提是抽样频率足够大。链接：Nyquist采样定理）？在这里我们先引用一傅里叶变换对：
+
+$$\displaystyle{
+    \sum_{n=-\infty}^{\infty}\delta(t-nT_s) \rightleftharpoons \frac{2\pi}{T_s}\sum_{n=-\infty}^{\infty}\delta(\Omega-n\Omega_s)
+    }$$
+
+由CTFT的时域乘法性质，频域相互卷积，有：
+
+$$\displaystyle{
+    \begin{aligned}
+    \hat{F}(j\Omega) & = \frac{1}{2\pi}F(j\Omega) * \frac{2\pi}{T_s}\sum_{n=-\infty}^{\infty}\delta(\Omega-n\Omega_s) \\
+    & = \frac{1}{T_s}\sum_{n=-\infty}^{\infty}F(j(\Omega-n\Omega_s))
+    \end{aligned}}$$
+
+说明$\hat{F}(j\Omega)$是$F(j\Omega)$的周期重复，且幅值下降为$\displaystyle{\frac{1}{T_s}}$，且频谱不混叠的前提下，一个$\Omega \in [-\Omega_s, \Omega_s]$的单个周期内即含有原信号的全频谱。根据数字角频率和模拟角频率的关系$\omega = \Omega T_s$，即在$\omega \in [-2\pi, 2\pi]$的区间即为$f(t)$的全频谱。因此要得到$f(t)$本身，只需对$\hat{F}(j\Omega)$乘以系数$T_s$，在$\omega \in [-2\pi, 2\pi]$进行ICTFT就可以得到$f(t)$。该过程可以写为：
+
+$$\displaystyle{\begin{aligned}
+    f(t) &= \frac{1}{2\pi}\int_{-\infty}^{\infty} F(j\Omega)e^{j\Omega t}\,d\Omega\\
+    &= \frac{1}{2\pi}\int_{-\infty}^{\infty} \frac{1}{T_s} F(j\Omega)e^{j\Omega t}\,d\omega \\
+    &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} \hat{F}(j\Omega) e^{j\Omega t} \, dw
+
+\end{aligned}}$$
+
+此时你可能会突然迷惑了：绕了这么一大圈，我们的目标究竟是什么？但仔细理一理，可以发现方向并没有歪。我们的最终目标是**通过反变换求得$x(n)$**，而$x(n)$是不含无穷大的抽样冲激的那一个。因此（实质上是）通过ICTFT从$x(n)$的频域函数$X(e^{j\omega})$反求得$f(t)$，再通过$x(n)=f(t)\bigg|_{t=nT_s}$，选取$f(t)$在$t=nT_s$点上的函数值。而$\hat{F}(j\Omega)$实质上就是$X(e^{j\omega})$，至此，我们终于得到正确形式的IDTFT：
+
+$$\displaystyle{\begin{aligned}
+    f(t)\bigg|_{t=nT_s} &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} \hat{F}(j\Omega) e^{j\Omega t} \, dw \bigg|_{t=nT_s} \\
+    &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} X(e^{j\omega}) e^{j\Omega nT_s} \, dw \\
+    &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} X(e^{j\omega}) e^{j\omega n} \, dw \\
+
+\end{aligned}}$$
 
 ## 频域函数自变量的问题
 我也不知道为什么。
@@ -173,3 +205,5 @@ $$F(s)=\mathcal{L}[f(t)]=$$
 
 
 ## 从Z变换得到DFT
+
+[^1]:这个方法来自《数字信号处理理论算法与实现（胡广书，第3版）》P54-55，对Z变换的推导。
