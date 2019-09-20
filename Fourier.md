@@ -72,19 +72,51 @@ $$\displaystyle{
 二者关系为$\omega=\Omega T_s$。
 
 # 离散傅里叶变换（DFT, Discrete Fourier Transformation）
+在了解了从CTFT到DTFT离散化时域的处理方法之后，我们也可以顺理成章的得到DFT了。DFT是为了计算机能进行傅里叶分析的产物。因为计算机只能处理离散量，因此虽然时域离散，但频域依然连续的DTFT不适应需求。那么怎么办？方法很简单，DTFT是通过对连续信号时域采样来得到的，那么我们只要照猫画虎对DTFT频域进行采样就可以了。假设在$\omega \in [-2\pi, 2\pi]$区间里采样$N$个点，采样后离散的频率点有：
 
-DFS/离散时间傅里叶级数（DTFS）
+$$\omega = \frac{2\pi}{N}k = \omega_0 k,\ k\in [0,1,2,\cdots ,N-1]$$
+
+记$X(k)$为频域抽样得到的离散序列，即原序列$x(n)$的DFT，有（特别注意这里抽样序列有一个系数$\displaystyle{\frac{2\pi}{N}}$，是为了保证加抽样后时域信号幅值不变。具体由来在这不作展开，可以参考[从CTFT到DTFT](#1)，原理是相同的（抽样序列的傅里叶变换对的系数））：
+
+$$X(k) = X(e^{j\omega})\bigg|_{\omega = k\omega_0} \simeq X(e^{j\omega}) \cdot \frac{2\pi}{N} \sum_{k, ,=0}^{N-1} \delta(\omega-k\omega_0)$$
+
+对其进行IDTFT（思考一下，为什么进行的是IDTFT？），类似的可以得到：
+
+$$\displaystyle{\begin{aligned}
+    \hat{x}(n) &= \frac{1}{2\pi} \int_{-\pi}^{\pi} \frac{2\pi}{N}X(e^{j\omega})\sum_{k=0}^{N-1} \delta(\omega-k\omega_0) e^{j\omega n}\,d\omega \\
+    &= \frac{1}{2\pi}\frac{2\pi}{N} \sum_{k=0}^{N-1} \int_{-\pi}^{\pi} X(e^{j\omega})\delta(\omega-k\omega_0) e^{j\omega n}\,d\omega \\
+    &= \frac{1}{N} \sum_{k=0}^{N-1} X(e^{j\omega})\bigg|_{\omega = k\omega_0} e^{j\frac{2\pi}{N}nk}
+\end{aligned}}$$
+
+
+
+记$X(e^{j\omega})\bigg|_{\omega = k\omega_0}$。另外记$W_N=e^{-j\frac{2\pi}{N}}$。由于在频域进行了抽样，反求得的$\hat{x}(n)$序列自然也是$x(n)$的周期重复，实际上我们只要取其中$n=0,1,\cdots,N-1$的点就可以了。因此先给出DFT正变换公式为：
+
+$$\displaystyle{
+    X(e^{j\omega})=\sum_{n=0}^{N-1} x(n) W_N^{nk}
+}$$
+
+IDFT公式由上述推导得出：
+
+$$x(n)=\frac{1}{N} \sum_{k=0}^{N-1} X(k) W_N^{-nk}$$
+
+## 离散傅里叶级数（DFS）/离散时间傅里叶级数（DTFS）
+又上述讨论可以得知，DFT变换对的时域和频域其实都是无限长、周期性的。这个无穷离散周期序列到无穷离散周期序列的变换称作离散傅里叶级数（DFS，证明略）。他本质上与DFT是一致的，区别在于DFT是只取其中$N$点进行变换。
 
 ## 快速傅里叶变换（FFT, Fast Fourier Transformation）
+DFT有被非常广泛应用的快速算法，即FFT。
+
 # 再谈（连续时间）傅里叶级数（CTFS）
 笔者在写下这份笔记的时候，其实是非常不愿意讨论傅里叶级数的，因为他形式繁琐，又臭又长，让数学苦手的笔者十分头大，而且在实际分析中很少用得上。奈何查阅的绝大多数资料都是从傅里叶级数讲起，逐步推导出傅里叶变换。这对于理解和应用来说既繁琐又不必要。但是，在从CTFT到DTFT，再到DFT的推进过程中，CTFS也逐渐揭示出清晰的属于他的位置。正如DFT实质上也是DTFS，CTFS实质上为**连续时域**到**离散频域**的变换。
 
+推导方式多种多样 殊途同归
+
 变换类型 | 时域性质 | 频域性质
 :-:|:-:|:-:
-CTFT | 连续 | 连续
-CTFS | 连续 | 离散
-DTFT | 离散 | 连续
-DFT | 离散 |离散
+CTFT | 连续、非周期 | 连续、非周期
+CTFS | 连续、周期 | 离散、非周期
+DTFT | 离散、非周期 | 连续、周期
+DFT | 离散、周期 |离散、周期
 
 # 一些数学
 ## 变换系数的小问题
@@ -132,7 +164,7 @@ f(t) &= \int_{-\infty}^{\infty} \int_{-\infty}^{\infty} f(t)\frac{e^{-j\omega t}
 
 $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 
-为对应的傅里叶正变换。系数的提取仅相当于对得到的频域图形等比例缩放，在反变换时加上去即可，不会影响单独时域或者频域的分析。习惯上来说，提取系数（即逆变换带系数$\dfrac{1}{2\pi}$）的傅里叶变换公式更为常见。
+为对应的傅里叶正变换。系数的提取仅相当于对得到的频域图形等比例缩放，在反变换时加上去即可，不会影响单独时域或者频域的分析。习惯上来说（由于历史原因），提取系数（即逆变换带系数$\dfrac{1}{2\pi}$）的傅里叶变换公式更为常见。喜欢使用带$\dfrac{1}{2\pi}$的原因可能是因为对计算机计算更友好（只需要在正变换加入$\pi$的相关计算了）。
 
 ## 帕塞瓦尔定理（Parseval's Theorem）
 帕塞瓦尔定理基底具备完备正交性有等价命题，即**帕塞瓦尔定理**成立。如同线性空间中一个向量在不同基底表示下长度（范数）依然相同一样，傅里叶变换前后函数的能量（范数）相同，即傅里叶算符是幺正算符
@@ -164,7 +196,7 @@ $$\left\{\begin{aligned}
 这给我们探讨IDTFT带来了一点点小麻烦，因为套用ICTFT得到的必然是带系数的冲激序列$f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)$（而我们只想求得$x(n)$），对$[-\infty,\infty]$的积分也确实会导致一个无穷大的冲激。剩下的问题只有系数$\frac{1}{T_s}$。这个系数的由来可以这么解释：
 
 首先我们回到$f(t)$，$f(t)$的频谱为$F(j\Omega)$。不妨记抽样序列$\displaystyle{\hat{f}(t)=f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)}$，有$\hat{f}(t)$的频谱$\hat{F}(j\Omega)=X(e^{j\omega})$。$F(j\Omega)$与$\hat{F}(j\Omega)$之间有什么关系（当然，假设前提是抽样频率足够大。链接：Nyquist采样定理）？在这里我们先引用一傅里叶变换对：
-
+<span id="1"></span>
 $$\displaystyle{
     \sum_{n=-\infty}^{\infty}\delta(t-nT_s) \rightleftharpoons \frac{2\pi}{T_s}\sum_{n=-\infty}^{\infty}\delta(\Omega-n\Omega_s)
     }$$
@@ -214,6 +246,6 @@ $$F(s)=\mathcal{L}[f(t)]=$$
 采用从CTFT推导DTFT同样的方法我们可以简单的从Laplace变换得到Z变换：
 
 
-## 从Z变换得到DFT
+## 从Z变换得到DTFT
 
 [^1]:这个方法来自《数字信号处理理论算法与实现（胡广书，第3版）》P54-55，对Z变换的推导。
