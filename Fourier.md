@@ -1,4 +1,7 @@
-# 有限维空间的向量分解与无穷维空间的函数分解
+# 傅里叶变换及其相关
+## 前言
+
+# 引入：有限维空间的向量分解与无穷维空间的函数分解
 我们已经熟悉，对于三维欧几里得空间中的向量$\vec{p}$，可以在三个正交基底进行分解$\vec{p}=a\vec{x}+b\vec{y}+c\vec{z}$。其中，$a,b,c$分别是$\vec{p}$在$\vec{x},\vec{y},\vec{z}$上的投影长度。对于欧几里得空间，如果记$B$为正交基底的集合（在三维的例子下即$B=\{\vec{x},\vec{y},\vec{z}\}$），$\vec{b}$为其中一个正交基底，那么向量的正交分解可以写为：
 
 $$\displaystyle{\vec{p}=\sum_{b\in B}\frac{\langle \vec{p},\vec{b}\rangle}{\| \vec{b}\|^2}\vec{b}}$$
@@ -43,7 +46,7 @@ $$\displaystyle{f(t)=\mathcal{F}^{-1}[F(j\omega)]=\frac{1}{2\pi}\int_{-\infty}^{
 
 $$\displaystyle{x(n)=f(t)\bigg|_{t=nT_s} \simeq f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)}$$
 
-通过$\delta$函数的帮助（太棒了！），我们可以将连续域与离散域无割裂的联系起来。因此我们可以直接把上式带入CTFT，为了避免混淆，我们记模拟角频率为$\Omega$，数字角频率为$\omega$，$\omega=\Omega T_s$，记频域函数为$X(e^{j\omega})$，有^[1]：
+通过$\delta$函数的帮助（太棒了！），我们可以将连续域与离散域无割裂的联系起来。因此我们可以直接把上式带入CTFT，为了避免混淆，我们记模拟角频率为$\Omega$，数字角频率为$\omega$，$\omega=\Omega T_s$，记频域函数为$X(e^{j\omega})$，有[^1]：
 
 $$\displaystyle{\begin{aligned}
     X(e^{j\omega}) & = \int_{-\infty}^{\infty} f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)e^{-j\Omega t}\,dt \\
@@ -55,7 +58,7 @@ $$\displaystyle{\begin{aligned}
 
 $$\displaystyle{X(e^{j\omega})=\sum_{n=-\infty}^{\infty} x(n)  e^{-j\omega n}}$$
 
-So far so good，DTFT的问题看起来就这样轻易的解决掉了，但是在细枝末节上却隐藏着各种各样的问题。为了避免混淆思维过程，在这里先直接给出正确的IDTFT形式，后文再进行细致讨论（如果有兴趣的话）。IDTFT的正确形式为：
+So far so good，DTFT的问题看起来就这样轻易的解决掉了，但是在细枝末节上却隐藏着各种各样的问题。为了避免混淆思维过程，在这里先直接给出正确的IDTFT形式，[后文](#ICTFT2IDTFT)再进行细致讨论（如果有兴趣的话）。IDTFT的正确形式为：
 
 $$\displaystyle{
     x(n)=\frac{1}{2\pi}\int_{-\pi}^{\pi} X(e^{j\omega})e^{j\omega n}\,d\omega 
@@ -76,9 +79,9 @@ $$\displaystyle{
 
 $$\omega = \frac{2\pi}{N}k = \omega_0 k,\ k\in [0,1,2,\cdots ,N-1]$$
 
-记$X(k)$为频域抽样得到的离散序列，即原序列$x(n)$的DFT，有（特别注意这里抽样序列有一个系数$\displaystyle{\frac{2\pi}{N}}$，是为了保证加抽样后时域信号幅值不变。具体由来在这不作展开，可以参考[从CTFT到DTFT](#1)，原理是相同的（抽样序列的傅里叶变换对的系数））：
+记$X(k)$为频域抽样得到的离散序列，即原序列$x(n)$的DFT，有（特别注意这里抽样序列有一个系数$\displaystyle{\frac{2\pi}{N}}$，是为了保证加抽样后时域信号幅值不变。具体由来在这不作展开，可以参考[从IDTFT到IDTF](#IDTFT2IDFT)，原理是相同的（抽样序列的傅里叶变换对的系数））：
 
-$$X(k) = X(e^{j\omega})\bigg|_{\omega = k\omega_0} \simeq X(e^{j\omega}) \cdot \frac{2\pi}{N} \sum_{k, ,=0}^{N-1} \delta(\omega-k\omega_0)$$
+$$X(k) = X(e^{j\omega})\bigg|_{\omega = k\omega_0} \simeq X(e^{j\omega}) \cdot \frac{2\pi}{N} \sum_{k=0}^{N-1} \delta(\omega-k\omega_0)$$
 
 对其进行IDTFT（思考一下，为什么进行的是IDTFT？），类似的可以得到：
 
@@ -90,7 +93,7 @@ $$\displaystyle{\begin{aligned}
 
 
 
-记$X(e^{j\omega})\bigg|_{\omega = k\omega_0}$。另外记$W_N=e^{-j\frac{2\pi}{N}}$。由于在频域进行了抽样，反求得的$\hat{x}(n)$序列自然也是$x(n)$的周期重复，实际上我们只要取其中$n=0,1,\cdots,N-1$的点就可以了。因此先给出DFT正变换公式为：
+记$X(k) = X(e^{j\omega})\bigg|_{\omega = k\omega_0}$。另外记$W_N=e^{-j\frac{2\pi}{N}}$。由于在频域进行了抽样，反求得的$\hat{x}(n)$序列自然也是$x(n)$的周期重复，实际上我们只要取其中$n=0,1,\cdots,N-1$的点就可以了。因此先给出DFT正变换公式为：
 
 $$\displaystyle{
     X(e^{j\omega})=\sum_{n=0}^{N-1} x(n) W_N^{nk}
@@ -149,7 +152,7 @@ $$\displaystyle{\int_{-\pi}^{\pi}k^2\,dt=1}$$
 
 $$\displaystyle{k=\frac{1}{\sqrt{2\pi}}}$$
 
-即是说正交基底为$\left \{ \cdots, \dfrac{e^{-2\omega t}}{\sqrt{2\pi}}, \dfrac{-e^{\omega t}}{\sqrt{2\pi}}, \dfrac{1}{\sqrt{2\pi}}, \dfrac{e^{\omega t}}{\sqrt{2\pi}}, \dfrac{e^{2\omega t}}{\sqrt{2\pi}}, \cdots \right \}$（实际上$\omega$取值是连续的）。如同向量的正交分解，各基底上的分量通过$\langle f(t),e^{j\omega t}\rangle$求出。
+即是说正交基底为$\left \{ \cdots, \dfrac{e^{-2j\omega t}}{\sqrt{2\pi}}, \dfrac{-e^{j\omega t}}{\sqrt{2\pi}}, \dfrac{1}{\sqrt{2\pi}}, \dfrac{e^{j\omega t}}{\sqrt{2\pi}}, \dfrac{e^{2j\omega t}}{\sqrt{2\pi}}, \cdots \right \}$（实际上$\omega$取值是连续的）。如同向量的正交分解，各基底上的分量通过$\langle f(t),\dfrac{e^{kj\omega t}}{\sqrt{2\pi}}\rangle$求出。
 
 如果使用这组正交基底的话，傅里叶变换对就可以写为：
 
@@ -177,7 +180,7 @@ $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 ## 帕塞瓦尔定理（Parseval's Theorem）
 帕塞瓦尔定理基底具备完备正交性有等价命题，即**帕塞瓦尔定理**成立。如同线性空间中一个向量在不同基底表示下长度（范数）依然相同一样，傅里叶变换前后函数的能量（范数）相同，即傅里叶算符是幺正算符
 
-## 从ICTFT到IDTFT
+## 从ICTFT到IDTFT<span id="ICTFT2IDTFT"></span>
 使用相同的思路（从CTFT导出DTFT）来考虑IDTFT，直接带入$X(e^{j\omega})$，有：
 
 $$\displaystyle{\begin{aligned}
@@ -204,9 +207,13 @@ $$\left\{\begin{aligned}
 这给我们探讨IDTFT带来了一点点小麻烦，因为套用ICTFT得到的必然是带系数的冲激序列$f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)$（而我们只想求得$x(n)$），对$[-\infty,\infty]$的积分也确实会导致一个无穷大的冲激。剩下的问题只有系数$\frac{1}{T_s}$。这个系数的由来可以这么解释：
 
 首先我们回到$f(t)$，$f(t)$的频谱为$F(j\Omega)$。不妨记抽样序列$\displaystyle{\hat{f}(t)=f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)}$，有$\hat{f}(t)$的频谱$\hat{F}(j\Omega)=X(e^{j\omega})$。$F(j\Omega)$与$\hat{F}(j\Omega)$之间有什么关系（当然，假设前提是抽样频率足够大。链接：Nyquist采样定理）？在这里我们先引用一傅里叶变换对：
-<span id="1"></span>
+
 $$\displaystyle{
-    \sum_{n=-\infty}^{\infty}\delta(t-nT_s) \rightleftharpoons \frac{2\pi}{T_s}\sum_{n=-\infty}^{\infty}\delta(\Omega-n\Omega_s)
+    \sum_{n=-\infty}^{\infty}\delta(t-nT_s) \rightleftharpoons \Omega_s \sum_{n=-\infty}^{\infty}\delta(\Omega-n\Omega_s)
+    }$$
+
+$$\displaystyle{
+    \Omega_s = 2\pi f_s=\frac{2\pi}{T_s}
     }$$
 
 由CTFT的时域乘法性质，频域相互卷积，有：
@@ -223,7 +230,6 @@ $$\displaystyle{\begin{aligned}
     f(t) &= \frac{1}{2\pi}\int_{-\infty}^{\infty} F(j\Omega)e^{j\Omega t}\,d\Omega\\
     &= \frac{1}{2\pi}\int_{-\infty}^{\infty} \frac{1}{T_s} F(j\Omega)e^{j\Omega t}\,d\omega \\
     &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} \hat{F}(j\Omega) e^{j\Omega t} \, dw
-
 \end{aligned}}$$
 
 此时你可能会突然迷惑了：绕了这么一大圈，我们的目标究竟是什么？但仔细理一理，可以发现方向并没有歪。我们的最终目标是**通过反变换求得$x(n)$**，而$x(n)$是不含无穷大的抽样冲激的那一个。因此（实质上是）通过ICTFT从$x(n)$的频域函数$X(e^{j\omega})$反求得$f(t)$，再通过$x(n)=f(t)\bigg|_{t=nT_s}$，选取$f(t)$在$t=nT_s$点上的函数值。同时$\hat{F}(j\Omega)$实质上就是$X(e^{j\omega})$，至此，我们终于得到正确形式的IDTFT：
@@ -232,8 +238,24 @@ $$\displaystyle{\begin{aligned}
     f(t)\bigg|_{t=nT_s} &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} \hat{F}(j\Omega) e^{j\Omega t} \, dw \bigg|_{t=nT_s} \\
     &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} X(e^{j\omega}) e^{j\Omega nT_s} \, dw \\
     &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} X(e^{j\omega}) e^{j\omega n} \, dw \\
-
 \end{aligned}}$$
+
+## 从IDTFT到IDFT<span id="IDTFT2IDFT"></span>
+关于DFT中所加采样函数的系数问题，回想从ICTFT到IDTFT中使用的变换对：
+$$\displaystyle{
+    \sum_{n=-\infty}^{\infty}\delta(t-nT_s) \rightleftharpoons \Omega_s \sum_{n=-\infty}^{\infty}\delta(\Omega-n\Omega_s)
+}$$
+在从DTFT到DFT中，进行的是类似的操作，不过因为是对频域进行采样，所以频域的采样函数需要补上上方变换对的系数。
+
+$$\displaystyle{
+    \sum_{n=-\infty}^{\infty}\delta(t-nT_0) \rightleftharpoons \omega_0 \sum_{k=-\infty}^{\infty} \delta(\omega-k\omega_0)
+}$$
+
+又有：
+
+$$\omega_0 = \frac{2\pi}{N}$$
+
+$$T_0 = N$$
 
 ## 频域函数自变量的问题
 在CTFT中，频域函数通常写成$F(j\omega)$。
@@ -246,4 +268,4 @@ $$\displaystyle{\begin{aligned}
 
 
 
-[^1]:这个方法来自《数字信号处理理论算法与实现（胡广书，第3版）》P54-55，对Z变换的推导。
+[^1]: 这个方法来自《数字信号处理理论算法与实现（胡广书，第3版）》P54-55，对Z变换的推导（类比）。
