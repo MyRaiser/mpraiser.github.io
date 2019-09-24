@@ -1,6 +1,26 @@
 # 傅里叶变换及其相关
 ## 前言
 
+- [傅里叶变换及其相关](#%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2%e5%8f%8a%e5%85%b6%e7%9b%b8%e5%85%b3)
+  - [前言](#%e5%89%8d%e8%a8%80)
+- [引入：有限维空间的向量分解与无穷维空间的函数分解](#%e5%bc%95%e5%85%a5%e6%9c%89%e9%99%90%e7%bb%b4%e7%a9%ba%e9%97%b4%e7%9a%84%e5%90%91%e9%87%8f%e5%88%86%e8%a7%a3%e4%b8%8e%e6%97%a0%e7%a9%b7%e7%bb%b4%e7%a9%ba%e9%97%b4%e7%9a%84%e5%87%bd%e6%95%b0%e5%88%86%e8%a7%a3)
+- [（连续时间）傅里叶变换（CTFT）](#%e8%bf%9e%e7%bb%ad%e6%97%b6%e9%97%b4%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2ctft)
+- [离散时间傅里叶变换（DTFT, Discrete Time Fourier Transformation）](#%e7%a6%bb%e6%95%a3%e6%97%b6%e9%97%b4%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2dtft-discrete-time-fourier-transformation)
+  - [模拟角频率和数字角频率的关系](#%e6%a8%a1%e6%8b%9f%e8%a7%92%e9%a2%91%e7%8e%87%e5%92%8c%e6%95%b0%e5%ad%97%e8%a7%92%e9%a2%91%e7%8e%87%e7%9a%84%e5%85%b3%e7%b3%bb)
+- [离散傅里叶变换（DFT, Discrete Fourier Transformation）](#%e7%a6%bb%e6%95%a3%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2dft-discrete-fourier-transformation)
+  - [离散傅里叶级数（DFS）/离散时间傅里叶级数（DTFS）](#%e7%a6%bb%e6%95%a3%e5%82%85%e9%87%8c%e5%8f%b6%e7%ba%a7%e6%95%b0dfs%e7%a6%bb%e6%95%a3%e6%97%b6%e9%97%b4%e5%82%85%e9%87%8c%e5%8f%b6%e7%ba%a7%e6%95%b0dtfs)
+  - [快速傅里叶变换（FFT, Fast Fourier Transformation）](#%e5%bf%ab%e9%80%9f%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2fft-fast-fourier-transformation)
+- [再谈（连续时间）傅里叶级数（CTFS）](#%e5%86%8d%e8%b0%88%e8%bf%9e%e7%bb%ad%e6%97%b6%e9%97%b4%e5%82%85%e9%87%8c%e5%8f%b6%e7%ba%a7%e6%95%b0ctfs)
+- [拉普拉斯变换（LT, Laplace Transformation）](#%e6%8b%89%e6%99%ae%e6%8b%89%e6%96%af%e5%8f%98%e6%8d%a2lt-laplace-transformation)
+- [Z变换](#z%e5%8f%98%e6%8d%a2)
+  - [从Z变换得到DTFT](#%e4%bb%8ez%e5%8f%98%e6%8d%a2%e5%be%97%e5%88%b0dtft)
+- [一些数学](#%e4%b8%80%e4%ba%9b%e6%95%b0%e5%ad%a6)
+  - [变换系数的小问题](#%e5%8f%98%e6%8d%a2%e7%b3%bb%e6%95%b0%e7%9a%84%e5%b0%8f%e9%97%ae%e9%a2%98)
+  - [帕塞瓦尔定理（Parseval's Theorem）](#%e5%b8%95%e5%a1%9e%e7%93%a6%e5%b0%94%e5%ae%9a%e7%90%86parsevals-theorem)
+  - [从ICTFT到IDTFT](#%e4%bb%8eictft%e5%88%b0idtft)
+  - [从IDTFT到IDFT](#%e4%bb%8eidtft%e5%88%b0idft)
+  - [频域函数自变量的问题](#%e9%a2%91%e5%9f%9f%e5%87%bd%e6%95%b0%e8%87%aa%e5%8f%98%e9%87%8f%e7%9a%84%e9%97%ae%e9%a2%98)
+
 # 引入：有限维空间的向量分解与无穷维空间的函数分解
 我们已经熟悉，对于三维欧几里得空间中的向量$\vec{p}$，可以在三个正交基底进行分解$\vec{p}=a\vec{x}+b\vec{y}+c\vec{z}$。其中，$a,b,c$分别是$\vec{p}$在$\vec{x},\vec{y},\vec{z}$上的投影长度。对于欧几里得空间，如果记$B$为正交基底的集合（在三维的例子下即$B=\{\vec{x},\vec{y},\vec{z}\}$），$\vec{b}$为其中一个正交基底，那么向量的正交分解可以写为：
 
@@ -13,8 +33,6 @@ $$\displaystyle{x=\sum_{b\in B}\frac{\langle x,b\rangle}{\|b\|^2}b}$$
 其中$\langle f_i,f_j\rangle$为希尔伯特空间中的向量内积，计算公式如下。$\overline{f_j(x)}$是$f_j(x)$的复共轭。
 
 $$\displaystyle{\langle f_i(x),f_j(x)\rangle =\int_{a}^{b}f_i(x)\overline{f_j(x)}}\, dx$$
-
-
 
 这就完成了一个函数在另一组正交基底函数上的分解工作。在傅里叶变换中，基底选择的就是复指数函数$e^{j\omega t}$。
  
@@ -47,6 +65,8 @@ $$\displaystyle{f(t)=\mathcal{F}^{-1}[F(j\omega)]=\frac{1}{2\pi}\int_{-\infty}^{
 $$\displaystyle{x(n)=f(t)\bigg|_{t=nT_s} \simeq f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)}$$
 
 通过$\delta$函数的帮助（太棒了！），我们可以将连续域与离散域无割裂的联系起来。因此我们可以直接把上式带入CTFT，为了避免混淆，我们记模拟角频率为$\Omega$，数字角频率为$\omega$，$\omega=\Omega T_s$，记频域函数为$X(e^{j\omega})$，有[^1]：
+
+[^1]: 这个方法来自《数字信号处理理论算法与实现（胡广书，第3版）》P54-55，对Z变换的推导（类比）。
 
 $$\displaystyle{\begin{aligned}
     X(e^{j\omega}) & = \int_{-\infty}^{\infty} f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)e^{-j\Omega t}\,dt \\
@@ -268,4 +288,3 @@ $$T_0 = N$$
 
 
 
-[^1]: 这个方法来自《数字信号处理理论算法与实现（胡广书，第3版）》P54-55，对Z变换的推导（类比）。
