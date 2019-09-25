@@ -13,7 +13,7 @@
 
     不需要重启更换系统（省事），文件交互简单。
 
-## 食用方法
+## WSL食用方法
 一个主要的参考文档：
 
 [微软官方的WSL说明文档](https://docs.microsoft.com/en-us/windows/wsl/install-on-server)
