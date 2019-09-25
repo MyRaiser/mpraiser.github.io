@@ -1,27 +1,27 @@
 # 傅里叶变换及其相关
 ## 前言
 
-- [傅里叶变换及其相关](#%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2%e5%8f%8a%e5%85%b6%e7%9b%b8%e5%85%b3)
-  - [前言](#%e5%89%8d%e8%a8%80)
-- [引入：有限维空间的向量分解与无穷维空间的函数分解](#%e5%bc%95%e5%85%a5%e6%9c%89%e9%99%90%e7%bb%b4%e7%a9%ba%e9%97%b4%e7%9a%84%e5%90%91%e9%87%8f%e5%88%86%e8%a7%a3%e4%b8%8e%e6%97%a0%e7%a9%b7%e7%bb%b4%e7%a9%ba%e9%97%b4%e7%9a%84%e5%87%bd%e6%95%b0%e5%88%86%e8%a7%a3)
-- [（连续时间）傅里叶变换（CTFT）](#%e8%bf%9e%e7%bb%ad%e6%97%b6%e9%97%b4%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2ctft)
-- [离散时间傅里叶变换（DTFT, Discrete Time Fourier Transformation）](#%e7%a6%bb%e6%95%a3%e6%97%b6%e9%97%b4%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2dtft-discrete-time-fourier-transformation)
-  - [模拟角频率和数字角频率的关系](#%e6%a8%a1%e6%8b%9f%e8%a7%92%e9%a2%91%e7%8e%87%e5%92%8c%e6%95%b0%e5%ad%97%e8%a7%92%e9%a2%91%e7%8e%87%e7%9a%84%e5%85%b3%e7%b3%bb)
-- [离散傅里叶变换（DFT, Discrete Fourier Transformation）](#%e7%a6%bb%e6%95%a3%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2dft-discrete-fourier-transformation)
-  - [离散傅里叶级数（DFS）/离散时间傅里叶级数（DTFS）](#%e7%a6%bb%e6%95%a3%e5%82%85%e9%87%8c%e5%8f%b6%e7%ba%a7%e6%95%b0dfs%e7%a6%bb%e6%95%a3%e6%97%b6%e9%97%b4%e5%82%85%e9%87%8c%e5%8f%b6%e7%ba%a7%e6%95%b0dtfs)
-  - [快速傅里叶变换（FFT, Fast Fourier Transformation）](#%e5%bf%ab%e9%80%9f%e5%82%85%e9%87%8c%e5%8f%b6%e5%8f%98%e6%8d%a2fft-fast-fourier-transformation)
-- [再谈（连续时间）傅里叶级数（CTFS）](#%e5%86%8d%e8%b0%88%e8%bf%9e%e7%bb%ad%e6%97%b6%e9%97%b4%e5%82%85%e9%87%8c%e5%8f%b6%e7%ba%a7%e6%95%b0ctfs)
-- [拉普拉斯变换（LT, Laplace Transformation）](#%e6%8b%89%e6%99%ae%e6%8b%89%e6%96%af%e5%8f%98%e6%8d%a2lt-laplace-transformation)
-- [Z变换](#z%e5%8f%98%e6%8d%a2)
-  - [从Z变换得到DTFT](#%e4%bb%8ez%e5%8f%98%e6%8d%a2%e5%be%97%e5%88%b0dtft)
-- [一些数学](#%e4%b8%80%e4%ba%9b%e6%95%b0%e5%ad%a6)
-  - [变换系数的小问题](#%e5%8f%98%e6%8d%a2%e7%b3%bb%e6%95%b0%e7%9a%84%e5%b0%8f%e9%97%ae%e9%a2%98)
-  - [帕塞瓦尔定理（Parseval's Theorem）](#%e5%b8%95%e5%a1%9e%e7%93%a6%e5%b0%94%e5%ae%9a%e7%90%86parsevals-theorem)
-  - [从ICTFT到IDTFT](#%e4%bb%8eictft%e5%88%b0idtft)
-  - [从IDTFT到IDFT](#%e4%bb%8eidtft%e5%88%b0idft)
-  - [频域函数自变量的问题](#%e9%a2%91%e5%9f%9f%e5%87%bd%e6%95%b0%e8%87%aa%e5%8f%98%e9%87%8f%e7%9a%84%e9%97%ae%e9%a2%98)
+- [傅里叶变换及其相关](#傅里叶变换及其相关)
+  - [前言](#前言)
+  - [引入：有限维空间的向量分解与无穷维空间的函数分解](#引入有限维空间的向量分解与无穷维空间的函数分解)
+  - [（连续时间）傅里叶变换（CTFT）](#连续时间傅里叶变换ctft)
+  - [离散时间傅里叶变换（DTFT, Discrete Time Fourier Transformation）](#离散时间傅里叶变换dtft-discrete-time-fourier-transformation)
+    - [模拟角频率和数字角频率的关系](#模拟角频率和数字角频率的关系)
+  - [离散傅里叶变换（DFT, Discrete Fourier Transformation）](#离散傅里叶变换dft-discrete-fourier-transformation)
+    - [离散傅里叶级数（DFS）/离散时间傅里叶级数（DTFS）](#离散傅里叶级数dfs离散时间傅里叶级数dtfs)
+    - [快速傅里叶变换（FFT, Fast Fourier Transformation）](#快速傅里叶变换fft-fast-fourier-transformation)
+  - [再谈（连续时间）傅里叶级数（CTFS）](#再谈连续时间傅里叶级数ctfs)
+  - [拉普拉斯变换（LT, Laplace Transformation）](#拉普拉斯变换lt-laplace-transformation)
+  - [Z变换](#z变换)
+    - [从Z变换得到DTFT](#从z变换得到dtft)
+  - [一些数学](#一些数学)
+    - [变换系数的小问题](#变换系数的小问题)
+    - [帕塞瓦尔定理（Parseval's Theorem）](#帕塞瓦尔定理parsevals-theorem)
+    - [从ICTFT到IDTFT](#从ictft到idtft)
+  - [从IDTFT到IDFT](#从idtft到idft)
+    - [频域函数自变量的问题](#频域函数自变量的问题)
 
-# 引入：有限维空间的向量分解与无穷维空间的函数分解
+## 引入：有限维空间的向量分解与无穷维空间的函数分解
 我们已经熟悉，对于三维欧几里得空间中的向量$\vec{p}$，可以在三个正交基底进行分解$\vec{p}=a\vec{x}+b\vec{y}+c\vec{z}$。其中，$a,b,c$分别是$\vec{p}$在$\vec{x},\vec{y},\vec{z}$上的投影长度。对于欧几里得空间，如果记$B$为正交基底的集合（在三维的例子下即$B=\{\vec{x},\vec{y},\vec{z}\}$），$\vec{b}$为其中一个正交基底，那么向量的正交分解可以写为：
 
 $$\displaystyle{\vec{p}=\sum_{b\in B}\frac{\langle \vec{p},\vec{b}\rangle}{\| \vec{b}\|^2}\vec{b}}$$
@@ -36,7 +36,7 @@ $$\displaystyle{\langle f_i(x),f_j(x)\rangle =\int_{a}^{b}f_i(x)\overline{f_j(x)
 
 这就完成了一个函数在另一组正交基底函数上的分解工作。在傅里叶变换中，基底选择的就是复指数函数$e^{j\omega t}$。
  
-# （连续时间）傅里叶变换（CTFT）
+## （连续时间）傅里叶变换（CTFT）
 函数的变换域是将一个域的函数，借由一组特定的基底函数，变换到另一个域，以便于分析和处理的方法。如在傅里叶变换中，完成的就是一个时域函数（变量为时间$t$）到频域（变量为角频率$\omega$）的变换。变换域的核心思想是使用一组特定的基底函数的组合去拟合原函数，即变换的过程就是求出各正交基底上幅度分量的过程。在傅里叶变换中，基底函数为所有频率的复指数函数$e^{j\omega t}$，$\omega \in[-\infty ,\infty]（通常理解为正弦函数即可，链接：欧拉公式）的集合$。
 
 可以记傅里叶变换为：
@@ -59,7 +59,7 @@ $$\displaystyle{f(t)=\mathcal{F}^{-1}[F(j\omega)]=\frac{1}{2\pi}\int_{-\infty}^{
 
 对于一种变换域方法，存在逆变换的条件的条件是基底函数**正交**，否则变换域之后各维度分量存在混叠，无法进行逆变换。
 
-# 离散时间傅里叶变换（DTFT, Discrete Time Fourier Transformation）
+## 离散时间傅里叶变换（DTFT, Discrete Time Fourier Transformation）
 对于离散时间信号，连续傅里叶变换无法直接应用。但是我们可以把离散信号看作连续信号在时间点的抽样，记抽样间隔为$T_s$，连续信号为$f(t)$，离散序列为$x(n)$，有：
 
 $$\displaystyle{x(n)=f(t)\bigg|_{t=nT_s} \simeq f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s)}$$
@@ -78,7 +78,7 @@ $$\displaystyle{\begin{aligned}
 
 $$\displaystyle{X(e^{j\omega})=\sum_{n=-\infty}^{\infty} x(n)  e^{-j\omega n}}$$
 
-So far so good，DTFT的问题看起来就这样轻易的解决掉了，但是在细枝末节上却隐藏着各种各样的问题。为了避免混淆思维过程，在这里先直接给出正确的IDTFT形式，[后文](#ICTFT2IDTFT)再进行细致讨论（如果有兴趣的话）。IDTFT的正确形式为：
+So far so good，DTFT的问题看起来就这样轻易的解决掉了，但是在细枝末节上却隐藏着各种各样的问题。为了避免混淆思维过程，在这里先直接给出正确的IDTFT形式，[后文](#从ICTFT到IDTFT)再进行细致讨论（如果有兴趣的话）。IDTFT的正确形式为：
 
 $$\displaystyle{
     x(n)=\frac{1}{2\pi}\int_{-\pi}^{\pi} X(e^{j\omega})e^{j\omega n}\,d\omega 
@@ -86,7 +86,7 @@ $$\displaystyle{
 
 对原模拟信号的抽样过程相当于将原信号频谱进行了周期搬移，所以在一个$2\pi$周期内的频谱$X(e^{j\omega})$已经包含有原信号的全部信息了，因此只需对$[-\pi,\pi]$进行积分就可以完全还原原信号。
 
-## 模拟角频率和数字角频率的关系
+### 模拟角频率和数字角频率的关系
 类型 | 符号| 单位
 :-:|:-:|:-:
 数字角频率 | $\omega$ | rad
@@ -94,12 +94,12 @@ $$\displaystyle{
 
 二者关系为$\omega=\Omega T_s$。
 
-# 离散傅里叶变换（DFT, Discrete Fourier Transformation）
+## 离散傅里叶变换（DFT, Discrete Fourier Transformation）
 在了解了从CTFT到DTFT离散化时域的处理方法之后，我们也可以顺理成章的得到DFT了。DFT是为了计算机能进行傅里叶分析的产物。因为计算机只能处理离散量，因此虽然时域离散，但频域依然连续的DTFT不适应需求。那么怎么办？方法很简单，DTFT是通过对连续信号时域采样来得到的，那么我们只要照猫画虎对DTFT频域进行采样就可以了。假设在$\omega \in [-2\pi, 2\pi]$区间里采样$N$个点，采样后离散的频率点有：
 
 $$\omega = \frac{2\pi}{N}k = \omega_0 k,\ k\in [0,1,2,\cdots ,N-1]$$
 
-记$X(k)$为频域抽样得到的离散序列，即原序列$x(n)$的DFT，有（特别注意这里抽样序列有一个系数$\displaystyle{\frac{2\pi}{N}}$，是为了保证加抽样后时域信号幅值不变。具体由来在这不作展开，可以参考[从IDTFT到IDTF](#IDTFT2IDFT)，原理是相同的（抽样序列的傅里叶变换对的系数））：
+记$X(k)$为频域抽样得到的离散序列，即原序列$x(n)$的DFT，有（特别注意这里抽样序列有一个系数$\displaystyle{\frac{2\pi}{N}}$，是为了保证加抽样后时域信号幅值不变。具体由来在这不作展开，可以参考[从IDTFT到IDTF](#从IDTFT到IDFT)，原理是相同的（抽样序列的傅里叶变换对的系数））：
 
 $$X(k) = X(e^{j\omega})\bigg|_{\omega = k\omega_0} \simeq X(e^{j\omega}) \cdot \frac{2\pi}{N} \sum_{k=0}^{N-1} \delta(\omega-k\omega_0)$$
 
@@ -123,13 +123,13 @@ IDFT公式由上述推导得出：
 
 $$x(n)=\frac{1}{N} \sum_{k=0}^{N-1} X(k) W_N^{-nk}$$
 
-## 离散傅里叶级数（DFS）/离散时间傅里叶级数（DTFS）
+### 离散傅里叶级数（DFS）/离散时间傅里叶级数（DTFS）
 又上述讨论可以得知，DFT变换对的时域和频域其实都是无限长、周期性的。这个无穷离散周期序列到无穷离散周期序列的变换称作离散傅里叶级数（DFS，证明略）。他本质上与DFT是一致的，区别在于DFT是只取其中$N$点进行变换。
 
-## 快速傅里叶变换（FFT, Fast Fourier Transformation）
+### 快速傅里叶变换（FFT, Fast Fourier Transformation）
 DFT有被非常广泛应用的快速算法，即FFT。
 
-# 再谈（连续时间）傅里叶级数（CTFS）
+## 再谈（连续时间）傅里叶级数（CTFS）
 笔者在写下这份笔记的时候，其实是非常不愿意讨论傅里叶级数的，因为他形式繁琐，又臭又长，让数学苦手的笔者十分头大，而且在实际分析中很少用得上。奈何查阅的绝大多数资料都是从傅里叶级数讲起，逐步推导出傅里叶变换。这对于理解和应用来说既繁琐又不必要。但是，在从CTFT到DTFT，再到DFT的推进过程中，CTFS也逐渐揭示出清晰的属于他的位置。正如DFT实质上也是DTFS，CTFS实质上为**连续时域**到**离散频域**的变换。
 
 推导方式多种多样 殊途同归
@@ -141,18 +141,18 @@ CTFS | 连续、周期 | 离散、非周期
 DTFT | 离散、非周期 | 连续、周期
 DFT | 离散、周期 |离散、周期
 
-# 拉普拉斯变换（LT, Laplace Transformation）
+## 拉普拉斯变换（LT, Laplace Transformation）
 LT可以看作是FT的一个推广；或者说，FT是LT的一个特例，他们的区别在于基函数不同。FT的基函数是复指数函数$e^{j\omega t}$，而LT的是带常数的复指数函数$e^{\sigma+j\omega t}$，这使得LT相比于LT具有更强的分析能力，同时有极高的相似性。有：
 
 $$F(s)=\mathcal{L}[f(t)]=$$
  
-# Z变换
+## Z变换
 采用从CTFT推导DTFT同样的方法我们可以简单的从Laplace变换得到Z变换：
 
-## 从Z变换得到DTFT
+### 从Z变换得到DTFT
 
-# 一些数学
-## 变换系数的小问题
+## 一些数学
+### 变换系数的小问题
 进行函数分解基底需要满足一定的条件，首先是**正交**，但最好是**规范正交**（即不仅相互正交，而且各自都是单位向量）。若$\{f_0(x),f_1(x),f_2(x),\cdots\}$为一组基底，各基底是取值在$[a,b]$上的函数，要使其规范正交，需要满足：
 
 $$ 
@@ -197,12 +197,11 @@ $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 
 为对应的傅里叶正变换。系数的提取仅相当于对得到的频域图形等比例缩放，在反变换时加上去即可，不会影响单独时域或者频域的分析。习惯上来说（由于历史原因），提取系数（即逆变换带系数$\dfrac{1}{2\pi}$）的傅里叶变换公式更为常见。喜欢使用带$\dfrac{1}{2\pi}$的原因可能是因为对计算机计算更友好（只需要在正变换加入$\pi$的相关计算了）。
 
-## 帕塞瓦尔定理（Parseval's Theorem）
+### 帕塞瓦尔定理（Parseval's Theorem）
 帕塞瓦尔定理基底具备完备正交性有等价命题，即**帕塞瓦尔定理**成立。如同线性空间中一个向量在不同基底表示下长度（范数）依然相同一样，傅里叶变换前后函数的能量（范数）相同，即傅里叶算符是幺正算符
 
 
-## 从ICTFT到IDTFT
-<span id="ICTFT2IDTFT"></span>
+### 从ICTFT到IDTFT
 使用相同的思路（从CTFT导出DTFT）来考虑IDTFT，直接带入$X(e^{j\omega})$，有：
 
 $$\displaystyle{\begin{aligned}
@@ -263,7 +262,6 @@ $$\displaystyle{\begin{aligned}
 \end{aligned}}$$
 
 ## 从IDTFT到IDFT
-<span id="IDTFT2IDFT"></span>
 关于DFT中所加采样函数的系数问题，回想从ICTFT到IDTFT中使用的变换对：
 $$\displaystyle{
     \sum_{n=-\infty}^{\infty}\delta(t-nT_s) \rightleftharpoons \Omega_s \sum_{n=-\infty}^{\infty}\delta(\Omega-n\Omega_s)
@@ -280,7 +278,7 @@ $$\omega_0 = \frac{2\pi}{N}$$
 
 $$T_0 = N$$
 
-## 频域函数自变量的问题
+### 频域函数自变量的问题
 在CTFT中，频域函数通常写成$F(j\omega)$。
 
 在DTFT中，频域函数通常写成$X(e^{j\omega})$。

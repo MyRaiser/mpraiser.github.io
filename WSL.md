@@ -1,11 +1,8 @@
 # WSL使用体验及食用方法
 
-- [WSL使用体验及食用方法](#wsl使用体验及食用方法)
-- [WSL介绍](#wsl介绍)
-- [食用方法](#食用方法)
-- [给WSL加上GUI](#给wsl加上gui)
+[TOC]
 
-# WSL介绍
+## WSL介绍
 > Windows Subsystem for Linux（WSL）是一个在Windows 10上能够运行> 原生Linux二进制可执行文件（ELF格式）的兼容层。它是由微软与> Canonical公司合作开发，其目标是使纯正的Ubuntu 14.04 "Trusty > Tahr"（等Linux发行版的）映像能下载和解压到用户的本地计算机，并且映像内的工具和实用工具能在此子系统上原生运行。
 
 - 相比于虚拟机他的优势有：
@@ -16,7 +13,7 @@
 
     不需要重启更换系统（省事），文件交互简单。
 
-# 食用方法
+## 食用方法
 一个主要的参考文档：
 
 [微软官方的WSL说明文档](https://docs.microsoft.com/en-us/windows/wsl/install-on-server)
@@ -37,7 +34,7 @@
 
     直接运行Linux发行版的启动器；或者配置好环境变量后，在Powershell/CMD中运行wsl或者bash。
 
-# 给WSL加上GUI
+## 给WSL加上GUI
 需要说明的是WSL本身不支持GUI，但是可以通过XServer间接实现GUI，使用的软件为[VcXsrv](https://sourceforge.net/projects/vcxsrv/)。这部分主要参考了[这篇文章](https://blog.csdn.net/w_weilan/article/details/82862913)。
 
 大致工作原理为：
