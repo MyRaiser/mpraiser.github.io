@@ -21,12 +21,13 @@
   - [拉普拉斯变换（LT, Laplace Transformation）](#拉普拉斯变换lt-laplace-transformation)
   - [Z变换](#z变换)
     - [从Z变换得到DTFT](#从z变换得到dtft)
-  - [一些数学](#一些数学)
-    - [变换系数的小问题](#变换系数的小问题)
-    - [帕塞瓦尔定理（Parseval's Theorem）](#帕塞瓦尔定理parsevals-theorem)
-    - [从ICTFT到IDTFT](#从ictft到idtft)
+- [一些数学](#一些数学)
+  - [反变换的系数？](#反变换的系数)
+  - [帕塞瓦尔定理（Parseval's Theorem）](#帕塞瓦尔定理parsevals-theorem)
+  - [从ICTFT到IDTFT](#从ictft到idtft)
   - [从IDTFT到IDFT](#从idtft到idft)
-    - [频域函数自变量的问题](#频域函数自变量的问题)
+  - [频域函数自变量的问题](#频域函数自变量的问题)
+  - [从FT到LT](#从ft到lt)
 
 ## 引入：有限维空间的向量分解与无穷维空间的函数分解
 我们已经熟悉，对于三维欧几里得空间中的向量$\vec{p}$，可以在三个正交基底进行分解$\vec{p}=a\vec{x}+b\vec{y}+c\vec{z}$。其中，$a,b,c$分别是$\vec{p}$在$\vec{x},\vec{y},\vec{z}$上的投影长度。对于欧几里得空间，如果记$B$为正交基底的集合（在三维的例子下即$B=\{\vec{x},\vec{y},\vec{z}\}$），$\vec{b}$为其中一个正交基底，那么向量的正交分解可以写为：
@@ -91,7 +92,7 @@ $$\displaystyle{\begin{aligned}
 
 $$\displaystyle{X(e^{j\omega})=\sum_{n=-\infty}^{\infty} x(n)  e^{-j\omega n}}$$
 
-So far so good，DTFT的问题看起来就这样轻易的解决掉了，但是在细枝末节上却隐藏着各种各样的问题。为了避免混淆思维过程，在这里先直接给出正确的IDTFT形式，[后文](#从ICTFT到IDTFT)再进行细致讨论（如果有兴趣的话）。IDTFT的正确形式为：
+So far so good，DTFT的问题看起来就这样轻易的解决掉了，但是在细枝末节上却隐藏着各种各样的问题。为了避免混淆思维过程，在这里先直接给出正确的IDTFT形式，[后文](#从ictft到idtft)再进行细致讨论（如果有兴趣的话）。IDTFT的正确形式为：
 
 $$\displaystyle{
     x(n)=\frac{1}{2\pi}\int_{-\pi}^{\pi} X(e^{j\omega})e^{j\omega n}\,d\omega 
@@ -112,7 +113,7 @@ $$\displaystyle{
 
 $$\omega = \frac{2\pi}{N}k = \omega_0 k,\ k\in [0,1,2,\cdots ,N-1]$$
 
-记$X(k)$为频域抽样得到的离散序列，即原序列$x(n)$的DFT，有（特别注意这里抽样序列有一个系数$\displaystyle{\frac{2\pi}{N}}$，是为了保证加抽样后时域信号幅值不变。具体由来在这不作展开，可以参考[从IDTFT到IDTF](#从IDTFT到IDFT)，原理是相同的（抽样序列的傅里叶变换对的系数））：
+记$X(k)$为频域抽样得到的离散序列，即原序列$x(n)$的DFT，有（特别注意这里抽样序列有一个系数$\displaystyle{\frac{2\pi}{N}}$，是为了保证加抽样后时域信号幅值不变。具体由来在这不作展开，可以参考[从IDTFT到IDTF](#从idtft到idft)，原理是相同的（抽样序列的傅里叶变换对的系数））：
 
 $$X(k) = X(e^{j\omega})\bigg|_{\omega = k\omega_0} \simeq X(e^{j\omega}) \cdot \frac{2\pi}{N} \sum_{k=0}^{N-1} \delta(\omega-k\omega_0)$$
 
@@ -215,7 +216,7 @@ $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 
 为对应的傅里叶正变换。系数的提取仅相当于对得到的频域图形等比例缩放，在反变换时加上去即可，不会影响单独时域或者频域的分析。习惯上来说（由于历史原因），提取系数（即逆变换带系数$\dfrac{1}{2\pi}$）的傅里叶变换公式更为常见。喜欢使用带$\dfrac{1}{2\pi}$的原因可能是因为对计算机计算更友好（只需要在正变换加入$\pi$的相关计算了）。
 
-对于IDTFT和IDFT的系数，请参考下文[从ICTFT到IDTFT](#从ICTFT到IDTFT)，[从IDTFT到IDFT](从IDTFT到IDFT)。
+对于IDTFT和IDFT的系数，请参考下文[从ICTFT到IDTFT](#从ictft到idtft)，[从IDTFT到IDFT](从idtft到idft)。
 
 ## 帕塞瓦尔定理（Parseval's Theorem）
 如同线性空间中一个向量在不同基底表示下长度（范数）依然相同一样，傅里叶变换前后函数的能量（范数）相同。这个定理对我们来说最直观的物理意义是：在时域求信号能量，与在频域求信号能量一致。它通常可以表述为：
@@ -224,7 +225,7 @@ $$\displaystyle{
     \int_{-\infty}^{\infty} |f(t)|^2 \, dt = \frac{1}{2\pi} \int_{-\infty}^{\infty} |F(j\omega)|^2 \, d\omega
 }$$
 
-这个$\dfrac{1}{2\pi}$系数由来和ICTFT中的系数由来原因相同，因为相比于使用规范正交基的CTFT，常见的CTFT公式中得到的频域函数$F(j\omega)$幅值扩大了$\sqrt{2\pi}$倍，为了保证相等需要额外加上校正系数$\dfrac{1}{2\pi}$。当然，如果CTFT采用[上文](#反变换的系数？)中使用的规范正交基，这个系数就没有了，帕塞瓦尔定理形式简化为：
+这个$\dfrac{1}{2\pi}$系数由来和ICTFT中的系数由来原因相同，因为相比于使用规范正交基的CTFT，常见的CTFT公式中得到的频域函数$F(j\omega)$幅值扩大了$\sqrt{2\pi}$倍，为了保证相等需要额外加上校正系数$\dfrac{1}{2\pi}$。当然，如果CTFT采用[上文](#反变换的系数)中使用的规范正交基，这个系数就没有了，帕塞瓦尔定理形式简化为：
 
 $$\displaystyle{
     \int_{-\infty}^{\infty} |f(t)|^2 \, dt = \int_{-\infty}^{\infty} |F(j\omega)|^2 \, d\omega
