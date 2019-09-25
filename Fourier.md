@@ -200,7 +200,9 @@ $$\displaystyle{F(j\omega)=\int_{-\infty}^{\infty} f(t){e^{-j\omega t}}\,dt}$$
 ## 帕塞瓦尔定理（Parseval's Theorem）
 帕塞瓦尔定理基底具备完备正交性有等价命题，即**帕塞瓦尔定理**成立。如同线性空间中一个向量在不同基底表示下长度（范数）依然相同一样，傅里叶变换前后函数的能量（范数）相同，即傅里叶算符是幺正算符
 
-## 从ICTFT到IDTFT<span id="ICTFT2IDTFT"></span>
+
+## 从ICTFT到IDTFT
+<span id="ICTFT2IDTFT"></span>
 使用相同的思路（从CTFT导出DTFT）来考虑IDTFT，直接带入$X(e^{j\omega})$，有：
 
 $$\displaystyle{\begin{aligned}
@@ -260,7 +262,8 @@ $$\displaystyle{\begin{aligned}
     &= \frac{1}{2\pi} \int_{-2\pi}^{2\pi} X(e^{j\omega}) e^{j\omega n} \, dw \\
 \end{aligned}}$$
 
-## 从IDTFT到IDFT<span id="IDTFT2IDFT"></span>
+## 从IDTFT到IDFT
+<span id="IDTFT2IDFT"></span>
 关于DFT中所加采样函数的系数问题，回想从ICTFT到IDTFT中使用的变换对：
 $$\displaystyle{
     \sum_{n=-\infty}^{\infty}\delta(t-nT_s) \rightleftharpoons \Omega_s \sum_{n=-\infty}^{\infty}\delta(\Omega-n\Omega_s)

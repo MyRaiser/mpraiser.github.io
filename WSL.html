@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+        <title>WSL使用体验及食用方法</title>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+        
+        <style>
+.task-list-item { list-style-type: none; } .task-list-item-checkbox { margin-left: -20px; vertical-align: middle; }
+</style>
+        <style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        
+        
+    </head>
+    <body>
+        <h1 id="wsl使用体验及食用方法">WSL使用体验及食用方法</h1>
+<ul>
+<li><a href="#wsl%E4%BD%BF%E7%94%A8%E4%BD%93%E9%AA%8C%E5%8F%8A%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95">WSL使用体验及食用方法</a></li>
+<li><a href="#wsl%E4%BB%8B%E7%BB%8D">WSL介绍</a></li>
+<li><a href="#%E9%A3%9F%E7%94%A8%E6%96%B9%E6%B3%95">食用方法</a></li>
+<li><a href="#%E7%BB%99wsl%E5%8A%A0%E4%B8%8Agui">给WSL加上GUI</a></li>
+</ul>
+<h1 id="wsl介绍">WSL介绍</h1>
+<blockquote>
+<p>Windows Subsystem for Linux（WSL）是一个在Windows 10上能够运行&gt; 原生Linux二进制可执行文件（ELF格式）的兼容层。它是由微软与&gt; Canonical公司合作开发，其目标是使纯正的Ubuntu 14.04 &quot;Trusty &gt; Tahr&quot;（等Linux发行版的）映像能下载和解压到用户的本地计算机，并且映像内的工具和实用工具能在此子系统上原生运行。</p>
+</blockquote>
+<ul>
+<li>
+<p>相比于虚拟机他的优势有：</p>
+<p>占用内存和CPU资源更少。在WSL上直接运行软件消耗资源和在Windows上差不多。Windows可以直接访问WSL环境。</p>
+</li>
+<li>
+<p>相比于多系统他的优势有</p>
+<p>不需要重启更换系统（省事），文件交互简单。</p>
+</li>
+</ul>
+<h1 id="食用方法">食用方法</h1>
+<p>一个主要的参考文档：</p>
+<p><a href="https://docs.microsoft.com/en-us/windows/wsl/install-on-server">微软官方的WSL说明文档</a></p>
+<p>主要步骤如下：</p>
+<ol>
+<li>
+<p>开启Windows中的WSL组件。</p>
+<p>这部分不再多说百度都有。</p>
+</li>
+<li>
+<p>安装WSL的Linux发行版镜像</p>
+<p>通常可以直接在Microsoft Store安装。由于我是LTSC 2019，没有Microsoft Store，非常尴尬。百度了一圈之后找到了直接下载的链接：<a href="https://docs.microsoft.com/en-us/windows/wsl/install-manual">手动下载Linux镜像的链接</a>，挑选一个使用<strong>迅雷</strong>下载即可。</p>
+<p>下载完成后，后缀名改成.zip解压，找到文件夹中对应Linux发行版的启动器进行安装。（但官方文档确实就是这么写的）</p>
+</li>
+<li>
+<p>运行WSL</p>
+<p>直接运行Linux发行版的启动器；或者配置好环境变量后，在Powershell/CMD中运行wsl或者bash。</p>
+</li>
+</ol>
+<h1 id="给wsl加上gui">给WSL加上GUI</h1>
+<p>需要说明的是WSL本身不支持GUI，但是可以通过XServer间接实现GUI，使用的软件为<a href="https://sourceforge.net/projects/vcxsrv/">VcXsrv</a>。这部分主要参考了<a href="https://blog.csdn.net/w_weilan/article/details/82862913">这篇文章</a>。</p>
+<p>大致工作原理为：</p>
+<blockquote>
+<ol>
+<li>VcXsrv启动Xserver服务用于监听；</li>
+<li>WSL启动程序后把界面数据发送给Xserver；</li>
+<li>Xserver接收到数据进行绘制，于是在Win下看到图形界面。</li>
+</ol>
+</blockquote>
+<p>主要步骤如下：</p>
+<ol>
+<li>
+<p>下载安装和启动<a href="https://sourceforge.net/projects/vcxsrv/">VcXsrv</a>。一直下一步就行。</p>
+</li>
+<li>
+<p>配置DISPLAY</p>
+<p>首先打开vi，创建一个脚本（vi使用方法略）：</p>
+<pre><code class="language-bash"><div>vi <span class="hljs-built_in">set</span>-display.sh
+</div></code></pre>
+<p>脚本内容为：</p>
+<pre><code class="language-bash"><div><span class="hljs-built_in">echo</span> <span class="hljs-string">"export DISPLAY=:0.0"</span> &gt;&gt; ~/.bashrc
+</div></code></pre>
+<p>保存后执行一下：</p>
+<pre><code class="language-bash"><div>sh <span class="hljs-built_in">set</span>-display.sh
+</div></code></pre>
+<p>最后更新一下配置文件：</p>
+<pre><code class="language-bash"><div><span class="hljs-built_in">source</span> ~/.bashrc
+</div></code></pre>
+</li>
+<li>
+<p>打开VcXsrv的<strong>XLaunch</strong>，配置看着选就行。</p>
+<p>这个时候XLaunch已经在Windows后台运行了，在WSL打开带GUI的程序时会弹出窗口。比如试一试Firefox：</p>
+<pre><code class="language-bash"><div>sudo apt install firefox
+firefox
+</div></code></pre>
+<p>还有个问题就是中文显示不全。安装一下字体包即可解决：</p>
+<pre><code class="language-bash"><div>sudo apt install fonts-noto-cjk
+</div></code></pre>
+</li>
+<li>
+<p>安装桌面</p>
+<p>选用的是<strong>xfce4</strong>，使用：</p>
+<pre><code class="language-bash"><div>sudo apt install xfce4 dbus-x11
+</div></code></pre>
+<p>打开XShell并在WSL执行：</p>
+<pre><code class="language-bash"><div>xfce4-session
+</div></code></pre>
+<p>即可进入桌面。</p>
+</li>
+<li>
+<p>使用vscode</p>
+<p>由于相距原教程已经过去一段时间，vscode已经更新了新的特性，原教程中安装vscode的方法不再必要（也不可行，在WSL运行vscode会报错）。现在不需要在WSL中另外安装visual-studio-code，只需要在Windows的vscode中安装Remote - WSL插件，再在WSL中键入：</p>
+<pre><code class="language-bash"><div>code
+</div></code></pre>
+<p>即可。</p>
+</li>
+</ol>
+
+    </body>
+    </html>
