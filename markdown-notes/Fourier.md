@@ -191,7 +191,7 @@ $$\displaystyle{\int_{-\pi}^{\pi}k^2\,dt=1}$$
 
 $$\displaystyle{k=\frac{1}{\sqrt{2\pi}}}$$
 
-即是说正交基底为$\left \{ \cdots, \dfrac{e^{-2j\omega t}}{\sqrt{2\pi}}, \dfrac{-e^{j\omega t}}{\sqrt{2\pi}}, \dfrac{1}{\sqrt{2\pi}}, \dfrac{e^{j\omega t}}{\sqrt{2\pi}}, \dfrac{e^{2j\omega t}}{\sqrt{2\pi}}, \cdots \right \}$（实际上$\omega$取值是连续的）。如同向量的正交分解，各基底上的分量通过$\langle f(t),\dfrac{e^{kj\omega t}}{\sqrt{2\pi}}\rangle$求出。
+即是说正交基底为$\left \{ \cdots, \dfrac{e^{-2j\omega t}}{\sqrt{2\pi}}, \dfrac{-e^{j\omega t}}{\sqrt{2\pi}}, \dfrac{1}{\sqrt{2\pi}}, \dfrac{e^{j\omega t}}{\sqrt{2\pi}}, \dfrac{e^{2j\omega t}}{\sqrt{2\pi}}, \cdots \right \}$（实际上$\omega$取值是连续的，不然就变成傅里叶级数了）。如同向量的正交分解，各基底上的分量通过$\langle f(t),\dfrac{e^{kj\omega t}}{\sqrt{2\pi}}\rangle$求出。
 
 如果使用这组正交基底的话，傅里叶变换对就可以写为：
 
@@ -231,19 +231,22 @@ $$\displaystyle{
     \int_{-\infty}^{\infty} |f(t)|^2 \, dt = \int_{-\infty}^{\infty} |F(j\omega)|^2 \, d\omega
 }$$
 
-更加优雅。实际上含$\dfrac{1}{2\pi}$系数的帕塞瓦尔定理公式是数学上不严谨的，因为帕塞瓦尔定理本身来自于《泛函分析》中“傅立叶变换是幺正算符“的性质[^2]：
+更加优雅。实际上含$\dfrac{1}{2\pi}$系数的帕塞瓦尔定理公式是数学上不严谨的，因为严格意义上的帕塞瓦尔定理本身为基底规范正交的等价条件[^2]。可以直观理解为毕达哥拉斯定理（勾股定理）的推广（正交的各边平方和等于最长边平方），没有任何多余的系数，非常漂亮：
 
-[^2]: 
 
-有的文章认为带$\dfrac{1}{2\pi}$系数的帕塞瓦尔定理从频域（$f$域，单位$Hz$，而非角频率$\omega$）理解可以得到本质：
+[^2]: 《泛函分析基础》刘培德著。P174-175，Hilbert空间几何学 定理4。
+
+$$\displaystyle{
+    \|x\|^2 = \sum_{n=1}^{\infty} |\langle x,e_n \rangle|^2
+}$$
+
+有的文章认为带$\dfrac{1}{2\pi}$系数的帕塞瓦尔定理从频域（$f$域，单位$Hz$，而非角频率$\omega$）理解可以得到本质，这个观点我是不同意的。我认为从两个“形式无关紧要”中得出一个“本质必然”着实没有道理，只不过是把巧合误当作了真理。
 
 $$\displaystyle{\begin{aligned}
     \int_{-\infty}^{\infty} |f(t)|^2 \, dt & = \frac{1}{2\pi} \int_{-\infty}^{\infty} |F(j\omega)|^2 \, d\omega \\
     & = \int_{-\infty}^{\infty} |F(j2\pi f)|^2 \, d\frac{2\pi f}{2\pi} \\
     & = \int_{-\infty}^{\infty} |F(j2\pi f)|^2 \, df
 \end{aligned}}$$
-
-这个观点我是不同意的。我认为从两个“形式无关紧要”中得出一个“本质必然”着实没有道理，只不过是把巧合误当作了真理。
 
 对于DTFT和DFT同样可以给出适应其形式的帕塞瓦尔定理，对DTFT有：
 
@@ -257,8 +260,6 @@ $$\displaystyle{
     \sum_{n=0}^{N-1} |x(n)|^2 \, dt = \frac{1}{N} \sum_{k=0}^{N-1} |X(k)|^2
 }$$
 
-
-
 ## 从ICTFT到IDTFT
 使用相同的思路（从CTFT导出DTFT）来考虑IDTFT，直接带入$X(e^{j\omega})$，有：
 
@@ -266,7 +267,7 @@ $$\displaystyle{\begin{aligned}
     & f(t)\sum_{n=-\infty}^{\infty}\delta(t-nT_s) \\
     &=\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\Omega nT_s}\,d\Omega \\
     &=\frac{1}{T_s}\frac{1}{2\pi}\int_{-\infty}^{\infty} X(e^{j\omega})e^{j\omega n}\,d\omega 
-    \end{aligned}}$$
+\end{aligned}}$$
 
 可以观察到，该式与正确的IDTFT形式具有区别。区别有二，一是在积分区间，二是在系数。我们在上文提到DTFT频谱中在一个$2\pi$区间中，已经具备了原信号完全的信息，这个结论显然是正确的。那么为什么会产生这种看似矛盾的佯谬呢？
 
@@ -343,7 +344,7 @@ $$T_0 = N$$
 
 但是在分析频谱的时候，通常都是以$\omega$为横坐标轴进行绘图。
 
-我也不知道为什么。
+我也不知道为什么，我目前知道的唯一有说服力的理由是为了**区别CTFT、DTFT、DFT的频域函数**。
 
 ## 从FT到LT
 Dirichlet条件和Gibbs现象
