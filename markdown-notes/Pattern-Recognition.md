@@ -42,9 +42,21 @@ $$\displaystyle{
     (w^*,b^*) = \mathop{argmin}\limits_{\boldsymbol{w},b} E(\boldsymbol{w},b)
 }$$
 
-$\boldsymbol{w}^*$和$b^*$是有闭式解的。
+$\boldsymbol{w}^*$和$b^*$是有闭式（closed-form）解的。求解:
+
+$$\displaystyle{\begin{aligned}
+    \frac{\partial{E}}{\partial{w}}
+\end{aligned}}$$
 
 ## 对数几率回归（Logistic Regression）
+如果我们希望回归完成的不是$f:\boldsymbol{x_i} \rightarrow y_i$，而是与$y$相关的信息。比如如果有两类$\omega_+,\omega_-$，当$y_i>0$，$\boldsymbol{x_i} \in \omega_+$；当$y_i<0$，$\boldsymbol{x_i} \in \omega_-$。我们希望当$\boldsymbol{x_i} \in \omega_+$，$f(\boldsymbol{x}_i)=1$；当$\boldsymbol{x_i} \in \omega_-$，$f(\boldsymbol{x}_i)=0$（临界值任意判别），我们可以寻找一个新的函数使标签$z=g(y)=g(\boldsymbol{w}^T\boldsymbol{x}+b)$，$z \in \{0,1\}$。该模型称为广义线性模型，$g(\cdot)$称为联系函数。
+
+
+
+对数几率回归[^1]
+
+[^1]:译名来自周志华《机器学习》。Logistic Logit Logic
+
 说是回归（Regression），实际上用作分类（Classification）。
 
 ## Softmax
