@@ -1,5 +1,5 @@
 # 模式识别
-![模式识别与机器学习](pattern-recognition/PR&ML.png)
+![模式识别与机器学习](Pattern-Recognition/PR&ML.png)
 
 - [模式识别](#模式识别)
     - [线性判别函数基础理论](#线性判别函数基础理论)
@@ -60,7 +60,7 @@ $$\displaystyle{
 }$$
 
 $$\displaystyle{
-    (w^*,b^*) = \mathop{argmin}\limits_{\boldsymbol{w},b} E(\boldsymbol{w},b)
+    (w^*,b^*) = \mathop{\argmin}\limits_{\boldsymbol{w},b} E(\boldsymbol{w},b)
 }$$
 
 $\boldsymbol{w}^*$和$b^*$是有闭式（closed-form）解的。求解:
