@@ -217,13 +217,13 @@ $$F(\phi) = g \delta(\phi) \left|\nabla\phi\right|$$
 
 $$\begin{aligned}
     F(\phi + \alpha h) &= g \delta(\phi + \alpha h) \left|\nabla(\phi + \alpha h)\right| \\
-    &= g \delta(\phi + \alpha h) \sqrt{{(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2}
+    &= g \delta(\phi + \alpha h) \sqrt{ {(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2}
 \end{aligned}$$
 
 对其求偏导，有：
 
 $$\begin{aligned}
-    \frac{\partial F(\phi+\alpha h)}{\partial\alpha} &= g\left( \delta^{'}(\phi+\alpha h)\sqrt{{(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2} + \delta(\phi + \alpha h)\frac{\nabla h \cdot \nabla(\phi+\alpha h)}{ \sqrt{{(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2}} \right)
+    \frac{\partial F(\phi+\alpha h)}{\partial\alpha} &= g\left( \delta^{'}(\phi+\alpha h)\sqrt{ {(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2} + \delta(\phi + \alpha h)\frac{\nabla h \cdot \nabla(\phi+\alpha h)}{ \sqrt{ {(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2}} \right)
 \end{aligned}$$
 
 当$\alpha$足够小时，
