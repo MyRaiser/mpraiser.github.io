@@ -9,17 +9,28 @@
       - [矩阵计算形式](#矩阵计算形式)
     - [K-L变换](#k-l变换)
       - [主成分分析（PCA）](#主成分分析pca)
+- [图像增强](#图像增强)
+  - [基本灰度变换](#基本灰度变换)
+  - [锐化](#锐化)
+  - [平滑](#平滑)
+  - [伪彩色](#伪彩色)
+  - [同态滤波](#同态滤波)
+  - [颜色迁移](#颜色迁移)
 - [边缘检测](#边缘检测)
   - [Canny算子](#canny算子)
     - [高斯滤波器和高斯差分滤波器](#高斯滤波器和高斯差分滤波器)
     - [非极大值抑制](#非极大值抑制)
     - [双阈值检测和连接](#双阈值检测和连接)
 - [图像分割](#图像分割)
-  - [水平集方法](#水平集方法)
-    - [演化方程的推导](#演化方程的推导)
-      - [$\mathcal{L}_g(\phi)$项的推导](#mathcall_gphi项的推导)
-      - [$\mathcal{A}_g(\phi)$项的推导](#mathcala_gphi项的推导)
-      - [演化方程](#演化方程)
+  - [阈值分割](#阈值分割)
+  - [聚类分割](#聚类分割)
+  - [主动轮廓](#主动轮廓)
+    - [水平集方法](#水平集方法)
+      - [演化方程的推导](#演化方程的推导)
+        - [$\mathcal{L}_g(\phi)$项的推导](#mathcall_gphi项的推导)
+        - [$\mathcal{A}_g(\phi)$项的推导](#mathcala_gphi项的推导)
+        - [演化方程](#演化方程)
+- [图像回复](#图像回复)
 
 ## 数字图像处理基础
 ### 像素间联系
@@ -109,7 +120,17 @@ m-连接可以消除8-连接产生的歧义性。
 #### K-L变换
 ##### 主成分分析（PCA）
 
+## 图像增强
+### 基本灰度变换
+### 锐化
+### 平滑
+### 伪彩色
+### 同态滤波
+### 颜色迁移
+
 ## 边缘检测
+![](Image-Processing/edge-model.png)
+
 ### Canny算子
 Canny算子是用于边缘检测（Edge Detection）的算子，与简单的一阶差分算子（Roberts算子、Sobel算子等）、二阶差分算子（Laplace算子）等相比具有较好的性能，是被广泛应用的边缘检测方法。J. Canny于1986年在*A Computational Approach to Edge Detection*[^canny_paper]中提出Canny算子，并且指出一个好的边缘检测算子应有的三个指标：
 
@@ -187,9 +208,12 @@ $$\displaystyle{\begin{aligned}
 3. 重复第二步，直到所有边缘都连接。
 
 ## 图像分割
-### 水平集方法
+### 阈值分割
+### 聚类分割
+### 主动轮廓
+#### 水平集方法
 水平集方法（Level Set）是基于主动轮廓模型的图像分割方法，相比于Snake方法他可以更好的解决重新参数化困难的问题，也能够处理拓扑变化。
-#### 演化方程的推导
+##### 演化方程的推导
 在水平集方法的应用中，往往多步迭代会使得水平集函数降质（Degraded），对于这种问题常常采用重新初始化的方法。在2005年，不需重新初始化的水平集方法[^1]被提出，这部分将对其演化方程做出推导。
 
 [^1]:Li C, Xu C, Gui C, et al. Level set evolution without reinitialization: a new variational formulation[C]//Computer
@@ -208,7 +232,7 @@ $$\left\{\begin{aligned}
 
 本次文主要分析对$\mathcal{L}_g(\phi)$和$\mathcal{A}_g(\phi)$的推导。
 
-##### $\mathcal{L}_g(\phi)$项的推导
+###### $\mathcal{L}_g(\phi)$项的推导
 对于$\displaystyle{\mathcal{L}_g(\phi) = \int_\Omega g \delta(\phi) \left|\nabla\phi\right| dxdy}$，令：
 
 $$F(\phi) = g \delta(\phi) \left|\nabla\phi\right|$$
@@ -286,7 +310,7 @@ $$
 
 $$\nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|}) = 0$$
 
-##### $\mathcal{A}_g(\phi)$项的推导
+###### $\mathcal{A}_g(\phi)$项的推导
 
 对于$\displaystyle{\mathcal{A}_g(\phi) = \int_\Omega gH(-\phi) dxdy}$，同理令：
 
@@ -313,7 +337,7 @@ $$\begin{aligned}
 
 $$g \delta(\phi) = 0$$
 
-##### 演化方程
+###### 演化方程
 要使变分能量函数
 $$\epsilon (\phi) = \mu \mathcal{P}(\phi) + \lambda \mathcal{L}_g(\phi) + \nu \mathcal{A}_g(\phi)$$
 
@@ -328,3 +352,5 @@ $$\begin{aligned}
     + \lambda\nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|})
     + \nu g \delta(\phi)
 \end{aligned}$$
+
+## 图像回复

@@ -3,25 +3,28 @@
 
 - [模式识别](#模式识别)
     - [线性判别函数基础理论](#线性判别函数基础理论)
+      - [一种线性判别函数的参数训练算法](#一种线性判别函数的参数训练算法)
+        - [修正权向量的几何意义](#修正权向量的几何意义)
   - [对数几率回归（Logistic Regression）](#对数几率回归logistic-regression)
     - [回顾线性回归](#回顾线性回归)
-    - [广义线性模型和对数几率回归（Logistic Regression）](#广义线性模型和对数几率回归logistic-regression)
-      - [Logistic?Logic?Logit?](#logisticlogiclogit)
+    - [对数几率回归（Logistic Regression）](#对数几率回归logistic-regression-1)
       - [Logistic回归的参数估计](#logistic回归的参数估计)
     - [Softmax](#softmax)
+  - [从感知器到神经网络](#从感知器到神经网络)
+    - [感知器](#感知器)
+      - [XOR problem](#xor-problem)
+    - [多层感知机(MLP)](#多层感知机mlp)
+      - [激活函数](#激活函数)
+      - [损失函数（Loss function)](#损失函数loss-function)
+    - [训练多层感知机：后向传播（BP）](#训练多层感知机后向传播bp)
+  - [支持向量机（SVM, Support Vector Machine）](#支持向量机svm-support-vector-machine)
+    - [线性SVM](#线性svm)
+      - [点到超平面的距离](#点到超平面的距离)
   - [多分类问题](#多分类问题)
     - [OvR(One vs. Rest)：$\omega_i/\bar{\omega_i}$二分类法](#ovrone-vs-restomega_ibaromega_i二分类法)
     - [OvO(One vs. One)：$\omega_i/\omega_j$二分类法](#ovoone-vs-oneomega_iomega_j二分类法)
       - [OvO的一种特例的等价表达](#ovo的一种特例的等价表达)
     - [MvM()](#mvm)
-  - [神经网络](#神经网络)
-    - [感知机](#感知机)
-      - [感知器算法（Percetron Approach）](#感知器算法percetron-approach)
-        - [修正权向量的几何意义](#修正权向量的几何意义)
-      - [XOR problem](#xor-problem)
-  - [支持向量机（SVM, Support Vector Machine）](#支持向量机svm-support-vector-machine)
-    - [线性SVM](#线性svm)
-      - [点到超平面的距离](#点到超平面的距离)
   
 ### 线性判别函数基础理论
 线性判别函数是一个线性函数，可以将一类样本进行**二分类**。
@@ -38,6 +41,53 @@ $$\displaystyle{
     \end{aligned}\right.
 }$$
 
+#### 一种线性判别函数的参数训练算法
+~~我也不知道课程PPT上为什么这里叫做感知器算法，尽管他还没有发展到真正意义上的感知器（Percetron）。~~
+为了方便将最后的这个常数项$b$也写成统一的形式，可以将模式向量和权向量写成增广形式，即增广模式向量：
+
+$$x=[x_1,x_2,\cdots,x_n,1]^T$$
+
+增广权向量：
+$$w=[w_1,w_2,\cdots,w_n, b]^T$$
+感知器算法是通过对已知样本的训练和学习来求得线性判别函数系数的方法。我们知道对于一个模式向量$x$，应该有：
+
+$$\displaystyle{
+    d(x) = w^Tx 
+    \left\{\begin{aligned}
+    &> 0, \, x \in \omega_1\\
+    &\leq 0,\, x \in \omega_2
+    \end{aligned}\right.
+}$$
+
+现在对于训练样本集中的样本$x_k$进行训练求解权向量。记$w_{(i)}$为第$i$步迭代时的权向量，若$x_k \in \omega_1$，但$w_{(i)}^T x_k \leq 0$，说明分类器分类错误，下一步迭代中的权向量应修正为：
+
+$$w_{(i+1)} = w_{(i)} + Cx_k$$
+
+$C$为校正增量。
+
+若$x_k \in \omega_2$，但$w_{(i)}^T x_k > 0$，同样分类错误，权向量应修正为：
+
+$$w_{(i+1)} = w_{(i)} - Cx_k$$
+
+若分类正确，则权向量保持不变，为：
+
+$$w_{(i+1)} = w_{(i)}$$
+
+现在对$x_k^{'} \in \omega_2$的样本乘以$(-1)$，有$w_{(i)}^T(-x_k^{'}) < 0$时分类错误，此时权向量修正为：
+
+$$w_{(i+1)} = w_{(i)} + C(-x_k^{'})$$
+
+令$x_k=-x_k^{'}$，可以得到统一的感知器算法表达式：
+
+$$\displaystyle{
+    w_{(i+1)} =
+    \left\{\begin{aligned}
+    &w_{(i)} &, &w_{(i)}^Tx_k > 0\\
+    w_{(i)} &+ Cx_k &, &w_{(i)}^Tx_k \leq 0
+    \end{aligned}\right.
+}$$
+
+##### 修正权向量的几何意义
 
 
 
@@ -69,8 +119,22 @@ $$\displaystyle{\begin{aligned}
     \frac{\partial{E}}{\partial{w}}
 \end{aligned}}$$
 
-### 广义线性模型和对数几率回归（Logistic Regression）
-如果我们希望回归完成的不是$f:\boldsymbol{x_i} \rightarrow y_i$，而是与$y$相关的信息。比如如果有两类$\omega_+,\omega_-$，当$y_i>0$，$\boldsymbol{x_i} \in \omega_+$；当$y_i<0$，$\boldsymbol{x_i} \in \omega_-$。我们希望当$\boldsymbol{x_i} \in \omega_+$，$f(\boldsymbol{x}_i)=1$；当$\boldsymbol{x_i} \in \omega_-$，$f(\boldsymbol{x}_i)=0$（临界值任意判别），我们可以寻找一个新的函数使标签$z=g(y)=g(\boldsymbol{w}^T\boldsymbol{x}+b)$，$z \in \{0,1\}$。该模型称为广义线性模型，$g(\cdot)$称为联系函数。
+### 对数几率回归（Logistic Regression）
+如果我们希望回归完成的不是$f:\boldsymbol{x_i} \rightarrow y_i$，而是与$y$相关的信息。比如如果有两类$\omega_+,\omega_-$，有
+
+$$\left\{\begin{aligned}
+  &\boldsymbol{x_i} \in \omega_+ , &y_i>0 \\
+  &\boldsymbol{x_i} \in \omega_- , &y_i<0
+\end{aligned}\right.$$
+
+我们希望将$(-\infty,\infty)$的值压缩成两个标签$\{0,1\}$上
+
+$$\left\{\begin{aligned}
+  &\boldsymbol{x_i} \in \omega_+, &f(\boldsymbol{x}_i)=1 \\
+  &\boldsymbol{x_i} \in \omega_-, &f(\boldsymbol{x}_i)=0
+\end{aligned}\right.$$
+
+当$x_i$属于正类时，输出值为1；当$x_i$属于负类时，输出值为0（临界值任意判别），我们可以寻找一个新的函数使标签$y=g(z)=g(\boldsymbol{w}^T\boldsymbol{x}+b)$，有$y \in \{0,1\}$。该模型称为广义线性模型，$g(\cdot)$称为联系函数。
 
 一个比较容易想到的的能完成上述任务的函数是：
 
@@ -85,7 +149,7 @@ $$\displaystyle{
 
 但是这个函数不连续可微，让我们之前进行参数估计的方法失效了。因此我们退求其次，寻找一类特征接近单位阶跃函数的替代函数（surrogate function），使得$f(\boldsymbol{x}_i)$的输出值尽量接近0或者1。一个可选的函数是Logistic函数：
 
-$$g(y)=\frac{1}{1+e^{-y}}$$
+$$logistic(y)=\frac{1}{1+e^{-y}}$$
 
 Logicstic函数是一种Sigmoid函数[^sigmoid]。最终得到对数几率回归[^对数几率回归]（Logistic Regression）形式：
 
@@ -98,26 +162,166 @@ $$f(\boldsymbol{x}_i)=\frac{1}{1+e^{-\boldsymbol{w}^T \boldsymbol{x}_i+b}}$$
 
 Logistic Regression说是回归（Regression），实际上用作分类（Classification）。
 
-#### Logistic?Logic?Logit?
-记$\displaystyle{y=f(\boldsymbol{x}_i)=\frac{1}{1+e^{-\boldsymbol{w}^T \boldsymbol{x}_i+b}}}$，有：
-
-$$ln\frac{y}{1-y}=\boldsymbol{w}^T \boldsymbol{x} + b$$
-
-当$y \rightarrow 1$（注意现在$y$实际上是上文中的标签$z$），意味着$\boldsymbol{x}$更可能属于$\omega_+$，那么$y$可以视作样本$\boldsymbol{x}$为正类的可能性，反之$1-y$就是负类的可能性，二者的比值
-
-$$\frac{y}{1-y}$$
-
-称作几率（odds），取对数之后
-
-$$ln\frac{y}{1-y}$$
-
-即为对数几率（log odds, 亦logit）。可见Logistic来源于Logit，与Logic毫无关系，所以译作“逻辑回归”是存在谬误的。
+> #### Logistic?Logic?Logit?
+> 记$\displaystyle{y=f(\boldsymbol{x}_i)=\frac{1}{1+e^{-\boldsymbol{w}^T \boldsymbol{x}_i+b}}}$，有：
+> 
+> $$ln\frac{y}{1-y}=\boldsymbol{w}^T \boldsymbol{x} + b$$
+> 
+> 当$y \rightarrow 1$（注意现在$y$实际上是上文中的标签$z$），意味着$\boldsymbol{x}$更可能属于$\omega_+$，那么$y$可以> 视作样本$\boldsymbol{x}$为正类的可能性，反之$1-y$就是负类的可能性，二者的比值
+> 
+> $$\frac{y}{1-y}$$
+> 
+> 称作几率（odds），取对数之后
+> 
+> $$ln\frac{y}{1-y}$$
+> 
+> 即为对数几率（log odds, 亦logit）。可见Logistic来源于Logit，与Logic毫无关系，所以译作“逻辑回归”是存在谬误的。
 
 #### Logistic回归的参数估计
 
-交叉熵？
-### Softmax
 
+### Softmax
+如果有多个类需要区分，那么此时用Logistic函数就不足以满足需求了，需要用Softmax函数。假设有$m$个类别需要区分，有一组（$m$个）softmax函数。与Logistic函数相同，我们依然希望输出值接近0或者1，其中1表示属于该类，0表示不属于该类。有输入$z_1,zy_2,\cdots,z_m$，通常输入为一组线性函数，有
+
+$$z_i = \sum_{j=1}^{m} w_{ij} x_{ij}$$
+
+第$i$个softmax函数为：
+
+$$\displaystyle{
+  {softmax}_i(x_i) = \dfrac{e^{z_i}}{ \displaystyle{\sum_{j=1}^{m}e^{z_j}} }
+}$$
+
+![softmax](Pattern-Recognition/softmax.png)
+
+映射到$[0,1]$上
+顾名思义softmax是一种“软”求最大值
+是logistic regression的拓展
+
+## 从感知器到神经网络
+
+### 感知器
+感知机的基本形式是：
+
+$$y=f(\sum_i w_ix_i-\theta)$$
+
+![神经元]()
+
+
+#### XOR problem
+
+### 多层感知机(MLP)
+#### 激活函数
+$f(\cdot)$称为激活函数=（activation function）。经典的激活函数有Sigmoid函数（狭义上的Sigmoid函数，即Logistic函数）
+
+$$\displaystyle{sigmoid(x)=\frac{1}{1+e^{-x}}}$$
+
+可以看到，当选取sigmoid函数作为激活函数时，单层感知器其实就是Logistic Regression。
+
+因为复杂度等问题之后被广泛使用的还有ReLU函数：
+
+#### 损失函数（Loss function)
+用于表征感知器的误差，可以有多种形式。
+- 均方误差
+- 交叉熵
+### 训练多层感知机：后向传播（BP）
+总结前文的线性回归、Logistic回归模型，他们的求解算法总是在最小化模型产生的误差/最小化误差函数，即
+
+$$w^* = \argmin_w E$$
+
+对于MLP这依然是贯穿始终的**目的**与**思想**。但是这样一个看似简单的方程当落到实际时，我们有更多的问题需要考虑。对于MLP来说，他们是：
+
+- 求解算法是什么
+- 损失函数形式是什么
+- 网络结构是什么
+- 激活函数是什么
+
+
+对于[线性回归](#回顾线性回归)这样简单的模型来说，当他使用均方误差作为损失函数时，可以求得最佳参数估计的闭式解。有闭式解意味着$w^*$可以直接求得，无需迭代。但是对于MLP，损失函数形式往往过于复杂闭式解难以（或者说无法）得到，因此往往要采取一些优化（Optimization）算法来求解。对于BP来说，我们使用的是**梯度下降**：
+
+要求
+
+$$\boldsymbol{w}^* = \argmin_{\boldsymbol{w}} E$$
+
+首先给参数一个初始值$\boldsymbol{w}^{(0)}$，有参数迭代公式：
+
+$$\Delta\boldsymbol{w} = -\eta \nabla E$$
+
+$$\boldsymbol{w}^{(t+1)}=\boldsymbol{w}^{(t)} + \Delta\boldsymbol{w}$$
+
+$\boldsymbol{w}^{(t+1)}$为下一步迭代的的权值，$\boldsymbol{w}^{(t)}$为当前的权值。$\nabla E$即为损失函数$E(\boldsymbol{w})$的梯度，当沿着梯度反方向不断下降，函数将进入一个极小值（当然，我们希望他是最小值）。$\eta$为学习率，是设定的代表学习速度的参数。
+
+有各权值
+
+$$\boldsymbol{w} = (w_1,w_2,\cdots,w_n)$$
+
+$$\nabla E = (\frac{\partial E}{\partial w_1}, \frac{\partial E}{\partial w_2}, \cdots, \frac{\partial E}{\partial w_n})$$
+
+我们可以写成各权值单独更新的公式：
+
+$$\Delta w_i = -\eta \frac{\partial E}{\partial w_i}$$
+
+下面给出以三层感知机网络为例的BP权值更新公式推导过程。用作分类（Classification）。其中隐层有$l$个神经元，采用sigmoid函数；输出层有$m$个神经元，激活函数也采用sigmoid。以**均方误差**作为损失函数。
+
+记输入层第$i$个节点输入为$x_i$；隐层第$j$个节点的输入为$HI_j$，输出为$HO_j$；输出层第$k$个节点的输入为$OI_k$，输出为$OO_k$（即网络预测值$\hat{L}_k$。为了体现他的意义有不同叫法，在后文推导需要注意其实是一样的）。从输入层第$i$个节点到到隐层第$j$个节点的权值记作$w_{ij}$；从隐层第$j$各节点到到输出层第$k$个节点的权值记作$w_{jk}$。记训练数据中样本对应每个输出层节点输出为$L_k$，则损失函数（系数$1\over 2$是为了计算方便）和目标为：
+
+$$E=\frac{1}{2} \sum_{k=1}^{l}[L_k-\hat{L}_k]^2$$
+
+$$w_{jk}^*,\cdots,v_{ij}^*,\cdots = \argmin_{w_{jk},\cdots,v_{ij},\cdots}E$$
+
+
+其中
+
+$$\left\{\begin{aligned}
+  \hat{L}_k = OO_k = f(OI_k) \\
+  OI_k = \sum_{j=1}^{m} w_{jk}HO_j \\
+  HO_j = f(HI_j) \\
+  HI_j = \sum_{i=1}^{n} v_{ij}x_i
+\end{aligned}\right.$$
+
+$$$$
+
+BP算法的核心即为求偏导的链式法则：
+
+$$\Delta w_{jk} = - \eta \frac{\partial E}{\partial w_{jk}} $$
+
+$$\frac{\partial E}{\partial w_{jk}} = \frac{\partial E}{\partial OI_k} \cdot \frac{\partial OI_k}{\partial w_{jk}}$$ 
+
+首先先给出sigmoid函数导数的性质：
+
+$$f(x) = \frac{1}{1+e^{-x}}$$
+
+$$\frac{\partial f}{\partial x} = \frac{-(-e^{-x})}{(1+e^{-x})^2} = \frac{1}{1+e^{-x}} \frac{(1+e^{-x})-1}{1+e^{-x}} = f(x)[1-f(x)]$$
+
+所以左边部分
+
+$$\frac{\partial E}{\partial OI_k} =\frac{\partial E}{\partial OO_k} \cdot \frac{\partial OO_k}{\partial OI_k} = (L_k-\hat{L}_k)f(OI_k)[1-f(OI_k)]$$
+
+为了方便，记输出层误差信号
+
+$$\begin{aligned}
+  \delta_k^o = - \frac{\partial E}{\partial OI_k} &= -(L_k-\hat{L}_k)f(OI_k)[1-f(OI_k)]
+\end{aligned}$$
+
+则有==输出层权值更新公式==：
+
+$$\Delta w_{jk} = \eta \delta_k^o HO_j $$
+
+对于隐层的权值更新公式照毛画虎：
+
+$$\Delta v_{ij} = - \eta \frac{\partial E}{\partial v_{ij}} $$
+
+$$\frac{\partial E}{\partial v_{ij}} = \frac{\partial E}{\partial HI_j} \cdot \frac{\partial HI_j}{\partial v_{ij}}$$ 
+
+有
+
+$$\frac{\partial E}{\partial HI_j} = $$
+
+--------
+激活函数采用softmax。以交叉熵为损失函数。
+## 支持向量机（SVM, Support Vector Machine）
+~~这个名字我十分想吐槽，第一次看到的时候以为是支持向量的机器，然而并没有什么关系。~~
+### 线性SVM
+#### 点到超平面的距离
 
 ## 多分类问题
 单个分类器只能处理二分类问题，如果要使用二分类的分类器而解决多分类问题，一个方法是使用多个二分类的分类器进行处理。若共有$M$个不同类别$\omega_1,\omega_2,\cdots,\omega_M$，分类方法有：
@@ -195,71 +399,3 @@ $$\left[ \begin{matrix}
 
 ### MvM()
 ECOC
-
-## 神经网络
-
-### 感知机
-感知机的基本形式是：
-
-$$y=f(\sum_i w_ix_i-\theta)$$
-
-![神经元]()
-
-$f(\cdot)$称为激活函数=（activation function）。经典的激活函数有Sigmoid函数（狭义上的Sigmoid函数，即Logistic函数）$\displaystyle{sigmoid(x)=\frac{1}{1+e^{-x}}}$，因为复杂度等问题之后被广泛使用的还有ReLU函数：
-
-#### 感知器算法（Percetron Approach）
-~~我也不知道课程PPT上为什么这里叫做感知器算法，尽管他还没有发展到真正意义上的感知器（Percetron）。~~
-为了方便将最后的这个常数项$b$也写成统一的形式，可以将模式向量和权向量写成增广形式，即增广模式向量：
-
-$$x=[x_1,x_2,\cdots,x_n,1]^T$$
-
-增广权向量：
-$$w=[w_1,w_2,\cdots,w_n, b]^T$$
-感知器算法是通过对已知样本的训练和学习来求得线性判别函数系数的方法。我们知道对于一个模式向量$x$，应该有：
-
-$$\displaystyle{
-    d(x) = w^Tx 
-    \left\{\begin{aligned}
-    &> 0, \, x \in \omega_1\\
-    &\leq 0,\, x \in \omega_2
-    \end{aligned}\right.
-}$$
-
-现在对于训练样本集中的样本$x_k$进行训练求解权向量。记$w_{(i)}$为第$i$步迭代时的权向量，若$x_k \in \omega_1$，但$w_{(i)}^T x_k \leq 0$，说明分类器分类错误，下一步迭代中的权向量应修正为：
-
-$$w_{(i+1)} = w_{(i)} + Cx_k$$
-
-$C$为校正增量。
-
-若$x_k \in \omega_2$，但$w_{(i)}^T x_k > 0$，同样分类错误，权向量应修正为：
-
-$$w_{(i+1)} = w_{(i)} - Cx_k$$
-
-若分类正确，则权向量保持不变，为：
-
-$$w_{(i+1)} = w_{(i)}$$
-
------------
-
-现在对$x_k^{'} \in \omega_2$的样本乘以$(-1)$，有$w_{(i)}^T(-x_k^{'}) < 0$时分类错误，此时权向量修正为：
-
-$$w_{(i+1)} = w_{(i)} + C(-x_k^{'})$$
-
-令$x_k=-x_k^{'}$，可以得到统一的感知器算法表达式：
-
-$$\displaystyle{
-    w_{(i+1)} =
-    \left\{\begin{aligned}
-    &w_{(i)} &, &w_{(i)}^Tx_k > 0\\
-    w_{(i)} &+ Cx_k &, &w_{(i)}^Tx_k \leq 0
-    \end{aligned}\right.
-}$$
-
-##### 修正权向量的几何意义
-
-#### XOR problem
-## 支持向量机（SVM, Support Vector Machine）
-~~这个名字我十分想吐槽，第一次看到的时候以为是支持向量的机器，然而并没有什么关系。~~
-### 线性SVM
-#### 点到超平面的距离
-
