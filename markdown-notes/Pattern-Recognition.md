@@ -238,7 +238,7 @@ $$w^* = \argmin_w E$$
 
 对于[线性回归](#回顾线性回归)这样简单的模型来说，当他使用均方误差作为损失函数时，可以求得最佳参数估计的闭式解。有闭式解意味着$w^*$可以直接求得，无需迭代。但是对于MLP，损失函数形式往往过于复杂闭式解难以（或者说无法）得到，因此往往要采取一些优化（Optimization）算法来求解。对于BP来说，我们使用的是**梯度下降**：
 
-要求
+==目标==
 
 $$\boldsymbol{w}^* = \argmin_{\boldsymbol{w}} E$$
 
@@ -256,13 +256,18 @@ $$\boldsymbol{w} = (w_1,w_2,\cdots,w_n)$$
 
 $$\nabla E = (\frac{\partial E}{\partial w_1}, \frac{\partial E}{\partial w_2}, \cdots, \frac{\partial E}{\partial w_n})$$
 
-我们可以写成各权值单独更新的公式：
+我们可以写成各==权值单独更新的公式==：
 
 $$\Delta w_i = -\eta \frac{\partial E}{\partial w_i}$$
 
+剩下的问题是如何求$\dfrac{\partial E}{\partial w_i}$。
+
+------
+
+
 下面给出以三层感知机网络为例的BP权值更新公式推导过程。用作分类（Classification）。其中隐层有$l$个神经元，采用sigmoid函数；输出层有$m$个神经元，激活函数也采用sigmoid。以**均方误差**作为损失函数。
 
-记输入层第$i$个节点输入为$x_i$；隐层第$j$个节点的输入为$HI_j$，输出为$HO_j$；输出层第$k$个节点的输入为$OI_k$，输出为$OO_k$（即网络预测值$\hat{L}_k$。为了体现他的意义有不同叫法，在后文推导需要注意其实是一样的）。从输入层第$i$个节点到到隐层第$j$个节点的权值记作$w_{ij}$；从隐层第$j$各节点到到输出层第$k$个节点的权值记作$w_{jk}$。记训练数据中样本对应每个输出层节点输出为$L_k$，则损失函数（系数$1\over 2$是为了计算方便）和目标为：
+记输入层第$i$个节点输入为$x_i$；隐层第$j$个节点的输入为$H_{in,k}$，输出为$H_{out,k}$；输出层第$k$个节点的输入为$O_{in,k}$，输出为$O_{out,k}$（即网络预测值$\hat{L}_k$。为了体现他的意义有不同叫法，在后文推导需要注意其实是一样的）。从输入层第$i$个节点到到隐层第$j$个节点的权值记作$w_{ij}$；从隐层第$j$各节点到到输出层第$k$个节点的权值记作$w_{jk}$。记训练数据中样本对应每个输出层节点输出为$L_k$，则损失函数（系数$1\over 2$是为了计算方便）和目标为：
 
 $$E=\frac{1}{2} \sum_{k=1}^{l}[L_k-\hat{L}_k]^2$$
 
@@ -272,19 +277,19 @@ $$w_{jk}^*,\cdots,v_{ij}^*,\cdots = \argmin_{w_{jk},\cdots,v_{ij},\cdots}E$$
 其中
 
 $$\left\{\begin{aligned}
-  \hat{L}_k = OO_k = f(OI_k) \\
-  OI_k = \sum_{j=1}^{m} w_{jk}HO_j \\
-  HO_j = f(HI_j) \\
-  HI_j = \sum_{i=1}^{n} v_{ij}x_i
+  \hat{L}_k = O_{out,k} = f(O_{in,k}) \\
+  O_{in,k} = \sum_{j=1}^{m} w_{jk}H_{out,k} \\
+  H_{out,k} = f(H_{in,k}) \\
+  H_{in,k} = \sum_{i=1}^{n} v_{ij}x_i
 \end{aligned}\right.$$
 
-$$$$
 
-BP算法的核心即为求偏导的链式法则：
+
+==BP算法的核心==*即为**求偏导的链式法则**：
 
 $$\Delta w_{jk} = - \eta \frac{\partial E}{\partial w_{jk}} $$
 
-$$\frac{\partial E}{\partial w_{jk}} = \frac{\partial E}{\partial OI_k} \cdot \frac{\partial OI_k}{\partial w_{jk}}$$ 
+$$\frac{\partial E}{\partial w_{jk}} = \frac{\partial E}{\partial O_{in,k}} \cdot \frac{\partial O_{in,k}}{\partial w_{jk}}$$ 
 
 首先先给出sigmoid函数导数的性质：
 
@@ -294,27 +299,40 @@ $$\frac{\partial f}{\partial x} = \frac{-(-e^{-x})}{(1+e^{-x})^2} = \frac{1}{1+e
 
 所以左边部分
 
-$$\frac{\partial E}{\partial OI_k} =\frac{\partial E}{\partial OO_k} \cdot \frac{\partial OO_k}{\partial OI_k} = (L_k-\hat{L}_k)f(OI_k)[1-f(OI_k)]$$
+$$\frac{\partial E}{\partial O_{in,k}} =\frac{\partial E}{\partial O_{out,k}} \cdot \frac{\partial O_{out,k}}{\partial O_{in,k}} = (L_k-\hat{L}_k)f(O_{in,k})[1-f(O_{in,k})]$$
 
 为了方便，记输出层误差信号
 
 $$\begin{aligned}
-  \delta_k^o = - \frac{\partial E}{\partial OI_k} &= -(L_k-\hat{L}_k)f(OI_k)[1-f(OI_k)]
+  \delta_{O,k} = - \frac{\partial E}{\partial O_{in,k}} &= -(L_k-\hat{L}_k)f(O_{in,k})[1-f(O_{in,k})]
 \end{aligned}$$
 
 则有==输出层权值更新公式==：
 
-$$\Delta w_{jk} = \eta \delta_k^o HO_j $$
+$$\Delta w_{jk} = \eta \delta_{O,k} H_{out,k} $$
 
 对于隐层的权值更新公式照毛画虎：
 
 $$\Delta v_{ij} = - \eta \frac{\partial E}{\partial v_{ij}} $$
 
-$$\frac{\partial E}{\partial v_{ij}} = \frac{\partial E}{\partial HI_j} \cdot \frac{\partial HI_j}{\partial v_{ij}}$$ 
+$$\frac{\partial E}{\partial v_{ij}} = \frac{\partial E}{\partial H_{in,k}} \cdot \frac{\partial H_{in,k}}{\partial v_{ij}}$$ 
 
 有
 
-$$\frac{\partial E}{\partial HI_j} = $$
+$$\begin{aligned}
+  \frac{\partial E}{\partial H_{in,k}} &= \sum_{k=1}^{l} \frac{\partial E}{\partial O_{in,k}} \cdot \frac{\partial O_{in,k}}{\partial H_{out,k}} \cdot \frac{\partial H_{out,k}}{\partial H_{in,k}} \\
+  &= \sum_{k=1}^{l} \delta_{O,k} w_{jk} f(H_{in,k})[1-f(H_{in,k})]
+\end{aligned}$$
+
+同样记输出层误差信号
+
+$$\delta_{H,j} = -\frac{\partial E}{\partial H_{in,k}} = \sum_{k=1}^{l} \delta_{O,k} w_{jk} f(H_{in,k})[1-f(H_{in,k})]$$
+
+==隐层权值更新公式==为：
+
+$$\Delta v_{ij} = \eta \delta_{H,j} H_{out,k} $$
+
+![BP链式法则]()
 
 --------
 激活函数采用softmax。以交叉熵为损失函数。
