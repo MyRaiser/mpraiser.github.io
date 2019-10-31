@@ -256,25 +256,54 @@ $$\begin{aligned}
     \frac{\partial F(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} = g\left( \delta^{'}(\phi)\left| \nabla \phi \right| + \delta(\phi)\frac{h_x\phi_x + h_y\phi_y}{\left| \nabla \phi \right|} \right)
 \end{aligned}$$
 
-则有：
+对于$\displaystyle{\mathcal{L}_g(\phi) = \int_\Omega g \delta(\phi) \left|\nabla\phi\right| dxdy}$，令：
+
+$$F(\phi) = g \delta(\phi) \left|\nabla\phi\right|$$
+
+令$h$为一个满足$h \Big|_{\partial\Omega}=0$的任意函数，令$\alpha$为一个小常数，有：
 
 $$\begin{aligned}
+    F(\phi + \alpha h) &= g \delta(\phi + \alpha h) \left|\nabla(\phi + \alpha h)\right| \\
+    &= g \delta(\phi + \alpha h) \sqrt{{(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2}
+\end{aligned}$$
+
+对其求偏导，有：
+
+$$\begin{aligned}
+    \frac{\partial F(\phi+\alpha h)}{\partial\alpha} &= g\left( h\delta^{'}(\phi+\alpha h)\sqrt{{(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2} + \delta(\phi + \alpha h)\frac{\nabla h \cdot \nabla(\phi+\alpha h)}{ \sqrt{{(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2}} \right)
+\end{aligned}$$
+
+当$\alpha$足够小时，
+
+$$\begin{aligned}
+    \frac{\partial F(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} = g\left( h\delta^{'}(\phi)\left| \nabla \phi \right| + \delta(\phi)\frac{h_x\phi_x + h_y\phi_y}{\left| \nabla \phi \right|} \right)
+\end{aligned}$$
+
+则有：
+
+$$
     \frac{\partial \mathcal{L}_g(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} 
-    &= \int_\Omega g \delta(\phi)\frac{h_x\phi_x + h_y\phi_y}{\left| \nabla \phi \right|} dxdy \\
+    = \int_\Omega gh\delta^{'}(\phi)\left| \nabla \phi \right| dxdy
+    + \int_\Omega g \delta(\phi)\frac{h_x\phi_x + h_y\phi_y}{\left| \nabla \phi \right|} dxdy 
+$$
+
+对于第二个积分：
+$$\begin{aligned}
+    & \quad \int_\Omega g \delta(\phi)\frac{h_x\phi_x + h_y\phi_y}{\left| \nabla \phi \right|} dxdy \\
     &= \int_\Omega \left( \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|} h_x \right) dxdy + \int_\Omega\left( \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|} h_y \right) dxdy \\
     &= \int_\Omega \left( 
-        \frac{\partial}{\partial{x}}\left( \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|} h\right)
-        - \frac{\partial}{\partial{x}}\left( \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|}\right)h 
+        \frac{\partial}{\partial{x}}\left[ \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|} h\right]
+        - \frac{\partial}{\partial{x}}\left[ \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|}\right]h 
         \right) dxdy 
     + \int_\Omega \left( 
-        \frac{\partial}{\partial{y}}\left( \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|} h\right) - \frac{\partial}{\partial{y}}\left( \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|}\right)h 
+        \frac{\partial}{\partial{y}}\left[ \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|} h\right] - \frac{\partial}{\partial{y}}\left[ \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|}\right]h 
     \right) dxdy \\
     &= \int_\Omega \left( 
-        \frac{\partial}{\partial{x}}\left( \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|} h\right) 
-        +\frac{\partial}{\partial{y}}\left( \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|} h\right)  \right) dxdy 
+        \frac{\partial}{\partial{x}}\left[ \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|} h\right] 
+        +\frac{\partial}{\partial{y}}\left[ \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|} h\right]  \right) dxdy 
     -\int_\Omega \left( 
-        \frac{\partial}{\partial{x}}\left( \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|}\right)h 
-        +\frac{\partial}{\partial{y}}\left( \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|}\right)h 
+        \frac{\partial}{\partial{x}}\left[ \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|}\right]h 
+        +\frac{\partial}{\partial{y}}\left[ \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|}\right]h 
     \right) dxdy 
 \end{aligned}$$
 
@@ -282,29 +311,46 @@ $$\begin{aligned}
 
 $$\begin{aligned}
     &\int_\Omega \left( 
-        \frac{\partial}{\partial{x}}\left( \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|} h\right) 
-        +\frac{\partial}{\partial{y}}\left( \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|} h\right)  \right) dxdy 
+        \frac{\partial}{\partial{x}}\left[ \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|} h\right] 
+        +\frac{\partial}{\partial{y}}\left[ \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|} h\right]  \right) dxdy 
         = \oint_{\partial{\Omega}} h\left( \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|}dx - \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|}dy \right) = 0
 \end{aligned}$$
 
 因此
 $$\begin{aligned}
-    \frac{\partial \mathcal{L}_g(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} 
+    \int_\Omega g \delta(\phi)\frac{h_x\phi_x + h_y\phi_y}{\left| \nabla \phi \right|} dxdy 
     &= -\int_\Omega h \left( 
-        \frac{\partial}{\partial{x}}\left( \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|}\right)
-        + \frac{\partial}{\partial{y}} \left(\frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|}\right)
+        \frac{\partial}{\partial{x}}\left[ \frac{g\delta(\phi)\phi_x}{\left| \nabla \phi \right|}\right]
+        + \frac{\partial}{\partial{y}} \left[\frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|}\right]
     \right) dxdy \\
     &= -\int_\Omega h \left( 
         \nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|})
-    \right) dxdy
+    \right) dxdy \\
 \end{aligned}$$
 
-当$\mathcal{L}_g(\phi)$取到最小时，有：
+其中
 
-$$\frac{\partial \mathcal{L}_g(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} 
-= -\int_\Omega h \left(\nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|})\right) dxdy 
-= 0
-$$
+$$\begin{aligned}
+    \nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left|\nabla\phi\right|})
+    &= \frac{\partial}{\partial x} \left( \frac{g\delta(\phi)}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial x} \right) + \frac{\partial}{\partial y} \left( \frac{g\delta(\phi)}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial y} \right) \\
+    &= \frac{\partial\delta}{\partial x} \left( \frac{g}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial x} \right) 
+    + \delta \frac{\partial}{\partial x} \left( \frac{g}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial x} \right)
+    + \frac{\partial\delta}{\partial y} \left( \frac{g}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial y} \right) 
+    + \delta \frac{\partial}{\partial y} \left( \frac{g}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial y} \right) \\
+    &= \frac{\partial\delta}{\partial\phi} \left( \frac{\partial\phi}{\partial x} \frac{g}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial x} + \frac{\partial\phi}{\partial y} \frac{g}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial y} \right) 
+    + \delta \left( \frac{\partial}{\partial x} , \frac{\partial}{\partial x}\right) \cdot \left( \frac{g}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial x}, \frac{g}{\left|\nabla\phi\right|} \frac{\partial\phi}{\partial y} \right) \\
+    &= \delta^{'}(\phi)\frac{g(\phi_x^2 + \phi_y^2)}{\left|\nabla\phi\right|} + \delta(\phi) \nabla\cdot\left( \frac{g}{\left|\nabla\phi\right|} \left( \frac{\partial}{\partial x} , \frac{\partial}{\partial x}\right) \cdot \phi \right) \\
+    &= g\delta^{'}(\phi)\left|\nabla\phi\right| + \delta(\phi)\nabla\cdot(\frac{g\nabla \phi}{\left| \nabla \phi \right|})
+\end{aligned}$$
+
+因此当$\mathcal{L}_g(\phi)$取到最小时，有：
+
+$$\begin{aligned}
+    \frac{\partial \mathcal{L}_g(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} 
+    &= \int_\Omega gh \delta^{'}(\phi)\left| \nabla \phi \right| dxdy - \int_\Omega gh\delta^{'}(\phi)\left|\nabla\phi\right| dxdy - \int_\Omega h \left(\nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|})\right) dxdy \\
+    &= - \int_\Omega h \left(\nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|})\right) dxdy \\
+    &= 0
+\end{aligned}$$
 
 由于函数$h$是任意的，必须有：
 
@@ -344,12 +390,29 @@ $$\epsilon (\phi) = \mu \mathcal{P}(\phi) + \lambda \mathcal{L}_g(\phi) + \nu \m
 最小化，即求
 $$\phi^* = \argmin_\phi \epsilon (\phi)$$
 
-通过上述的推导，可以得到梯度下降法的更新公式：
+通过上述的推导，有：
+
+$$\begin{aligned}
+    \frac{\partial \epsilon(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0}
+    &= \mu \frac{\partial \mathcal{P}_g(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} + \lambda\frac{\partial \mathcal{L}_g(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} + \nu\frac{\partial \mathcal{A}_g(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} \\
+    &= \mu \left[ - \int_\Omega h \left(\Delta\phi - \nabla\cdot(\frac{\nabla\phi}{\left|\nabla\phi\right|})\right) dxdy  \right] \\
+    &\quad + \lambda \left[  - \int_\Omega h \left(\delta(\phi) \nabla \cdot (g \frac{\nabla\phi}{\left| \nabla \phi \right|})\right) dxdy \right]\\
+    &\quad  + \nu \left[ - \int_\Omega h \Big( g \delta(\phi) \Big) dxdy \right] \\
+    &= - \int_\Omega h \left[ \mu\left[\Delta\phi - \nabla\cdot(\frac{\nabla\phi}{\left|\nabla\phi\right|}) \right] + \lambda\delta(\phi)\nabla \cdot (g \frac{\nabla\phi}{\left| \nabla \phi \right|}) + \nu g \delta(\phi) \right]dxdy
+\end{aligned}$$
+
+当$\epsilon (\phi)$最小，有上式等于$0$。又因为函数$h$是任意的，则有：
+
+$$\mu\left[\Delta\phi - \nabla\cdot(\frac{\nabla\phi}{\left|\nabla\phi\right|}) \right]
+    + \lambda \delta(\phi) \nabla\cdot (g \frac{\nabla\phi}{\left| \nabla \phi \right|})
+    + \nu g \delta(\phi) = 0$$
+
+可以得到梯度下降法的更新公式：
 
 $$\begin{aligned}
     \frac{\partial\phi}{\partial t}
-    = \mu\left(\nabla\phi - \nabla\cdot(\frac{\nabla\phi}{\left|\nabla\phi\right|}) \right)
-    + \lambda\nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|})
+    = \mu\left[\Delta\phi - \nabla\cdot(\frac{\nabla\phi}{\left|\nabla\phi\right|}) \right]
+    + \lambda\delta(\phi) \nabla\cdot (g \frac{\nabla\phi}{\left| \nabla \phi \right|})
     + \nu g \delta(\phi)
 \end{aligned}$$
 

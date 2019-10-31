@@ -45,45 +45,45 @@ $$\displaystyle{
 ~~我也不知道课程PPT上为什么这里叫做感知器算法，尽管他还没有发展到真正意义上的感知器（Percetron）。~~
 为了方便将最后的这个常数项$b$也写成统一的形式，可以将模式向量和权向量写成增广形式，即增广模式向量：
 
-$$x=[x_1,x_2,\cdots,x_n,1]^T$$
+$$\boldsymbol{x}=[x_1,x_2,\cdots,x_n,1]^T$$
 
 增广权向量：
-$$w=[w_1,w_2,\cdots,w_n, b]^T$$
+$$\boldsymbol{w}=[w_1,w_2,\cdots,w_n, b]^T$$
 感知器算法是通过对已知样本的训练和学习来求得线性判别函数系数的方法。我们知道对于一个模式向量$x$，应该有：
 
 $$\displaystyle{
-    d(x) = w^Tx 
+    d(x) = \boldsymbol{w}^T\boldsymbol{x} 
     \left\{\begin{aligned}
     &> 0, \, x \in \omega_1\\
     &\leq 0,\, x \in \omega_2
     \end{aligned}\right.
 }$$
 
-现在对于训练样本集中的样本$x_k$进行训练求解权向量。记$w_{(i)}$为第$i$步迭代时的权向量，若$x_k \in \omega_1$，但$w_{(i)}^T x_k \leq 0$，说明分类器分类错误，下一步迭代中的权向量应修正为：
+现在对于训练样本集中的样本$\boldsymbol{x}_k$进行训练求解权向量。记$\boldsymbol{w}_{(i)}$为第$i$步迭代时的权向量，若$\boldsymbol{x}_k \in \omega_1$，但$\boldsymbol{w}_{(i)}^T \boldsymbol{x}_k \leq 0$，说明分类器分类错误，下一步迭代中的权向量应修正为：
 
-$$w_{(i+1)} = w_{(i)} + Cx_k$$
+$$\boldsymbol{w}_{(i+1)} = \boldsymbol{w}_{(i)} + C\boldsymbol{x}_k$$
 
 $C$为校正增量。
 
 若$x_k \in \omega_2$，但$w_{(i)}^T x_k > 0$，同样分类错误，权向量应修正为：
 
-$$w_{(i+1)} = w_{(i)} - Cx_k$$
+$$\boldsymbol{w}_{(i+1)} = \boldsymbol{w}_{(i)} - C\boldsymbol{x}_k$$
 
 若分类正确，则权向量保持不变，为：
 
-$$w_{(i+1)} = w_{(i)}$$
+$$\boldsymbol{w}_{(i+1)} = \boldsymbol{w}_{(i)}$$
 
-现在对$x_k^{'} \in \omega_2$的样本乘以$(-1)$，有$w_{(i)}^T(-x_k^{'}) < 0$时分类错误，此时权向量修正为：
+现在对$x_k^{'} \in \omega_2$的样本乘以$(-1)$，有$w_{(i)}^T(-\boldsymbol{x}_k^{'}) < 0$时分类错误，此时权向量修正为：
 
-$$w_{(i+1)} = w_{(i)} + C(-x_k^{'})$$
+$$\boldsymbol{w}_{(i+1)} = \boldsymbol{w}_{(i)} + C(-\boldsymbol{x}_k^{'})$$
 
 令$x_k=-x_k^{'}$，可以得到统一的感知器算法表达式：
 
 $$\displaystyle{
-    w_{(i+1)} =
+    \boldsymbol{w}_{(i+1)} =
     \left\{\begin{aligned}
-    &w_{(i)} &, &w_{(i)}^Tx_k > 0\\
-    w_{(i)} &+ Cx_k &, &w_{(i)}^Tx_k \leq 0
+    &\boldsymbol{w}_{(i)} &, &\boldsymbol{w}_{(i)}^T\boldsymbol{x}_k > 0\\
+    \boldsymbol{w}_{(i)} &+ C\boldsymbol{x}_k &, &\boldsymbol{w}_{(i)}^T\boldsymbol{x}_k \leq 0
     \end{aligned}\right.
 }$$
 
@@ -139,17 +139,17 @@ $$\left\{\begin{aligned}
 一个比较容易想到的的能完成上述任务的函数是：
 
 $$\displaystyle{
-    g(y) = \frac{1}{2}sgn(x)+\frac{1}{2} =
+    g(z) = \frac{1}{2}sgn(z)+\frac{1}{2} =
     \left\{\begin{aligned}
-    &1 , &y>0 \\
-    &0.5 , &y=0 \\
-    &0 , &y<0
+    &1 , &z>0 \\
+    &0.5 , &z=0 \\
+    &0 , &z<0
     \end{aligned}\right.
 }$$
 
 但是这个函数不连续可微，让我们之前进行参数估计的方法失效了。因此我们退求其次，寻找一类特征接近单位阶跃函数的替代函数（surrogate function），使得$f(\boldsymbol{x}_i)$的输出值尽量接近0或者1。一个可选的函数是Logistic函数：
 
-$$logistic(y)=\frac{1}{1+e^{-y}}$$
+$$logistic(z)=\frac{1}{1+e^{-z}}$$
 
 Logicstic函数是一种Sigmoid函数[^sigmoid]。最终得到对数几率回归[^对数几率回归]（Logistic Regression）形式：
 
