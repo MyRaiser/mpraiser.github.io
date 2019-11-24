@@ -25,6 +25,10 @@
     - [OvO(One vs. One)：$\omega_i/\omega_j$二分类法](#ovoone-vs-oneomega_iomega_j二分类法)
       - [OvO的一种特例的等价表达](#ovo的一种特例的等价表达)
     - [MvM()](#mvm)
+  - [贝叶斯分类器](#贝叶斯分类器)
+    - [参数估计](#参数估计)
+      - [极大似然估计](#极大似然估计)
+      - [贝叶斯估计](#贝叶斯估计)
   
 ### 线性判别函数基础理论
 线性判别函数是一个线性函数，可以将一类样本进行**二分类**。
@@ -417,3 +421,66 @@ $$\left[ \begin{matrix}
 
 ### MvM()
 ECOC
+
+## 贝叶斯分类器
+### 参数估计
+#### 极大似然估计
+已知有样本$\chi = \{x_1,x_2,\cdots,x_N\}$，参数为$\theta$，则产生这些样本的概率（似然函数）为：
+
+$$\begin{aligned}
+  p(\chi|\theta) &= p(x_1,x_2,\cdots,x_N|\theta) \\
+  &= \prod_{k=1}^{N} p(x_k|\theta)
+\end{aligned}$$
+
+为了计算方便，常常取对数，于是有似然函数：
+
+$$L(\theta) = \sum_{k=1}^{N} \ln p(x_k|\theta) $$
+
+我们知道样本$\chi = \{x_1,x_2,\cdots,x_N\}$的发生已经是既然事实，那么我们期望参数$\hat{\theta}$应该使其发生概率最大，即极大似然估计的核心为：
+
+$$\hat{\theta} = \argmax_{\theta}L(\theta)$$
+
+这通常通过求解导数的零点来实现，即求解
+
+$$\frac{\partial L(\theta)}{\partial \theta} = 0$$
+
+如果具有多个参数，即$\theta$为一向量，则有更广泛的形式：
+
+$$\nabla L(\theta) = 0$$
+
+#### 贝叶斯估计
+已知有样本$\chi = \{x_1,x_2,\cdots,x_N\}$，参数为$\theta$，估计参数$\hat{\theta}$的损失函数为$\lambda(\theta,\hat{\theta})$，如果使用平方误差有：
+
+$$\lambda(\theta,\hat{\theta}) = (\hat{\theta}-\theta)^2$$
+
+条件风险为
+
+$$R(\hat{\theta}|x) = \int_{\theta} \lambda(\theta,\hat{\theta})p(\theta|x)d\theta$$
+
+要最小化条件风险，有
+
+$$\theta^{*} = \argmin_{\hat{\theta}} R(\hat{\theta}|x)$$
+
+要使
+
+$$\begin{aligned}
+  \frac{\partial R(\hat{\theta}|x)}{\partial \hat{\theta}} &= \int_\theta \frac{\partial \lambda(\theta,\hat{\theta})}{\partial \hat{\theta}}p(\theta|x)d\theta \\
+  &= \int_\theta 2(\hat{\theta}-\theta) p(\theta|x)d\theta = 0
+\end{aligned}$$
+
+移项得
+$$\hat{\theta}\int_\theta p(\theta|x)d\theta = \int_\theta \theta p(\theta|x)d\theta$$
+
+其中
+
+$$\begin{aligned}
+  \int_\theta p(\theta|x)d\theta &= \int_\theta \frac{p(x|\theta)p(\theta)}{p(x)} d\theta\\
+  &= \frac{\int_\theta p(x|\theta)p(\theta) d\theta}{p(x)} \\
+  &= \frac{p(x)}{p(x)}(全概率公式) \\
+  &= 1
+\end{aligned}$$
+
+所以参数$\theta$的最佳估计
+
+$$\theta^{*} = \int_\theta \theta p(\theta|x)d\theta = E[\theta|x]$$
+
