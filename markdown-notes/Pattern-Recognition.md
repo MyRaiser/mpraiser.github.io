@@ -340,6 +340,11 @@ $$\Delta v_{ij} = \eta \delta_{H,j} H_{out,k} $$
 
 --------
 激活函数采用softmax。以交叉熵为损失函数。
+
+### RNN
+
+### CNN
+
 ## 支持向量机（SVM, Support Vector Machine）
 ~~这个名字我十分想吐槽，第一次看到的时候以为是支持向量的机器，然而并没有什么关系。~~
 ### 线性SVM
@@ -484,3 +489,10 @@ $$\begin{aligned}
 
 $$\theta^{*} = \int_\theta \theta p(\theta|x)d\theta = E[\theta|x]$$
 
+## 决策树
+
+
+## 集成学习
+## Boosting
+
+## Bagging与随机森林
