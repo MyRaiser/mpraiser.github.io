@@ -1,36 +1,9 @@
 # 模式识别
 ![模式识别与机器学习](Pattern-Recognition/PR&ML.png)
 
-- [模式识别](#模式识别)
-    - [线性判别函数基础理论](#线性判别函数基础理论)
-      - [一种线性判别函数的参数训练算法](#一种线性判别函数的参数训练算法)
-        - [修正权向量的几何意义](#修正权向量的几何意义)
-  - [对数几率回归（Logistic Regression）](#对数几率回归logistic-regression)
-    - [回顾线性回归](#回顾线性回归)
-    - [对数几率回归（Logistic Regression）](#对数几率回归logistic-regression-1)
-      - [Logistic回归的参数估计](#logistic回归的参数估计)
-    - [Softmax](#softmax)
-  - [从感知器到神经网络](#从感知器到神经网络)
-    - [感知器](#感知器)
-      - [XOR problem](#xor-problem)
-    - [多层感知机(MLP)](#多层感知机mlp)
-      - [激活函数](#激活函数)
-      - [损失函数（Loss function)](#损失函数loss-function)
-    - [训练多层感知机：后向传播（BP）](#训练多层感知机后向传播bp)
-  - [支持向量机（SVM, Support Vector Machine）](#支持向量机svm-support-vector-machine)
-    - [线性SVM](#线性svm)
-      - [点到超平面的距离](#点到超平面的距离)
-  - [多分类问题](#多分类问题)
-    - [OvR(One vs. Rest)：$\omega_i/\bar{\omega_i}$二分类法](#ovrone-vs-restomega_ibaromega_i二分类法)
-    - [OvO(One vs. One)：$\omega_i/\omega_j$二分类法](#ovoone-vs-oneomega_iomega_j二分类法)
-      - [OvO的一种特例的等价表达](#ovo的一种特例的等价表达)
-    - [MvM()](#mvm)
-  - [贝叶斯分类器](#贝叶斯分类器)
-    - [参数估计](#参数估计)
-      - [极大似然估计](#极大似然估计)
-      - [贝叶斯估计](#贝叶斯估计)
+[TOC]
   
-### 线性判别函数基础理论
+## 线性判别函数基础理论
 线性判别函数是一个线性函数，可以将一类样本进行**二分类**。
 
 线性判别函数可以将一系列样本划分为为$\omega_+$和$\omega_-$两类。记一个d维空间中**模式向量**（样本）为$\boldsymbol{x}_i=[x_{i1},x_{i2},\cdots,x_{id}]^T$，**权向量**$\boldsymbol{w}=[w_1,w_2,\cdots,w_d]^T$，有线性判别函数$d(\boldsymbol{x}_i)=w_1x_{i1} + w_2x_{i2} + \cdots +w_dx_{id} + b$。
@@ -45,7 +18,7 @@ $$\displaystyle{
     \end{aligned}\right.
 }$$
 
-#### 一种线性判别函数的参数训练算法
+### 一种线性判别函数的参数训练算法
 ~~我也不知道课程PPT上为什么这里叫做感知器算法，尽管他还没有发展到真正意义上的感知器（Percetron）。~~
 为了方便将最后的这个常数项$b$也写成统一的形式，可以将模式向量和权向量写成增广形式，即增广模式向量：
 
@@ -91,7 +64,7 @@ $$\displaystyle{
     \end{aligned}\right.
 }$$
 
-##### 修正权向量的几何意义
+#### 修正权向量的几何意义
 
 
 
@@ -227,7 +200,7 @@ $$\displaystyle{sigmoid(x)=\frac{1}{1+e^{-x}}}$$
 用于表征感知器的误差，可以有多种形式。
 - 均方误差
 - 交叉熵
-### 训练多层感知机：后向传播（BP）
+#### 训练多层感知机：后向传播（BP）
 总结前文的线性回归、Logistic回归模型，他们的求解算法总是在最小化模型产生的误差/最小化误差函数，即
 
 $$w^* = \argmin_w E$$
@@ -341,10 +314,9 @@ $$\Delta v_{ij} = \eta \delta_{H,j} H_{out,k} $$
 --------
 激活函数采用softmax。以交叉熵为损失函数。
 
-### RNN
-
 ### CNN
 
+### RNN
 ## 支持向量机（SVM, Support Vector Machine）
 ~~这个名字我十分想吐槽，第一次看到的时候以为是支持向量的机器，然而并没有什么关系。~~
 ### 线性SVM
