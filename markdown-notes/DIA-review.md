@@ -154,10 +154,7 @@ m-连接可以消除8-连接产生的歧义性。
 - 如何选取边界点
 - 右下点属于内部？边界？
 
-### 图像增强和图像恢复的区别
-图像在形成、传输和记录中，由于成像系统、传输介质和设备的不完善，导致图像质量下降，这一现象称为图像退化。
 
-图像复原和图像增强是有区别的，虽然二者的目的都是为了改善图像的质量，但图像增强不考虑图像是如何退化的，只通过试探各种技术来来增强图像的视觉效果。因此，图像增强可以不顾增强后的图像是否失真，只要看着舒服就行。而图像复原则完全不同，需知道图像退化的机制和过程等先验知识，据此找出一种相应的逆过程解算方法，从而得到复原的图像。如果图像已退化，应先做复原处理，再做增强处理。
 
 ### 2D-DFT性质
 名称    |   空域    |   频域
@@ -189,6 +186,141 @@ $$
     v
 \end{matrix}\right]
 $$
+
+### 图像增强
+#### 灰度映射
+原图$s$，目标图像$t$
+
+$$t = E_H(s)$$
+
+#### 直方图修正
+有$L$个灰度级$\{0,1,\cdots,L-1\}$
+灰度统计直方图：
+$$h(k) = n_k, k=0,1,\cdots,L-1$$
+
+灰度统计累计直方图：
+$$H(k) = \sum_{i=0}^{k} n_i, k=0,1,\cdots,L-1$$
+
+##### 直方图均衡
+把直方图变为均匀分布，用于增强对比度。
+$s_k$为第$k$级灰度值。
+
+$$p_s(s_k) = \frac{n_k}{N}$$
+
+$$t_k = E_H(s_k) = \sum_{i=0}^{k}\frac{n_i}{N} = \sum_{i=0}^{k}p_s(s_i)$$
+
+> 实际上，就是灰度统计累计直方图。
+
+##### 直方图匹配（规定化）
+1. 均衡化
+2. 规定需要的直方图，计算能使规定直方图均衡化的变换
+3. 使用2的反变换处理1的均衡化直方图
+
+#### 锐化
+- 频域高通滤波
+- 空域梯度算子卷积
+
+#### 平滑
+- 频域低通滤波
+- 空域
+  - 均值滤波
+  - 中值滤波
+- 多帧平均
+
+#### 伪彩色
+##### 色彩空间
+- RGB
+- HSI
+  - Intensity 亮度
+  - Hue 色度
+  - Saturation 饱和度
+##### 方法
+- 灰度分层法
+- 变换法
+
+#### 同态滤波
+图像包括照射分量和反射分量：
+$$f(x,y) = i(x,y)\cdot r(x,y)$$
+
+1. 取对数
+2. 傅里叶变换
+3. 滤波
+4. 傅里叶反变换
+5. 取指数
+
+能消除乘性噪声，压缩动态范围，增强相邻区域对比度。
+
+### 图像恢复
+#### 空域滤波
+> 处理加性噪声
+
+- 均值滤波器
+    - 算术平均滤波器(Arithmetic mean filters)
+        $$\hat{f}(x,y)=\frac{1}{mn}\sum_{(s,t \in S)}g(s,t)$$
+
+    - 几何平均滤波器(Geometric mean filter)
+        $$\hat{f}(x,y)=\left[\prod_{(s,t \in S)}g(s,t)\right]^{\frac{1}{mn}}$$
+
+    - 调和平均滤波器(Harmonic mean filter)
+        $$\hat{f}(x,y)=\frac{mn}{\sum_{(s,t \in S)}\frac{1}{g(s,t)}}$$
+
+    - 反调和平均滤波器(Contraharmonic filter)
+
+- 次序统计滤波器
+    - 中值滤波器(Median filter)
+        $$\hat{f}(x,y) = median\{g(s,t)\}$$
+
+    - 最大最小滤波器(Max and min filters)
+        $$\left\{\begin{aligned}
+            \hat{f}(x,y) = \max \{g(s,t)\} \\
+            \hat{f}(x,y) = \min \{g(s,t)\} \\
+        \end{aligned}\right.$$
+
+    - 中点滤波器(Midpoint filter)
+        $$\hat{f}(x,y) = \frac{1}{2}\left[\max \{g(s,t)\} + \min \{g(s,t)\}\right]$$
+
+    - Alpha截取均值滤波器(Alpha-trimmed mean filter)
+        $$\hat{f}(x,y) = \frac{1}{mn-d}\sum g_r(s,t)$$
+        
+        > 去掉最大最小的若干个
+
+#### 频域滤波
+- 带通
+- 带组
+- 槽口
+
+#### 运动恢复建模估计 √
+均匀线性运动：
+
+$$g(x,y) = \int_0^T f\left( x-x_0(t), y-y_0(t) \right) dt$$
+
+两边取傅里叶变换可以得到形式：
+
+$$G(u,v) = F(u,v) \cdot H(u,v)$$
+
+#### 几何矫正
+1. 坐标几何矫正（空间变换）
+    $$g(x,y) = f(x',y') = f(a(x,y),b(b,y))$$
+
+2. 象素灰度值的估计(灰度插值)
+    - 实现
+      1. 前向映射
+      2. 后向映射（常用）
+
+    - 方法
+      1. 最近邻赋值
+      2. 双向线性差值
+      3. 高阶插值
+
+
+### 图像增强和图像恢复的区别
+图像在形成、传输和记录中，由于成像系统、传输介质和设备的不完善，导致图像质量下降，这一现象称为图像退化。
+
+图像复原和图像增强是有区别的，虽然二者的目的都是为了改善图像的质量，但图像增强不考虑图像是如何退化的，只通过试探各种技术来来增强图像的视觉效果。因此，图像增强可以不顾增强后的图像是否失真，只要看着舒服就行。而图像复原则完全不同，需知道图像退化的机制和过程等先验知识，据此找出一种相应的逆过程解算方法，从而得到复原的图像。如果图像已退化，应先做复原处理，再做增强处理。
+
+数字图象恢复与增强的目的类似，也是旨在改善图象的质量
+
+但恢复是力求保持图象的本来面目，即以保真原则为其前提，这是区别于增强的基本不同点。因而恢复时要了解图象质量下降的物理过程，找出或估计其物理模型。恢复的过程就是沿着质量下降的逆过程来重现原始图象
 
 ## 3 数字化图像
 ### 图像采集网格
@@ -406,6 +538,8 @@ $$\displaystyle{\begin{aligned}
 
 ## 5 图像分割
 ### 阈值分割
+### 区域生长法
+### 分裂合并法
 ### 聚类分割
 #### K-means
 1. 初始化K个聚类中心$\{\mathcal{\mu}_1,\cdots,\mathcal{\mu}_k\}$
@@ -415,9 +549,13 @@ $$\displaystyle{\begin{aligned}
 
 
 ### 主动轮廓
+#### 从曲线演化到水平集？
+
+
 #### 水平集方法
 水平集方法（Level Set）是基于主动轮廓模型的图像分割方法，相比于Snake方法他可以更好的解决重新参数化困难的问题，也能够处理拓扑变化。
-##### 演化方程的推导
+
+##### 变分法推导演化方程 √
 在水平集方法的应用中，往往多步迭代会使得水平集函数降质（Degraded），对于这种问题常常采用重新初始化的方法。在2005年，不需重新初始化的水平集方法[^1]被提出，这部分将对其演化方程做出推导。
 
 [^1]:Li C, Xu C, Gui C, et al. Level set evolution without reinitialization: a new variational formulation[C]//Computer
@@ -436,30 +574,12 @@ $$\left\{\begin{aligned}
 
 本次文主要分析对$\mathcal{L}_g(\phi)$和$\mathcal{A}_g(\phi)$的推导。
 
+步骤为
+1. 令$\phi = \phi + \alpha h$
+2. 对$\alpha$求导
+3. 取$\alpha \rightarrow 0$
+   
 ###### $\mathcal{L}_g(\phi)$项的推导
-对于$\displaystyle{\mathcal{L}_g(\phi) = \int_\Omega g \delta(\phi) \left|\nabla\phi\right| dxdy}$，令：
-
-$$F(\phi) = g \delta(\phi) \left|\nabla\phi\right|$$
-
-令$h$为一个满足$h \Big|_{\partial\Omega}=0$的任意函数，令$\alpha$为一个小常数，有：
-
-$$\begin{aligned}
-    F(\phi + \alpha h) &= g \delta(\phi + \alpha h) \left|\nabla(\phi + \alpha h)\right| \\
-    &= g \delta(\phi + \alpha h) \sqrt{ {(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2}
-\end{aligned}$$
-
-对其求偏导，有：
-
-$$\begin{aligned}
-    \frac{\partial F(\phi+\alpha h)}{\partial\alpha} &= g\left( \delta^{'}(\phi+\alpha h)\sqrt{ {(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2} + \delta(\phi + \alpha h)\frac{\nabla h \cdot \nabla(\phi+\alpha h)}{ \sqrt{ {(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2}} \right)
-\end{aligned}$$
-
-当$\alpha$足够小时，
-
-$$\begin{aligned}
-    \frac{\partial F(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} = g\left( \delta^{'}(\phi)\left| \nabla \phi \right| + \delta(\phi)\frac{h_x\phi_x + h_y\phi_y}{\left| \nabla \phi \right|} \right)
-\end{aligned}$$
-
 对于$\displaystyle{\mathcal{L}_g(\phi) = \int_\Omega g \delta(\phi) \left|\nabla\phi\right| dxdy}$，令：
 
 $$F(\phi) = g \delta(\phi) \left|\nabla\phi\right|$$
@@ -476,6 +596,10 @@ $$\begin{aligned}
 $$\begin{aligned}
     \frac{\partial F(\phi+\alpha h)}{\partial\alpha} &= g\left( h\delta^{'}(\phi+\alpha h)\sqrt{ {(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2} + \delta(\phi + \alpha h)\frac{\nabla h \cdot \nabla(\phi+\alpha h)}{ \sqrt{ {(\phi+\alpha h)_x}^2 + {(\phi+\alpha h)_y}^2}} \right)
 \end{aligned}$$
+
+> $$\frac{\partial}{\partial\alpha}\left(\frac{\partial(\phi+\alpha h)}{\partial x}\right) = \frac{\partial}{\partial\alpha}\left(\frac{\partial\phi}{\partial x} + \alpha \frac{\partial h}{\partial x}\right) = \frac{\partial}{\partial\alpha}(\phi_x + \alpha h_x)$$
+
+> $$\phi_xh_x+\phi_yh_y = (\phi_x,\phi_y)\cdot(h_x,h_y)$$
 
 当$\alpha$足够小时，
 
@@ -510,6 +634,8 @@ $$\begin{aligned}
         +\frac{\partial}{\partial{y}}\left[ \frac{g\delta(\phi)\phi_y}{\left| \nabla \phi \right|}\right]h 
     \right) dxdy 
 \end{aligned}$$
+
+> $$(fh)_x - f_xh = fh_x$$
 
 对于左边项，由格林公式$\displaystyle{\oint_{\partial{\Omega}}Rdx+Sdy=\iint_{\Omega}\left( \frac{dS}{dx} - \frac{dR}{dy} \right)dxdy}$，且$h$满足$h \Big|_{\partial\Omega}=0$，有：
 
@@ -551,20 +677,22 @@ $$\begin{aligned}
 
 $$\begin{aligned}
     \frac{\partial \mathcal{L}_g(\phi+\alpha h)}{\partial\alpha} \bigg|_{\alpha \rightarrow 0} 
-    &= \int_\Omega gh \delta^{'}(\phi)\left| \nabla \phi \right| dxdy - \int_\Omega gh\delta^{'}(\phi)\left|\nabla\phi\right| dxdy - \int_\Omega h \left(\nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|})\right) dxdy \\
-    &= - \int_\Omega h \left(\nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|})\right) dxdy \\
+    &= \int_\Omega gh \delta^{'}(\phi)\left| \nabla \phi \right| dxdy - \int_\Omega gh\delta^{'}(\phi)\left|\nabla\phi\right| dxdy - \int_\Omega h \left(\delta(\phi)\nabla \cdot (g \frac{\nabla\phi}{\left| \nabla \phi \right|})\right) dxdy \\
+    &= - \int_\Omega h \left(\delta(\phi)\nabla \cdot (g \frac{\nabla\phi}{\left| \nabla \phi \right|})\right) dxdy \\
     &= 0
 \end{aligned}$$
 
 由于函数$h$是任意的，必须有：
 
-$$\nabla \cdot (g\delta(\phi) \frac{\nabla\phi}{\left| \nabla \phi \right|}) = 0$$
+$$\delta(\phi)\nabla \cdot (g \frac{\nabla\phi}{\left| \nabla \phi \right|}) = 0$$
 
 ###### $\mathcal{A}_g(\phi)$项的推导
 
 对于$\displaystyle{\mathcal{A}_g(\phi) = \int_\Omega gH(-\phi) dxdy}$，同理令：
 
 $$F(\phi) = gH(-\phi)$$
+
+> $H(x)$是单位阶跃函数。其导数是$\delta(x)$ 
 
 有：
 
@@ -619,6 +747,15 @@ $$\begin{aligned}
     + \lambda\delta(\phi) \nabla\cdot (g \frac{\nabla\phi}{\left| \nabla \phi \right|})
     + \nu g \delta(\phi)
 \end{aligned}$$
+
+### Graph Cut
+最小化能量函数
+
+$$E_x = E_{smooth}(x) + E_{data}(x)$$
+
+$x$是一个分割结果。
+
+？？？
 
 ## 6 模板匹配
 ### 相似性度量
@@ -686,7 +823,8 @@ $$\left\{\begin{aligned}
 
 
 ## 7 目标表达
-### 链码
+### 基于边界的表达
+#### 链码
 链码（Chain Code）
 
 ![8向链码与4向链码](https://bkimg.cdn.bcebos.com/pic/359b033b5bb5c9ea9bf5ff4ad539b6003af3b311?x-bce-process=image/watermark,g_7,image_d2F0ZXIvYmFpa2U4MA==,xp_5,yp_5)
@@ -697,19 +835,29 @@ $$\left\{\begin{aligned}
 
 > e.g. 起始点(1,4)，链码**0405**001**0405**00477002200033355**0400**
 
-#### 链码归一化
+##### 链码归一化
 - 起点归一化
     选取值最小的自然数顺序
+    
 - 旋转归一化
     一阶差分
 
-### 多边形近似
-#### 分裂算法
+#### 多边形近似
+##### 分裂算法
 先连接边界上相距最远的两个点（即把边界分成两部分），然后根据一定的准则进一步分解边界，构成多边形逼近边界，直到拟合误差满足一定的条件。
-#### 贪婪算法
+
+##### 贪婪算法
 先选一个边界点为起点，用直线依次连接该点与相邻的边界点，直至拟合误差超过某个限度。以线段的另一段为起点继续连接边界点，直至绕边界一周。
 
 > 与起点有关，**贪婪**
+
+### 基于区域的表达
+#### 四叉树
+#### 骨架
+
+### 基于变换的表达：傅里叶描述子
+
+## 8 简单目标描述
 
 ## 9 局部视觉特征
 ### 9.4 SIFT
