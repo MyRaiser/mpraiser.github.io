@@ -534,8 +534,28 @@ $$\displaystyle{\begin{aligned}
 3. 重复第二步，直到所有边缘都连接。
 
 ### SUSAN算子
+USAN: Univalue Segment Assimilating Nucleus
+SUSAN：最小（Smallest） 核同值区(USAN)
 
+核中心$(x_0,y_0)$，模板中的点$(x,y)$
 
+$$C(x,y;x_0,y_0)=\left\{\begin{aligned}
+    1&,|f(x_0,y_0)-f(x,y)| \leq T \\
+    0&,|f(x_0,y_0)-f(x,y)| > T
+\end{aligned}\right.$$
+
+游程和：
+
+$$S(x_0,y_0) = \sum_{(x,y)\in Nucleus(x_0,y_0)} C(x_0,y_0;x,y)$$
+
+边缘响应：
+
+$$R(x_0,y_0)\left\{\begin{aligned}
+    &G-S(x_0,y_0) ,& S(x_0,y_0)<G \\
+    &0 ,& \text{otherwise}
+\end{aligned}\right.$$
+
+几何阈值$G = 3S_{max}/4$。$S_{max}$是模板面积
 ## 5 图像分割
 ### 阈值分割
 ### 区域生长法
@@ -840,7 +860,13 @@ $$\left\{\begin{aligned}
     选取值最小的自然数顺序
 
 - 旋转归一化
-    一阶差分
+    一阶差分（逆时针方向变化的次数，用最后一位补第一位生成）
+    e.g.
+    
+    名称 | 值 | 值 | 值 | 值 | 值 | 值 | 值 | 值 | 值
+    :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-: | :-:
+    四方向链码 | (2) | 1 | 0 | 1 | 0 | 3 | 3 | 2 | 2 
+    差分码 |  | 3 | 3 | 1 | 3 | 3 | 0 | 3 | 0
 
 #### 多边形近似
 ##### 分裂算法
@@ -866,7 +892,7 @@ $$d_s(p,B) = \inf \{d(p,z) | z \in B\}$$
 ### 基于变换的表达：傅里叶描述子
 将点$(x,y)$视作复数$u+jv$
 
-如何预处理消除平移、旋转、尺度变换以及计算起点影响？
+#### 如何预处理消除平移、旋转、尺度变换以及计算起点影响？
 
 - 平移
     零均值化，以中心作为起点。
@@ -889,12 +915,116 @@ $$d_s(p,B) = \inf \{d(p,z) | z \in B\}$$
     取最远的两个点，取其中一点，逆时针旋转到0度
 
 ## 8 简单目标描述
+### 基于边界的描述
+#### 形状数
+4-方向（？）差分码中值最小的1个序列
+
+- 阶
+    序列的长度
+    闭合曲线阶是偶数
+    凸形区域形状数的阶$N$对应区域外包矩形的周长$(m+n)\times 2$
+
+##### 获取指定阶数的形状数
+从满足$2(m+n)=N$的矩形中选取长短轴比例与区域最接近的。
+
+### 基于区域的描述
+#### 拓扑描述符
+> 不受畸变变形
+
+##### 欧拉数
+$H$：区域内的孔数
+$C$：区域内的连通组元个数
+
+$$E=C-H$$
+
+- 4-连通欧拉数
+    $$E_4=C_4-H_8$$
+
+- 8-连通欧拉数
+    $$E_8=C_8-H_4$$
+
+##### 不变矩
+区域矩：
+- $p+q$阶矩
+    $$m_{pq} = \sum_{x}\sum_{y}x_py_qf(x,y)$$
+
+- $p+q$阶中心矩
+    $$\mu_{pq} = \sum_{x}\sum_{y}(x-\bar{x})^p(y-\bar{y})^qf(x,y)$$
+
+- 归一化中心矩
+    $$\mathcal{y}_{pq} = \frac{\mu_{pq}}{\mu_{00}^{\gamma}}$$
+
+    $$\gamma = \frac{p+q}{2} + 1$$
+
+平移、旋转、尺度不变矩？（Hu矩？）
+共有7个
+
+### 区域标记和计数
+#### 像素标记
+从左到右、从上到下扫描，检测连通性，连通认为是同一个，反之则设为新目标。
+
+#### 收缩连通元法
+- parallel shrinking：并行的逐步收缩连通元。
+- label propagation：沿逐次收缩的结果，反向标记连通区域。
 
 ## 9 局部视觉特征
-### 9.4 SIFT
+### 局部特征点
+#### 角点（Corner）检测
+##### Harris角点检测子 √
+> 满足旋转不变，不满足尺度不变。
+
+在图像$I$上，将窗口$W$移动$(u,v)$后：
+
+$$E(u,v) = \sum_{(x,y)\in W} [I(x+u,y+v)-I(x,y)]^2$$
+
+泰勒展开：
+
+$$\begin{aligned}
+    I(x+u,y+v) &= I(x,y) + \frac{\partial I}{\partial x}u + \frac{\partial I}{\partial y}v + o(I) \\
+    &\simeq I(x,y) + [I_x \, I_y]\left[\begin{matrix}u \\ v\end{matrix}\right]
+\end{aligned}$$
+
+可以推得：
+
+$$\begin{aligned}
+    E(u,v) &= \sum_{(x,y)\in W}\left[[I_x \, I_y]\left[\begin{matrix}u \\ v\end{matrix}\right]\right]^2 \\
+    &= [u \, v] \sum_{(x,y)\in W} \left[\begin{matrix} I_x^2 & I_xI_y \\ I_yI_x & I_y^2 \end{matrix}\right] \left[\begin{matrix}u \\ v\end{matrix}\right] \\
+    &= [u \, v] M \left[\begin{matrix}u \\ v\end{matrix}\right]
+\end{aligned}$$
+
+求解$M$的特征值、特征向量
+
+令
+
+$$[u,v]^T = a\boldsymbol{x}_{max} + b\boldsymbol{x}_{min}, a^2+b^2 = 1$$
+
+判定条件：
+
+类型 | 条件
+:-: | :-:
+edge | $\lambda_1\gg\lambda_2$或$\lambda_2\gg\lambda_1$
+corner | $\lambda_1$与$\lambda_2$均较大且相近
+flat | $\lambda_1$与$\lambda_2$均较小
+`
+$$R(x,y) = \lambda_1\lambda_2 - \alpha(\lambda_1 + \lambda_2)^2$$
+
+步骤：
+1. 对每个图像窗，计算 M 矩阵，得到相应的角点响应 R 值
+2. 找到角点响应较大的值所对应的图像位置点：
+3.  取 R 的局部极大值点，例如 进行非最大抑制
+
+
+#### 块（blob）检测
+##### LoG与DoG
+用不同大小的LoG（$\sigma$不同）与图像卷积，得到不同尺度的响应。
+
+DoG近似：
+
+### 局部区域描述
+#### 9.4 SIFT √
 SFIT（Scale-invariant feature transform）
 
-###  不变性
+#####  不变性
 - 平移不变：
     SIFT是局部特征，只提取关键点附近的信息。
 
@@ -906,6 +1036,151 @@ SFIT（Scale-invariant feature transform）
 
 - 缩放不变：
     通过尺度空间确保一定的缩放不变性。
+
+
+##### 反色后SIFT特征变化
+主方向反向。块编号顺序颠倒。但是块内特征不变（因为梯度编号顺序和主方向都取反）。总128维SIFT特征以8个为一组颠倒。
+
+### 主方向估计方法
+#### ORB
+主方向：质心与几何中心连线的方向与垂直方向的偏移
+
+#### BRISK
+
+### 特征匹配、编码、聚合
+#### 词袋模型（BoW） 
+bag-of-words model
+- 如何定义视觉单词和视觉码本？
+    对大量的局部视觉特征进行聚类（如k-means），聚类中心视为视觉单词，所有的聚类中心构成了视觉码本。
+
+- 如何将每个局部视觉特征与视觉单词对应？
+    基于视觉码本，通过矢量量化，将局部视觉特征量化到最近的视觉单词。
+
+    > 有损压缩（lossy compression），表达紧凑。
+
+- 如何基于对一幅图像的局部视觉特征集合进行紧凑表达?
+    基于视觉单词在图像中出现的频率，构造视觉单词直方图
+
+#### VLAD
+> 用于表征图像？
+
+Vector of Locally Aggregated Descriptor
+对于一个codebook$\{\mu_1,\cdots,\mu_N\}$（由kmeans聚类得到）local descriptor $X=\{x_1,\cdots,x_T\}$
+
+1. 令
+   $$NN(x_t) = \arg\min_{\mu_i}\|x_t-\mu_i\|$$
+
+    > 距离最近的$\mu_i$
+
+2. 计算
+    $$v_i = \sum_{x_t:NN(x_t)=\mu_i} x_t-\mu_i$$
+
+    > 所有意义为$\mu_i$的样本和
+
+3. 整合$v_i$？？$\mathcal{l}_2$正则化
+
+### 乘积量化
+基本思想：
+1. 将特征向量划分为$m$个子向量
+2. 使用$m$个不同的量化器量化子向量
+
+优势：
+1. 低复杂度
+2. 对于每个特征空间都有极为合适的量化
+
+## 10 形状分析
+### 形状特性
+#### 紧凑型描述
+##### 外观比
+围盒长宽比：
+$$R=\frac{L}{W}$$
+
+##### 形状因子
+基于周长和面积：
+$$F = \frac{\|B\|^2}{a\pi A}$$
+
+> 区域为圆时，最小
+> 对尺度变化不敏感，无量纲
+> 不同形状，形状因子可能相同
+
+##### 偏心率
+eccentricity
+长短轴之比：
+$$E=\frac{p}{q}$$
+
+> 区域为圆时，最小
+
+##### 球状性
+sphericity
+区域内切与外接圆半径之比：
+$$S = \frac{r_i}{r_c}$$
+
+> 区域为圆时，最大
+
+##### 圆形性
+$$\mu_R = \frac{1}{K}\sum_{k=0}{K-1}\|(x_k,y_k)-(\bar{x},\bar{y})\|$$
+
+$$\sigma_R^2 = \frac{1}{K}\sum_{k=0}{K-1}[\|(x_k,y_k)-(\bar{x},\bar{y})\| - \mu_R]^2$$
+
+圆形性：
+$$C = \frac{\mu_R}{\sigma_R}$$
+
+> 区域为圆时，趋于无穷
+
+#### 复杂性描述
+##### 细度比例
+##### 面积周长比
+##### 矩形度
+##### 与边界的平均距离
+##### 轮廓温度
+##### 饱和度
+
+### Chamfer Distance: global model
+平均与最近特征距离。对于模板$T$和图像$I$：
+
+$$D_{chamfer}(T,I) = \frac{1}{|T|}\sum_{t\in T}d_I(t)$$
+
+其中$d_I$是距离$I$的最小距离（用[距离图方法](#2d距离变换)生成）。
+
+### Shape Context: local matching
+匈牙利算法
+
+## 11 纹理分析
+### 纹理描述的统计方法
+#### 局部二值模式
+Local Binary Patterns
+
+对每个像素$p$生成一个8-bit数，当邻域$i$的值小于等于$p$的值，否则为1。编号顺序为从左上顺时针旋转$1,2,\cdots,8$。
+
+e.g.
+
+$$
+\left[\begin{matrix}
+    100 & 101 & 103 \\
+    40 & 50 & 80 \\
+    50 & 60 & 90
+\end{matrix}\right]
+\rightarrow [1,1,1,1,1,1,0,0]
+$$
+
+所以LBP码为252。
+
+![](Image-Processing/LBP.png)
+
+#### 自相关函数
+
+#### 灰度共生矩阵 √
+GLCM (Gray Level Co-ocurrence Matrices)
+
+$S$为区域$R$中具有特定空间联系（可由位置算子确定）的像素对的集合。
+
+记$\#$为求集合中元素数量的运算。对于像素对灰度值为$g_1$和$g_2$的共生矩阵$\boldsymbol{P}$中的元素
+
+$$p(g_1,g_2) = \frac{\#\{[(x_1,y_1),(x_2,y_2)]\in S|f(x_1,y_1)=g_1\& f(x_2,y_2)=g_2\}}{\# S}$$
+
+![](Image-Processing/GLCM.png)
+
+### 分形计算方法 
 
 ## 12 二值形态学
 定义$A$为图像集合，$B$为结构元素。
@@ -943,3 +1218,5 @@ $$A \ominus B = \{x | (B)_x \subseteq A\}$$
     $$(A \ominus B)^c = A^c \oplus \hat{B}$$
 
 ### 开启和闭合
+
+### 对偶性证明
