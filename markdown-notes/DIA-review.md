@@ -1214,6 +1214,18 @@ $$p(g_1,g_2) = \frac{\#\{[(x_1,y_1),(x_2,y_2)]\in S|f(x_1,y_1)=g_1\& f(x_2,y_2)=
 ![](Image-Processing/GLCM.png)
 
 ### 分形计算方法 
+#### 盒计数方法
+1. 用半径为$r\times r$的盒子覆盖图像
+2. 对其中含有目标的盒子计数，为$N(r)$
+3. 选取不同$r$，得到$\log[N(r)]$与$\log(r)$
+
+分形维度有：
+
+$$N(r) \sim r^{-d}$$
+
+有$d = -\dfrac{\log N}{\log r} = \dfrac{\log N}{\log(1/r)} $
+
+![](Image-Processing/fractal.png)
 
 ## 12 二值形态学
 定义$A$为图像集合，$B$为结构元素。
