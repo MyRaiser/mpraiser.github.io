@@ -3,7 +3,10 @@
 [TOC]
 
 ## 2 相关图像基础
-
+### 采样与量化
+- 采样：空间坐标的离散化
+- 量化：幅度的离散化
+  
 ### 像素间联系
 #### 像素间距离度量
 对于两个像素点$p(x,y)$，$q(s,t)$，他们之间的距离需要有一定的度量方法描述，一个统一的描述这一性质的方法是p-范数（p-norm）
@@ -210,6 +213,11 @@ $$p_s(s_k) = \frac{n_k}{N}$$
 $$t_k = E_H(s_k) = \sum_{i=0}^{k}\frac{n_i}{N} = \sum_{i=0}^{k}p_s(s_i)$$
 
 > 实际上，就是灰度统计累计直方图。
+
+> 积分变换证明方法
+> 要使
+> $$p_s(s) = p_r(r) \left|\frac{dr}{ds}\right| = \frac{1}{L-1}$$
+> $$s = T(r) = \int \left|\frac{ds}{dr}\right|$$
 
 ##### 直方图匹配（规定化）
 1. 均衡化
@@ -559,7 +567,15 @@ $$R(x_0,y_0)\left\{\begin{aligned}
 ## 5 图像分割
 ### 阈值分割
 ### 区域生长法
+1. 选择区域的种子象素
+2. 确定将相邻象素包括进来的准则
+3. 制定生长停止的规则
+
 ### 分裂合并法
+1. 先把图象分成任意大小且不重叠的区域
+2. 然后再（根据准则）合并或分裂这些区域
+3. 迭代进行直到实现分割
+
 ### 聚类分割
 #### K-means
 1. 初始化K个聚类中心$\{\mathcal{\mu}_1,\cdots,\mathcal{\mu}_k\}$
@@ -943,7 +959,14 @@ $$E=C-H$$
 - 8-连通欧拉数
     $$E_8=C_8-H_4$$
 
-##### 不变矩
+###### 多边形网中的欧拉数
+$V$：顶点数
+$B$：边线数
+$F$：面数
+
+$$E = V-B+F$$
+
+#### 不变矩
 区域矩：
 - $p+q$阶矩
     $$m_{pq} = \sum_{x}\sum_{y}x_py_qf(x,y)$$
@@ -1022,7 +1045,7 @@ DoG近似：
 
 ### 局部区域描述
 #### 9.4 SIFT √
-SFIT（Scale-invariant feature transform）
+SIFT（Scale-invariant feature transform）
 
 #####  不变性
 - 平移不变：
@@ -1042,10 +1065,15 @@ SFIT（Scale-invariant feature transform）
 主方向反向。块编号顺序颠倒。但是块内特征不变（因为梯度编号顺序和主方向都取反）。总128维SIFT特征以8个为一组颠倒。
 
 ### 主方向估计方法
+#### 梯度主方向
 #### ORB
+Oriented FAST and Rotated BRIEF
 主方向：质心与几何中心连线的方向与垂直方向的偏移
 
+$$\theta = \arctan(m_{01},m_{10})$$
+
 #### BRISK
+长短距离
 
 ### 特征匹配、编码、聚合
 #### 词袋模型（BoW） 
@@ -1077,7 +1105,7 @@ Vector of Locally Aggregated Descriptor
 
     > 所有意义为$\mu_i$的样本和
 
-3. 整合$v_i$？？$\mathcal{l}_2$正则化
+3. 拼成向量，$\mathcal{l}_2$归一化
 
 ### 乘积量化
 基本思想：
@@ -1135,6 +1163,10 @@ $$C = \frac{\mu_R}{\sigma_R}$$
 ##### 轮廓温度
 ##### 饱和度
 
+### 拓扑描述符
+
+![](Image-Processing/topology-description.png)
+
 ### Chamfer Distance: global model
 平均与最近特征距离。对于模板$T$和图像$I$：
 
@@ -1143,7 +1175,8 @@ $$D_{chamfer}(T,I) = \frac{1}{|T|}\sum_{t\in T}d_I(t)$$
 其中$d_I$是距离$I$的最小距离（用[距离图方法](#2d距离变换)生成）。
 
 ### Shape Context: local matching
-匈牙利算法
+
+![](Image-Processing/shape-context.png)
 
 ## 11 纹理分析
 ### 纹理描述的统计方法
