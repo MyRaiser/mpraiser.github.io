@@ -1220,3 +1220,87 @@ $$A \ominus B = \{x | (B)_x \subseteq A\}$$
 ### 开启和闭合
 
 ### 对偶性证明
+
+## 13 运动分析
+### 相机运动建模
+平移旋转
+
+![](Image-Processing/camera-motion.png)
+
+- 跟(track)
+- 吊(boom)
+- 摇(Pan)
+- 倾(Tilt)
+- 推(Zoom)
+- 滚(Roll)
+
+### 光流
+记$\psi(x,y,t)$是一点的在某帧的灰度，泰勒展开得到：
+
+$$\psi(x+dx,y+dy,t+dt) = \psi(x,y,t) + \frac{\partial\psi}{\partial x}dx + \frac{\partial\psi}{\partial y}dy + \frac{\partial\psi}{\partial t}dt$$
+
+由“恒定亮度假设”：
+
+$$\frac{\partial\psi}{\partial x}dx + \frac{\partial\psi}{\partial y}dy + \frac{\partial\psi}{\partial t}dt = 0$$
+
+$$\frac{\partial\psi}{\partial x}v_x + \frac{\partial\psi}{\partial y}v_y + \frac{\partial\psi}{\partial t} = 0$$
+
+> $v_x = \dfrac{dx}{dt}$，$v_y = \dfrac{dy}{dt}$
+
+得到：
+
+$$\nabla\psi^T \boldsymbol{v} + \frac{\partial\psi}{\partial t} = 0$$
+
+$\boldsymbol{v}$：该点空间运动速度光流场，待求目标。
+
+$\frac{\partial\psi}{\partial t}$： 灰度时间变化率，通过时间一阶差分估计。
+
+$\nabla\psi$：灰度空间变化率，通过$X$和$Y$方向空间一阶差分估计。
+
+> 运动图像中某一点的灰度时间变化率，是该点灰度空间变化率与该点空间运动速度的乘积。
+
+#### 多义性
+光流方程只能求$\nabla\psi$方向上的法向分量$v_n$，原因是$\nabla\psi$与$\boldsymbol{v}$做内积得到$\dfrac{\partial\psi}{\partial t}$是一个常数（而不是一个向量，即两个数），无法解出两个方向的$\boldsymbol{v}$的分量（两个未知数）。
+
+光流方程可以等价描述为：
+
+$$\|\nabla\psi\|v_n + \frac{\partial\psi}{\partial t} = 0$$
+
+切向$v_t$未定义。
+
+此外，在平坦纹理区域，有$\nabla\psi=0$，这个地方求解$v$是无意义的，即运动估计不可靠。
+
+### 运动表达方法（4种）
+
+![](Image-Processing/motion-expression.png)
+
+### 运动估计准则
+- 基于位移帧差准则 (DFD criterion)
+- 基于光流方程准则 (OF criterion)
+- 正则化准则：利用额外的平滑项 (smoothness) 约束 (important in pixel- and block-based representation)
+- 贝叶斯准则 (Bayesian criterion)：最大化后验概率
+
+### 块匹配算法（BMA）
+- 假设块中所有像素仅有同一个平移运动，用一个MV即可表示
+- 通过最小化块中的DFD误差，估计MV
+
+> MV即运动向量？
+
+#### 穷举块匹配算法(EBMA)
+![](Image-Processing/EBMA.png)
+
+#### 层级块匹配算法(HBMA)
+![](Image-Processing/HBMA.png)
+
+### 相位相关法
+$$\psi_1(X) = \psi_2(X+d)$$
+
+两边过傅里叶变换：
+
+$$\bar{\psi_1}(f) = \bar{\psi_2}(f)\cdot e^{j2\pi d^T f}$$
+
+$$\tilde{\psi}(f) = \frac{\bar{\psi_1}(f)\cdot \bar{\psi_2}^*(f)}{\bar{\psi_1}(f)\cdot \bar{\psi_2}^*(f)} = e^{j2\pi d^Tf}$$
+
+反变换：
+
+$$PCF(X) = \delta(X+d)$$
