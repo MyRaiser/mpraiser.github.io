@@ -100,6 +100,7 @@ $$K_{i,p-j} = \lim_{z\to z_i}\left\{
 这一性质可以如此理解：如果$H(z)$在$z=\infty$处极点，即意味着$H(z)$有因子$z^p$，由上文幂级数性质可知此时原序列$h[n]$在$n<0$时有值。
 
 ## 平稳随机信号基础
+### 平稳随机，各态遍历
 ### 自相关函数与互相关函数
 定义：
 
@@ -108,6 +109,7 @@ $$R_{xy}(m) = E[x(n)y(n+m)]$$
 
 
 ### 功率谱
+维纳-辛钦定理
 
 ### 平稳随机信号通过线性系统
 有一平稳随机信号$x[n]$，通过线性系统$h[n]$，得到$y[n]$。
@@ -146,7 +148,7 @@ $X(z) = \sigma_\epsilon^2$可以看作是一白噪声的功率谱，$\sigma_\eps
 
 >　最小相位：零点都在单位圆内
 
-## 维纳滤波器与卡尔曼滤波器
+## 维纳滤波器
 ### 问题模型
 输入信号$x(n)=s(n)+v(n)$通过系统$h(n)$得到输出$y(n)$。
 
@@ -180,12 +182,12 @@ $$E[x(n-m)s(n)] = \sum_i h(i)E[x(n-m)x(n-i)]$$
 
 $$R_{xs}(m) = \sum_i h(i)R_{xx}(m-i)$$
 
-> 在胡广. 数字信号处理理论算法与实现. 第一版. 中式左侧写成了$R_{sx}(m)$，是一个错误。
+> 在姚天任. 数字信号处理理论算法与实现. 第一版. 中式左侧写成了$R_{sx}(m)$，是一个错误。
 
-这个方程称作维纳-霍夫（Wiener-Hopf）方程。
+这个方程称作**维纳-霍夫（Wiener-Hopf）方程**。
 
 ### 求解维纳-霍夫方程
-维纳-霍夫方程没有规定滤波器的形式，滤波器$h(i)$可以取不同取值范围，主要使用的形式有：
+维纳-霍夫方程没有规定滤波器$h(i)$的形式，$h(i)$可以取不同取值范围，主要使用的形式有：
 
 1. $0\leq i \leq N-1$，FIR维纳滤波器。
 2. $0\leq i < \infty$，因果IIR维纳滤波器。
@@ -198,10 +200,40 @@ $$R_{xs}(m) = \sum_i h(i)R_{xx}(m-i)$$
 3. 预测
 
 #### FIR维纳滤波器
+记N阶FIR维纳滤波器冲激响应：
 
-#### 非因果
+$$\mathbf{h} = [h(0),h(1),\cdots,h(N-1)]^T$$
 
-#### 因果
+输入信号为：
+
+$$\mathbf{x}(n) = [x(n),x(n-1),\cdots,x(n-(N-1))]^T$$
+
+记$x(n)$的自相关矩阵为$\mathbf{R}$
+
+$$\mathbf{R} = E[\mathbf{x}(n)\mathbf{x}^T(n)]$$
+
+记$s(n)$与$\mathbf{x}(n)$的互相关矩阵为$\mathbf{P}$
+
+$$\mathbf{P} = E[d(n)\mathbf{x}(n)]$$
+
+维纳-霍夫（Wiener-Hopf）方程可以写作：
+
+$$\mathbf{P} = \mathbf{R}\mathbf{h}$$
+
+解为：
+
+$$\mathbf{h}_{opt} = \mathbf{R^{-1}}\mathbf{P}$$
+
+> 在[自适应滤波](自适应滤波器基本原理)一节中，对相关推导的写法可能更系统一些。基于矩阵微积分。
+
+#### 非因果IIR维纳滤波器
+对维纳-霍夫（Wiener-Hopf）方程两边取Z变换：
+
+$$H_{opt}(z) = \frac{S_{sx}(z)}{S_{xx}(z)}$$
+
+#### 因果IIR维纳滤波器
+
+## 卡尔曼滤波器
 
 
 ## 自适应滤波器
@@ -245,6 +277,8 @@ $$\mathbf{R} = E[\mathbf{x}(n)\mathbf{x}^T(n)]$$
 $$\mathbf{P} = E[d(n)\mathbf{x}(n)]$$
 
 $$\xi(n;\mathbf{w}) = E[d^2(n)] + \mathbf{w}^T\mathbf{R}\mathbf{w} - 2\mathbf{P}^T\mathbf{w}$$
+
+> 这里转不转置定义比较乱，但是应该没错。
 
 这在参数空间$(w_0,w_1,\cdots,w_L)$称作均方误差性能曲面。
 
@@ -316,6 +350,193 @@ $$\mathbf{R}\mathbf{w} = \mathbf{P}$$
 
 $$\mathbf{w}^* = \mathbf{R}^{-1}\mathbf{P}$$
 
-## 现代谱估计
+## 线性预测编码（LPC）分析
 
-## 矩阵微积分
+## 现代谱估计
+### 经典谱估计
+实际操作中对于平稳随机信号只能观察到若干有限个取样值：
+
+$$x_N(n) = \{x(0),x(1),\cdots,x(N)\}$$
+
+由此对自相关函数进行估计：
+
+$$\hat{R}_{xx}(m) = \frac{1}{N}\sum_{n=0}^{N-1-|m|}x(n)x(n+m)$$
+
+这是一种渐进无偏估计，称之为取样自相关函数。
+
+由维纳-辛钦定理，经过傅里叶变换（指DFT）得到功率谱估计：
+
+$$\hat{S}_{xx}(\omega) = \frac{1}{N}|X(e^{jw})|^2$$
+
+这个方法的问题是：
+
+1. 频率分辨率不高
+2. 有限样本等效于加窗，导致频谱泄漏
+
+### 参数模型
+相比于经典谱估计，现代谱估计先验地假设随机信号由一定的模型产生。这个想法由[谱分解](#白噪声通过线性系统)带来的知识支撑。
+
+设随机信号由一个均值为零、方差为$\sigma^2$的白噪声$u(n)$通过一线性系统$H(z)$产生，$H(z)$有：
+
+$$H(z) = \frac{B(z)}{A(z)} = \frac{\displaystyle{\sum_{n=0}^{q}b_nz^{-n}}}{\displaystyle{\sum_{n=0}^{p}a_nz^{-n}}}$$
+
+输出信号$x(n)$的功率谱为：
+
+$$\begin{aligned}
+    S_{xx}(z) &= \sigma^2H(z)H^*(\frac{1}{z^*}) = \sigma^2\frac{B(z)B^*(\frac{1}{z^*})}{A(z)A^*(\frac{1}{z^*})}
+\end{aligned}$$
+
+通常系统冲激响应$h(z)$是实信号，有：
+
+$$S_{xx}(z) = \sigma^2H(z)H(z^{-1}) = \sigma^2\frac{B(z)B(z^{-1})}{A(z)A(z^{-1})}$$
+
+不失一般性，可以调整系数使$a_0=1$，$b_0=1$。
+
+根据$H(z)$性质的不同，可以分为几种不同的模型：
+
+#### MA(q)模型
+除了$a_0=1$，其他$a_i$均为零。
+
+称为$q$阶滑动平均模型（Moving-Average, MA），是全零点模型。
+
+$$H_{MA}(z) = B(z)$$
+
+#### AR(p)模型
+除了$b_0=1$，其他$b_i$均为零。
+
+称为$p$自回归模型（Auto-regressive, AR），是全极点模型。
+
+$$H_{AR}(z) = \frac{1}{A(z)}$$
+
+#### ARMA(p,q)模型
+所有$a_i$，$b_i$不全为零。
+
+#### 模型之间转化
+- Wold分解定理：
+    任意ARMA过程或AR过程可以用一个无限长MA过程表示。
+
+- Kolmogorov定理：
+    任意ARMA过程或MA过程可以用一个无限长AR过程表示。
+
+通常AR模型好解。
+
+### AR模型谱估计
+对于$p$阶AR模型，有$p$个AR系数。
+
+由
+
+$$H_{AR}(z) = \frac{1}{A(z)} = \frac{1}{1+\displaystyle{\sum_{k=1}^{p}a_kz^{-k}}}$$
+
+输出为：
+
+$$x(n) = -\sum_{k=1}^{p}a_kx(n-k) + u(n)$$
+
+推导略
+
+Yule-Walker方程：
+
+$$R_{xx}(m) = \left\{\begin{aligned}
+    &-\sum_{k=1}^{p}a_kR_{xx}(m-k) + \sigma^2, &m=0\\
+    &-\sum_{k=1}^{p}a_kR_{xx}(m-k), &m>0
+\end{aligned}\right.$$
+
+矩阵形式：
+
+$$\begin{bmatrix}
+    R(0) & R(1) & \cdots & R(p)\\
+    R(1) & R(2) & \cdots & R(p-1)\\
+    \vdots & \vdots &\ddots &\vdots\\
+    R(p) & R(p-1) & \cdots & R(0) 
+\end{bmatrix}
+\begin{bmatrix}
+1 \\ a_1 \\ \vdots \\ a_p
+\end{bmatrix}
+=\begin{bmatrix}
+\sigma^2 \\ 0 \\ \vdots \\ 0
+\end{bmatrix}
+$$
+
+#### Levinson-Durbin算法
+Levinson算法：由AR(k)模型参数迭代计算AR(k+1)的参数。
+
+已知$k$阶参数$\{a_{k,1},a_{k,2},\cdots,a_{k,k},\sigma_k^2\}$，对其Yule-Walker方程增广，增加一列和一行
+
+$$\begin{bmatrix}
+    R(0) & R(1) & \cdots & R(k) & R(k+1)\\
+    R(1) & R(2) & \cdots & R(k-1) & R(k)\\
+    \vdots & \vdots &\ddots &\vdots & \vdots\\
+    R(k) & R(k-1) & \cdots & R(0) & R(1)\\
+    R(k+1) & R(k) & \cdots & R(1) & R(0)
+\end{bmatrix}
+\begin{bmatrix}
+1 \\ a_{k,1} \\ \vdots \\ a_{k,k} \\ 0
+\end{bmatrix}
+=\begin{bmatrix}
+\sigma_k^2 \\ 0 \\ \vdots \\ 0 \\ D_k
+\end{bmatrix}
+$$
+
+其中$D_k$为
+
+$$D_k = \sum_{i=0}^{k}a_{k,i}R(k+1-i),\quad a_{k,0}=1$$
+
+对比$k+1$阶的Yule-Walker方程：
+
+$$\begin{bmatrix}
+    R(0) & R(1) & \cdots & R(k) & R(k+1)\\
+    R(1) & R(2) & \cdots & R(k-1) & R(k)\\
+    \vdots & \vdots &\ddots &\vdots & \vdots\\
+    R(k) & R(k-1) & \cdots & R(0) & R(1)\\
+    R(k+1) & R(k) & \cdots & R(1) & R(0)
+\end{bmatrix}
+\begin{bmatrix}
+1 \\ a_{k+1,1} \\ \vdots \\ a_{k+1,k} \\ a_{k+1,k+1}
+\end{bmatrix}
+=\begin{bmatrix}
+\sigma_{k+1}^2 \\ 0 \\ \vdots \\ 0 \\ 0
+\end{bmatrix}
+$$
+
+将增广的$k$阶方程行列倒序，左式左侧项不变。倒序后与倒序前线性组合得到：
+
+$$\begin{bmatrix}
+1 \\ a_{k+1,1} \\ \vdots \\ a_{k+1,k} \\ a_{k+1,k+1}
+\end{bmatrix} = 
+\begin{bmatrix}
+1 \\ a_{k,1} \\ \vdots \\ a_{k,k} \\ 0
+\end{bmatrix}-\gamma_{k+1}
+\begin{bmatrix}
+0 \\ a_{k,k} \\ \vdots \\ a_{k,1} \\ 1
+\end{bmatrix}
+$$
+
+$\gamma_{k+1}$称为反射系数。
+
+又有：
+
+$$\begin{bmatrix}
+\sigma_{k+1}^2 \\ 0 \\ \vdots \\ 0 \\ 0
+\end{bmatrix} =
+\begin{bmatrix}
+\sigma_k^2 \\ 0 \\ \vdots \\ 0 \\ D_k
+\end{bmatrix}-\gamma_{k+1}
+\begin{bmatrix}
+D_k \\ 0 \\ \vdots \\ 0 \\ \sigma_k^2 
+\end{bmatrix}
+$$
+
+得到：
+
+$$\gamma_{k+1} = \frac{D_k}{\sigma_k^2}$$
+
+$$\sigma_{k+1}^2 = \sigma_k^2-\gamma_{k+1}D_k = (1-\gamma_{k+1}^2)\sigma_k^2$$
+
+对于$p$阶模型，递推到指定阶数就行。
+
+
+## 附录
+### 计算复杂度
+- 高斯消元法解线性方程组：$p^3$
+- Toeplitz矩阵求解：$p^2$
+
+### 矩阵微积分
