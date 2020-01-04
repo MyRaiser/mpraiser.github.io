@@ -8,26 +8,20 @@
 
 在前半文中，笔者会尽量隐去数学细节，而希望以一个完整、连贯的思路呈现整个傅立叶及其相关变换体系。在后半文中，笔者会对傅立叶体系中的一系列细节问题进行展开详细分析。
 
-- [傅里叶变换及其相关](#傅里叶变换及其相关)
-  - [前言](#前言)
-  - [引入：有限维空间的向量分解与无穷维空间的函数分解](#引入有限维空间的向量分解与无穷维空间的函数分解)
-  - [（连续时间）傅里叶变换（CTFT）](#连续时间傅里叶变换ctft)
-  - [离散时间傅里叶变换（DTFT, Discrete Time Fourier Transformation）](#离散时间傅里叶变换dtft-discrete-time-fourier-transformation)
-    - [模拟角频率和数字角频率的关系](#模拟角频率和数字角频率的关系)
-  - [离散傅里叶变换（DFT, Discrete Fourier Transformation）](#离散傅里叶变换dft-discrete-fourier-transformation)
-    - [离散傅里叶级数（DFS）/离散时间傅里叶级数（DTFS）](#离散傅里叶级数dfs离散时间傅里叶级数dtfs)
-    - [快速傅里叶变换（FFT, Fast Fourier Transformation）](#快速傅里叶变换fft-fast-fourier-transformation)
-  - [再谈（连续时间）傅里叶级数（CTFS）](#再谈连续时间傅里叶级数ctfs)
-  - [拉普拉斯变换（LT, Laplace Transformation）](#拉普拉斯变换lt-laplace-transformation)
-  - [Z变换](#z变换)
-    - [从Z变换得到DTFT](#从z变换得到dtft)
-- [一些数学](#一些数学)
-  - [反变换的系数？](#反变换的系数)
-  - [帕塞瓦尔定理（Parseval's Theorem）](#帕塞瓦尔定理parsevals-theorem)
-  - [从ICTFT到IDTFT](#从ictft到idtft)
-  - [从IDTFT到IDFT](#从idtft到idft)
-  - [频域函数自变量的问题](#频域函数自变量的问题)
-  - [从FT到LT](#从ft到lt)
+本文可能用到的一些缩写：
+
+中文全称 | 英文缩写
+:-: | :-:
+（连续时间）傅里叶变换 | CTFT
+离散时间傅里叶变换 | DTFT
+离散傅里叶变换/级数 | DFT/DFS
+快速傅里叶变换 | FFT
+（连续时间）傅里叶级数 | CTFS
+拉普拉斯变换 | LT
+Z变换 | ZT
+
+
+[TOC]
 
 ## 引入：有限维空间的向量分解与无穷维空间的函数分解
 我们已经熟悉，对于三维欧几里得空间中的向量$\vec{p}$，可以在三个正交基底进行分解$\vec{p}=a\vec{x}+b\vec{y}+c\vec{z}$。其中，$a,b,c$分别是$\vec{p}$在$\vec{x},\vec{y},\vec{z}$上的投影长度。对于欧几里得空间，如果记$B$为正交基底的集合（在三维的例子下即$B=\{\vec{x},\vec{y},\vec{z}\}$），$\vec{b}$为其中一个正交基底，那么向量的正交分解可以写为：
@@ -169,6 +163,10 @@ $$s=\sigma + j\omega$$
 采用从CTFT推导DTFT同样的方法我们可以简单的从Laplace变换得到Z变换：
 
 ### 从Z变换得到DTFT
+
+## Gibbs现象
+
+## 截断误差、频谱泄漏
 
 # 一些数学
 ## 反变换的系数？

@@ -3,7 +3,6 @@
 [傅里叶变换及其相关](markdown-notes/Fourier.html)
 [STM32](markdown-notes/STM32-learning-notes.html)
 [模式识别](markdown-notes/Pattern-Recognition.html)
-[图像处理](markdown-notes/Image-Processing.html)
 [图像分析复习](markdown-notes/DIA-review.html)
 [CUDA](markdown-notes/CUDA.html)
 
