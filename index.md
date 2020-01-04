@@ -5,6 +5,6 @@
 [模式识别](markdown-notes/Pattern-Recognition.html)
 [图像分析复习](markdown-notes/DIA-review.html)
 [CUDA](markdown-notes/CUDA.html)
-
+[数字信号处理](markdown-notes/Digital-Signal-Processing.html)
 ## 不务正业
 [WSL](markdown-notes/WSL.html)
