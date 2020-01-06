@@ -65,11 +65,13 @@ $$\begin{aligned}
 对于$p$阶重根的项，有相似的思路，左右同乘$(z-z_i)^p$：
 
 $$\begin{aligned}
-    (z-z_i)^p\frac{N(z)}{D(z)} &= (z-z_i)^p \left[ \frac{K_{i,p}}{(z-z_i)^p} + \frac{K_{i,p-1}}{(z-z_i)^{p-1}} +\cdots+ \frac{K_{i,0}}{(z-z_i)} + \sum_{k\not=i}\frac{K_k}{z-z_k} \right]\\
-    &= K_{i,p} + K_{i,p-1}(z-z_i) +\cdots+ K_{i,0}(z-z_i)^{p-1} + (z-z_i)^p\sum_{k\not=i}\frac{K_k}{z-z_k}
+    (z-z_i)^p\frac{N(z)}{D(z)} &= (z-z_i)^p \left[ \frac{K_{i,p}}{(z-z_i)^p} + \frac{K_{i,p-1}}{(z-z_i)^{p-1}} +\cdots+ \frac{K_{i,1}}{(z-z_i)} + \sum_{k\not=i}\frac{K_k}{z-z_k} \right]\\
+    &= K_{i,p} + K_{i,p-1}(z-z_i) +\cdots+ K_{i,1}(z-z_i)^{p-1} + (z-z_i)^p\sum_{k\not=i}\frac{K_k}{z-z_k}
 \end{aligned}$$
 
 可见要求得$K_{i,p-j}$只需要对上式两边求$j$次导，由此得到$p$阶重根的项的系数公式：
+
+> $j=0,1,\cdots,p-1$
 
 $$K_{i,p-j} = \lim_{z\to z_i}\left\{
     \frac{1}{j!}
@@ -77,8 +79,26 @@ $$K_{i,p-j} = \lim_{z\to z_i}\left\{
         (z-z_i)^p\dfrac{N(z)}{D(z)}
         \right]
     \right\}$$
+
 #### 留数法
-我还不会
+$$\begin{aligned}
+    f(n) = \mathcal{Z}^{-1}[F(z)] &= \frac{1}{2\pi j}\oint_C F(z)z^{n-1}dz \\
+    &= \sum_{C内诸极点}\mathrm{Res}[F(z)z^{n-1}]
+\end{aligned}$$
+
+其中由复变可知，留数的计算公式为：
+
+$$\mathrm{Res}[F(z)z^{n-1}]\Big|_{z=z_i} = [(z-z_i)F(z)z^{n-1}]\Big|_{z=z_i} $$
+
+对于$p$阶极点，有：
+
+$$\mathrm{Res}[F(z)z^{n-1}]\Big|_{z=z_i} = \frac{1}{(p-1)!}\{\frac{d^{p-1}}{dz^{p-1}}[(z-z_i)F(z)z^{n-1}]\}\Big|_{z=z_i} $$
+
+这形式上与部分分式分解相同。
+
+特别地，如果$n=0$，还会有$z^{n-1}$带来的极点，也需要计算。
+
+> 适合计算某点的值。
 
 ### 收敛域
 - 不能包含极点，以极点为界。
@@ -130,6 +150,7 @@ $$P_{yx}(z) = P_{xx}(z)H(z)$$
 
 $$P_{xy}(z) = P_{xx}(z)H^*(z)$$
 
+$$P_{xx} \xrightarrow{h(m)} P_{xy} \xrightarrow{h(-m)} P_{yy}$$
 ## 谱分解
 对于任意实平稳随机信号$y_n$的有理功率谱$S_{yy}(z)$可以唯一的表示为：
 
@@ -231,10 +252,130 @@ $$\mathbf{h}_{opt} = \mathbf{R^{-1}}\mathbf{P}$$
 
 $$H_{opt}(z) = \frac{S_{sx}(z)}{S_{xx}(z)}$$
 
+最好求。
+
 #### 因果IIR维纳滤波器
+如果滤波器的输入是方差为$\sigma_\epsilon^2$白噪声，方程是好求解的，所以如果将输入信号先白化，再设计滤波器，就简单了。
 
-## 卡尔曼滤波器
+设输入信号转化为方差为$\sigma_\epsilon^2$的白噪声$\epsilon(n)$
 
+$$\begin{aligned}
+    H(z) &= \frac{1}{B(z)}G(z) \\
+    &= \frac{1}{B(z)}\frac{1}{\sigma_\epsilon^2}[S_{\epsilon s}(z)]_+ \\
+    &= \frac{1}{B(z)}\frac{1}{\sigma_\epsilon^2}[\frac{S_{xs}(z)}{B(z^{-1})}]_+
+\end{aligned}$$
+
+1. 白化
+
+    $B(z)$是一个白化滤波器，对输入信号自功率谱$S_{xx}(z)$做谱分解得到：
+
+    $$S_{xx}(z) = \sigma_\epsilon^2B(z)B(z^{-1})$$
+
+2. 和分解，取因果部分
+
+    $$\frac{S_{xs}(z)}{B(z^{-1})} = [\frac{S_{xs}(z)}{B(z^{-1})}]_- + [\frac{S_{xs}(z)}{B(z^{-1})}]_+$$
+
+3. 逆Z变换，求冲激响应
+
+### 给定模型的因果IIR维纳滤波器
+对于有：
+
+$$s(n) = as(n-1) + w(n)$$
+
+$$x(n) = cs(n) + v(n)$$
+
+的模型，其中$w(n)$是信号模型中的白噪声激励，方差为$Q$；$v(n)$是信号传输或测量中引入的加性白噪声，方差为$R$。$a,c<1$
+
+这个模型是一阶AR模型，有：
+
+$$S_{ss}(z) = \frac{Q}{(1-az^{-1})(1-az)}$$
+
+对于一些功率谱，有如下特征：
+
+$$S_{xs}(z) = \frac{cQ}{(1-az^{-1})(1-az)}$$
+
+$$S_{xx}(z) = \frac{c^2Q}{(1-az^{-1})(1-az)} + R$$
+
+按照因果IIR维纳滤波器的设计流程，有：
+
+1. 谱分解
+    
+    $$\begin{aligned}
+        S_{xx}(z) &= \frac{c^2Q + (1+a^2)R - aRz^{-1} - aRz}{(1-az^{-1})(1-az)}\\
+        &= \sigma_\epsilon^2\frac{(1-fz^{-1})}{(1-az^{-1})}\frac{(1-fz)}{(1-az)}
+    \end{aligned}$$
+
+    待定系数$\sigma_\epsilon^2$、$f$
+
+    解为：
+
+    $$\left\{\begin{aligned}
+        f &= \frac{Ra}{R+c^2P} \\
+        \sigma_\epsilon^2 &= R+c^2P
+    \end{aligned}\right.$$
+
+    $P$是Ricatti方程$Q = P - \dfrac{PRa^2}{R+c^2P}$的正解
+
+2. 取因果部分
+
+    $$\begin{aligned}
+        \frac{S_{xs}(z)}{B(z^{-1})} &= \frac{cQ}{(1-az^{-1})(1-az)} \Big/ \frac{(1-fz)}{(1-az)}\\
+        &= \frac{cQ}{((1-az^{-1})(1-fz)} \\
+        &= \frac{A}{1-az^{-1}} + \frac{Bz}{1-fz}
+    \end{aligned}$$
+
+    待定系数求得$A = \dfrac{cQ}{1-fa}$，有：
+    
+    $$[\frac{S_{xz}(z)}{B(z^{-1})}]_+ = \frac{\sigma_\epsilon^2G}{1-az^{-1}}$$
+
+    其中$G = \dfrac{cQ}{\sigma_\epsilon^2(1-fa)}$，称为*维纳增益*。
+
+最终求得：
+
+$$H_c(z) = \frac{G}{1-fz^{-1}}$$
+### 维纳滤波器的均方误差
+一个感兴趣的问题是滤波器已经得到最优解$h_{opt}$后，最小的均方误差$\xi_{min}$是什么。
+
+#### FIR
+直接带入计算：
+
+$$\xi_{min}(n) = E[s^2(n)]$$
+
+#### IIR
+通常设计得出$H_{opt}$
+
+最优时有
+
+$$\xi_{min}(n) = E[e(n)s(n)] = R_{es}(0)$$
+
+反变换$S_{es}(z)$
+
+$$\begin{aligned}
+    \xi_{min}(n) &= \frac{1}{2\pi j}\oint S_{es}(z) z^{0-1}dz \\
+    \xi_{min}(n) &= \frac{1}{2\pi j}\oint [S_{ss}(z) - H_{opt}(z)S_{xs}(z^{-1})] z^{-1}dz
+\end{aligned}$$
+
+围线$C$取单位圆
+
+> 但是为什么？
+
+### 卡尔曼滤波器
+先做一些符号规定：
+
+$$\hat{s}(n|n) \rightarrow \hat{s}(n)$$
+
+$$\hat{s}(n-1|n-1) \rightarrow \hat{s}(n-1)$$
+
+由上节因果IIR维纳滤波器：
+
+$$H_c(z) = \frac{G}{1-fz^{-1}},f=a(1-cG)$$
+
+$$\begin{aligned}
+    \hat{s}(n|n) &= f\hat{s}(n-1|n-1) + Gx(n)\\
+    &= a\hat{s}(n-1|n-1) + G[x(n)-ac\hat{s}(n-1|n-1)]
+\end{aligned}$$
+
+用$n-1$时$s(n)$的最佳线性估计$\hat{s}(n-1|n-1)$得到……
 
 ## 自适应滤波器
 ### 自适应滤波器基本原理
@@ -280,7 +421,7 @@ $$\xi(n;\mathbf{w}) = E[d^2(n)] + \mathbf{w}^T\mathbf{R}\mathbf{w} - 2\mathbf{P}
 
 > 这里转不转置定义比较乱，但是应该没错。
 
-这在参数空间$(w_0,w_1,\cdots,w_L)$称作均方误差性能曲面。
+这在参数空间$(\xi,w_0,w_1,\cdots,w_L)$称作均方误差性能曲面。
 
 求梯度：
 
@@ -294,6 +435,63 @@ $$\mathbf{w}^* = \mathbf{R}^{-1}\mathbf{P}$$
 
 > 但是矩阵求逆计算很复杂，所以有以下多种改进方法。
 
+### 性能曲面
+在空间$(\xi,w_0,w_1,\cdots,w_L)$中，等高线（定误差）有：
+
+$$\mathbf{w}^T\mathbf{R}\mathbf{w} - 2\mathbf{P}^T\mathbf{w} = \text{常数}$$
+
+将原点平移到$\mathbf{w}^*$，得到权偏移矢量坐标系：
+
+$$\mathbf{v} = \mathbf{w}-\mathbf{w}^*$$
+
+$$F(\mathbf{v}) = \mathbf{v}^T\mathbf{R}\mathbf{v} = \text{常数}$$
+
+有
+
+$$\begin{aligned}
+    \nabla F &= 2\mathbf{R}\mathbf{v}\\
+    &= 2\mathbf{R}(\mathbf{w}-\mathbf{w}^*)\\
+    &= 2\mathbf{R}(\mathbf{w}-\mathbf{R}^{-1}\mathbf{P})\\
+    &= 2\mathbf{R}\mathbf{w}-2\mathbf{P} = \nabla\xi
+\end{aligned}$$
+
+**主轴**$\mathbf{v}'$通过原点，形式为$\mu\mathbf{v'}$；与椭圆$F(\mathbf{v})$正交的矢量可以用$\nabla F$表示，有：
+
+$$2\mathbf{R}\mathbf{v}' = \mu \mathbf{v}'$$
+
+$$(\mathbf{R} - \frac{\mu}{2})\mathbf{v}' = 0$$
+
+这与$\mathbf{R}$的特征矢量等式的形式一致：
+
+$$(\mathbf{R}-\lambda_n\mathbf{I})\mathbf{Q}_n = 0$$
+
+**说明主轴$\mathbf{v}'$是$\mathbf{R}$的特征矢量。**
+
+将$\mathbf{R}$对角化：
+
+$$\mathbf{R} = \mathbf{Q} \Lambda \mathbf{Q}^{-1}$$
+
+$$\Lambda = \mathrm{diag}(\lambda_0,\lambda_1,\cdots,\lambda_L)$$
+
+$$\mathbf{Q} = [\mathbf{Q}_0,\mathbf{Q}_1,\cdots,\mathbf{Q}_L]$$
+
+分别为特征值和特征向量阵。
+
+这表明进行变换
+
+$$\mathbf{v}' = \mathbf{Q}^T\mathbf{v} = \mathbf{Q}^{-1}\mathbf{v}$$
+
+后
+
+$$\nabla\xi = 2\Lambda\mathbf{v}' = 2[\lambda_0 v_0',\cdots,\lambda_L v_L']^T$$
+
+这个操作通过旋转将坐标轴变换到主轴上。
+
+二次性能曲面的性质可以总结为：
+
+- 输入信号自相关矩阵$\mathbf{R}$的特征矢量阵确定了主轴。
+- 旋转坐标系统$\mathbf{v}'$确定了性能曲面等高线（一组同心超椭圆）的主轴坐标系统。
+- $\mathbf{R}$的特征值是特征曲面沿主轴的二阶导数。
 
 ### GD
 $$\mathbf{w}^{(t+1)} = \mathbf{w}^{(t)} - \mu\nabla\xi(n)$$
@@ -302,19 +500,56 @@ $$\mathbf{w}^{(t+1)} = \mathbf{w}^{(t)} - \mu\nabla\xi(n)$$
 
 $$\mathbf{w}(n+1) = \mathbf{w}(n) - \mu\nabla\xi(n)$$
 
-#### 稳定性分析
-分析收敛性：
+
+#### 稳定性、收敛速度
+分析收敛性：略
+
+第$n$步的权值：
+
+$$\mathbf{w}(n) = \mathbf{w}^*  + (\mathbf{I}-2\mu\mathbf{R})^n[\mathbf{w}(0)-\mathbf{w}^*]$$
+
+最低误差：
+
+$$\xi_{min} = E[d^2[n]]-\mathbf{P}^T\mathbf{W}^*$$
+
+学习曲线时间常数$\tau_{mse}$：
+
+$$(r_{mse})_k = (1-2\mu\lambda_k)^2$$
+
+误差下降到：
+
+$$\frac{\xi(n)-\xi_{min}}{\xi(0)-\xi_{min}} = r_{mse}^n$$
+
+$$r_{mse}^{\tau_{mse}} = e^{-1}$$
+
+时
+
+$$(\tau_{mse})_k = \frac{1}{4\mu\lambda_k}$$
 
 ### LMS
 最小均方（LMS）算法，不要求脱线计算。
 
-用平方误差代替均方误差，有：
+用平方误差估计均方误差，有：
 
 $$\begin{aligned}
     \nabla\xi &\approx \frac{\partial}{\partial\mathbf{w}}(e^2(n))\\
     &= 2e(n)\frac{\partial(d(n)-\mathbf{w}^T\mathbf{x})}{\partial\mathbf{w}} \\
     &= -2e(n)\mathbf{x}(n)
 \end{aligned}$$
+
+#### 权矢量噪声
+用这个方法估计是存在误差/噪声的：
+
+$$\mathrm{cov}[\mathbf{v}(n)] \approx \mu\xi_{min}\mathbf{I}$$
+#### 失调量
+
+失调量$M$：
+
+$$M = \frac{\text{超量MSE}}{\xi_{min}} \approx \mu\mathrm{tr}(\mathbf{R})$$
+
+$$\mathrm{tr}(\mathbf{R})$$
+
+失调量、学习曲线时间常数是折衷
 
 ### RLS
 自适应递归最小二乘方（RLS）算法：
@@ -350,9 +585,8 @@ $$\mathbf{R}\mathbf{w} = \mathbf{P}$$
 
 $$\mathbf{w}^* = \mathbf{R}^{-1}\mathbf{P}$$
 
-## 线性预测编码（LPC）分析
 
-## 现代谱估计
+## 现代谱估计 
 ### 经典谱估计
 实际操作中对于平稳随机信号只能观察到若干有限个取样值：
 
@@ -431,7 +665,32 @@ $$H_{AR}(z) = \frac{1}{A(z)} = \frac{1}{1+\displaystyle{\sum_{k=1}^{p}a_kz^{-k}}
 
 $$x(n) = -\sum_{k=1}^{p}a_kx(n-k) + u(n)$$
 
-推导略
+1. 逆Z变换法
+
+根据AR模型：
+
+$$u(n) \longrightarrow H(z)=\frac{1}{A(z)} \longrightarrow x(n)$$
+
+由此有：
+
+$$S_{xx} = \frac{\sigma^2}{A(z)A(z^{-1})}$$
+
+略作变换，得到：
+
+$$A(z)S_{xx} = \frac{\sigma^2}{A(z^{-1})}$$
+
+$$S_{xx} = \frac{\sigma^2}{A(z^{-1})} + (1-A(z))S_{xx}$$
+
+$$S_{xx} = \frac{\sigma^2}{A(z^{-1})} + \sum_{k=1}^{p}a_kS_{xx}z^{-k}$$
+
+两遍逆Z变换，得到：
+
+$$R_{xx}(m) = \sum_{k=0}^{p}\sigma^2\delta(m+k) + \sum_{k=1}^{p}a_kR_{xx}(m-k)$$
+
+由于是因果信号，去掉$m<0$的冲激，得到：
+
+$$R_{xx}(m) = \delta(m) + \sum_{k=1}^{p}a_kR_{xx}(m-k)$$
+
 
 Yule-Walker方程：
 
@@ -471,7 +730,7 @@ $$\begin{bmatrix}
 \begin{bmatrix}
 1 \\ a_{k,1} \\ \vdots \\ a_{k,k} \\ 0
 \end{bmatrix}
-=\begin{bmatrix}
+=\begin{bmatrix}0
 \sigma_k^2 \\ 0 \\ \vdots \\ 0 \\ D_k
 \end{bmatrix}
 $$
@@ -532,6 +791,148 @@ $$\gamma_{k+1} = \frac{D_k}{\sigma_k^2}$$
 $$\sigma_{k+1}^2 = \sigma_k^2-\gamma_{k+1}D_k = (1-\gamma_{k+1}^2)\sigma_k^2$$
 
 对于$p$阶模型，递推到指定阶数就行。
+
+### 格型滤波器
+前向预测 后向预测
+
+AR(k)模型参数为一个序列：
+
+$$A_k(z) = \sum_{i=0}^{k}a_{k,0}z^{-i},a_{k,0}=1$$
+
+倒序多项式为：
+
+$$A_k^R(z) = z^{-k}A_k(z^{-1})$$
+
+在Levinson-Durbin算法中，递推公式可以写为：
+
+$$A_{k+1}(z) = A_k(z) - \gamma_{k+1}z^{-1}A_k^R(z)$$
+
+$$A_{k+1}^R(z) = z^{-1}A_k^R(z) - \gamma_{k+1}A_k(z)$$
+
+写成矩阵形式：
+
+$$\begin{bmatrix}
+A_{k+1}(z)\\A_{k+1}^R(z)
+\end{bmatrix} = 
+\begin{bmatrix}
+1 & -\gamma_{k+1}z^{-1} \\
+-\gamma_{k+1} & z^{-1}
+\end{bmatrix}
+\begin{bmatrix}
+A_k(z)\\A_k^R(z)
+\end{bmatrix}
+$$
+
+前向预测误差，$a_{k,0}=1$：
+
+$$\begin{aligned}
+    e_k^+(n) &= \sum_{i=0}^{k} a_{k,i}x(n-i)\\
+    &= x(n) - [-\sum_{i=i}^{k} a_{k,i}x(n-i)] \\
+    &= x(n) - \hat{x}(n)
+\end{aligned}$$
+
+
+$$E_k^+(z) = A_k(z)X(z)$$
+
+后向预测误差：
+
+$$e_k^+(n) = \sum_{i=0}^{k} a_{k,k-i}x{n-i},a_{k,0}=1$$
+
+$$E_k^+(z) = A_k^R(z)X(z)$$
+
+可见误差与模型参数有对应关系：
+
+$$\begin{bmatrix}
+E_{k+1}^+(z)\\E_{k+1}^-(z)
+\end{bmatrix} = 
+\begin{bmatrix}
+1 & -\gamma_{k+1}z^{-1} \\
+-\gamma_{k+1} & z^{-1}
+\end{bmatrix}
+\begin{bmatrix}
+E_k^+(z)\\E_k^-(z)
+\end{bmatrix}
+$$
+
+对应时域关系式：
+
+$$\begin{bmatrix}
+e_{k+1}^+(n)\\e_{k+1}^-(n)
+\end{bmatrix} = 
+\begin{bmatrix}
+1 & -\gamma_{k+1} \\
+-\gamma_{k+1} & 1
+\end{bmatrix}
+\begin{bmatrix}
+e_k^+(n)\\e_k^-(n-1)
+\end{bmatrix}
+$$
+
+### 白噪声中正弦频率的估计
+
+对于有$M$个复正弦波的模型，是AR和MA参数相同的特殊的ARMA(M,M)
+
+- 在低信噪比情况下，AR谱估计结果不理想，为了提
+高谱估计结果的精度，要降低噪声的影响。
+
+
+
+
+## 线性预测编码（LPC）分析
+未知序列$e(n)$激励未知系统$V(z) = \dfrac{G(z)}{A(z)},a_0=1$得到已知序列$s(n)$。
+
+令$G(z) = 1$，为P阶AR模型。
+
+$s(n)$满足：
+
+$$s(n) = -\sum_{i=1}^{P}\alpha_i s(n-i) + Ge(n)$$
+
+
+有$P'$阶的预测器，目标预测值：
+
+$$\hat{S}(n) = -\sum_{i=1}^{P'}\alpha_i s(n-i)$$
+
+预测误差：
+
+$$\epsilon(n) = s(n) - \hat{s}(n) = s(n) + \sum_{i=1}^{P'}\alpha_i s(n-i)$$
+
+$$\begin{aligned}
+    \sigma_\epsilon^2 &= \sum_{n} \epsilon^2(n) \\
+    &= \sum_{n} \left\{s^2(n) + 2s(n)\sum_{i=1}^{P'}\alpha_i s(n-i) + [\sum_{i=1}^{P'}\alpha_i s(n-i)]^2  \right\} \\
+    &= \sum_{n}\left\{s^2(n)\right\} + 2\sum_{i=1}^{P'}\alpha_i \left\{ \sum_{n}s(n)s(n-i)\right\} + \sum_{i=1}^{P'}\sum_{j=1}^{P'}\alpha_i\alpha_j \left\{  \sum_{n} s(n-i)s(n-j) \right\}
+\end{aligned}$$
+
+要MMSE，必须满足其一
+- $P' = P$，$\hat{\alpha}_i = \alpha_i$
+- $P' > P$，超出的部分$\hat{\alpha}_i=0$
+
+求
+
+$$\nabla\sigma_\epsilon^2 = 0$$
+
+令$\phi(i,j) = \sigma_{n}s(n-i)(n-j)$
+
+改写为：
+
+$$\begin{aligned}
+    \sigma_\epsilon^2 = \sum_{n}\left\{s^2(n)\right\} + 2\sum_{i=1}^{P'}\alpha_i \phi(0,i) + \sum_{i=1}^{P'}\sum_{j=1}^{P'}\alpha_i\alpha_j\phi(i,j)
+\end{aligned}$$
+
+求导：
+
+$$\frac{\partial \sigma_\epsilon^2}{\partial \alpha_i}=
+2\phi(0,i) + 2\sum_{j=1}^{P'}\alpha_j\phi(i,j) = 0
+$$
+
+得到
+
+$$\left\{\begin{aligned}
+    \sum_{j=1}^{P'}\alpha_j\phi(i,j) = -\phi(0,i)\\
+    \cdots \\
+    \cdots
+\end{aligned}\right.
+\quad k=1,2,\cdots,P $$
+
 
 
 ## 附录
