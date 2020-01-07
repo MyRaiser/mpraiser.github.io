@@ -339,7 +339,7 @@ $$H_c(z) = \frac{G}{1-fz^{-1}}$$
 #### FIR
 直接带入计算：
 
-$$\xi_{min}(n) = E[s^2(n)]$$
+$$\xi_{min}(n) = E[s^2(n)] - \mathbf{P}^T\mathbf{w}^*$$
 
 #### IIR
 通常设计得出$H_{opt}$
@@ -514,7 +514,7 @@ $$\xi_{min} = E[d^2[n]]-\mathbf{P}^T\mathbf{W}^*$$
 
 学习曲线时间常数$\tau_{mse}$：
 
-$$(r_{mse})_k = (1-2\mu\lambda_k)^2$$
+$$(r_{mse})_k = r_k^2 = (1-2\mu\lambda_k)^2$$
 
 误差下降到：
 
