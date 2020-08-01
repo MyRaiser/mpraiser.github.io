@@ -22,7 +22,7 @@
 
 1. 开启Windows中的WSL组件。
 
-    这部分不再多说百度都有。
+    略。
 
 2. 安装WSL的Linux发行版镜像
 
@@ -47,22 +47,17 @@
    
 2. 配置DISPLAY
    
-    首先打开vi，创建一个脚本（vi使用方法略）：
+    使用vi打开
     ```bash
-    vi set-display.sh
+    sudo vi ~/.bashrc
     ```
 
-    脚本内容为：
+    在最后加上一行：
     ```bash
-    echo "export DISPLAY=:0.0" >> ~/.bashrc
+    export DISPLAY=:0.0
     ```
 
-    保存后执行一下：
-    ```bash
-    sh set-display.sh
-    ```
-
-    最后更新一下配置文件：
+    保存退出后更新一下：
     ```bash
     source ~/.bashrc
     ```
@@ -74,6 +69,8 @@
     sudo apt install firefox
     firefox
     ```
+    > 我换了Ubuntu 20.04后firefox变成能打开但是无法正常使用了，不知道为什么。
+
     还有个问题就是中文显示不全。安装一下字体包即可解决：
     ```bash
     sudo apt install fonts-noto-cjk
@@ -99,3 +96,105 @@
     code
     ```
     即可。
+
+## 关掉WSL的提示音
+WSL有许多毫无必要并且非常刺耳的提示音，听多了特别令人烦躁，因此可以想办法关掉它。
+
+bash
+1.sudo vi /etc/inputrc
+2.取消注释 set bell-style none
+3.退出重启
+
+> 但是这个不能取消掉VIM里的提示声，你可以选择关闭系统声音，按照如下步骤：打开控制面板——>打开硬件和声音——>打开声音——>选择声音——>修改关键性停止的声音方案，来取消提示音。
+> 
+> ![](https://pic1.zhimg.com/50/07378255d876ce3830964b5f0b29b05a_hd.jpg)
+> 
+> 链接：https://www.zhihu.com/question/42228124/answer/115022693
+> 来源：知乎
+
+
+## 更换源
+Ubuntu自带源在国内访问速度太慢，因此可以更换国内的源，比如清华源、中科大源、[阿里云源](https://developer.aliyun.com/mirror/)等。
+
+1. 先备份一下原来的，以免搞坏了。
+    ```bash
+    cd /etc/apt
+    sudo cp sources.list sources.list.backup
+    ```
+    复制了一份并命名为`sources.list.backup`，到时候再`cp`回来就行。
+
+2. 更改源配置
+    ```bash
+    sudo vi sources.list
+    ```
+    可以把里面原来的都删掉或者注释掉，然后加上网站上复制来的源，下面提供一些[范例](https://developer.aliyun.com/mirror/ubuntu?spm=a2c6h.13651102.0.0.3e221b11waT1Yb)：
+
+    - ubuntu 16.04 配置如下：
+        ```bash
+        deb http://mirrors.aliyun.com/ubuntu/ xenial main
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial main
+
+        deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+
+        deb http://mirrors.aliyun.com/ubuntu/ xenial universe
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial universe
+        deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+
+        deb http://mirrors.aliyun.com/ubuntu/ xenial-security main
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main
+        deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+        ```
+
+    - ubuntu 18.04(bionic) 配置如下：
+        ```bash
+        deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+        ```
+
+    - ubuntu 20.04(focal) 配置如下：
+        ```bash
+        deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+        ```
+
+3. 更新
+
+    保存退出之后，更新一下`apt`就可以正常使用了。
+    ```bash
+    sudo apt-get update
+    ```
+
+> 特别注意，源需要换对应OS版本的，不然可能会出现
+> ```
+> The following packages have unmet dependencies:
+> ```
+> 这是因为源对应系统版本不对，找不到依赖了。
+
+
