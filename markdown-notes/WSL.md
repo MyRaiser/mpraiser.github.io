@@ -34,6 +34,12 @@
 
     直接运行Linux发行版的启动器；或者配置好环境变量后，在Powershell/CMD中运行wsl或者bash。
 
+> 如果出现
+> ```bash
+> Error: 0x80070005 ?????
+> ```
+> 是因为没有以管理员权限运行。使用管理员权限打开即可。
+
 ## 给WSL加上GUI
 需要说明的是WSL本身不支持GUI，但是可以通过XServer间接实现GUI，使用的软件为[VcXsrv](https://sourceforge.net/projects/vcxsrv/)。这部分主要参考了[这篇文章](https://blog.csdn.net/w_weilan/article/details/82862913)。
 
@@ -65,11 +71,30 @@
 3. 打开VcXsrv的**XLaunch**，配置看着选就行。
 
     这个时候XLaunch已经在Windows后台运行了，在WSL打开带GUI的程序时会弹出窗口。比如试一试Firefox：
+
     ```bash
     sudo apt install firefox
     firefox
     ```
-    > 我换了Ubuntu 20.04后firefox变成能打开但是无法正常使用了，不知道为什么。
+
+    > 由于更新的原因，新版Firefox在WSL上是跑不起来的。可以通过
+    > ```bash
+    > apt-cache madison firefox
+    > ```
+    >我这里查找得到结果有
+    > ```bash
+    > firefox | 79.0+build1-0ubuntu0.16.04.2 | http://mirrors.aliyun.com/ubuntu xenial-updates/main amd64 Packages
+    > firefox | 79.0+build1-0ubuntu0.16.04.2 | http://mirrors.aliyun.com/ubuntu    xenial-security/main amd64 Packages
+    > firefox | 45.0.2+build1-0ubuntu1 | http://mirrors.aliyun.com/ubuntu xenial/  main amd64 Packages
+    > firefox | 45.0.2+build1-0ubuntu1 | http://mirrors.aliyun.com/ubuntu xenial/  main Sources
+    > firefox | 79.0+build1-0ubuntu0.16.04.2 | http://mirrors.aliyun.com/ubuntu    xenial-updates/main Sources
+    > firefox | 79.0+build1-0ubuntu0.16.04.2 | http://mirrors.aliyun.com/ubuntu    xenial-security/main Sources
+    > ```
+    > 选择一个旧版本firefox进行安装。我测试的Firefox 45.0.2可以跑起来。
+    > ```bash
+    > sudo apt install firefox=45.0.2+build1-0ubuntu1
+    > ```
+    
 
     还有个问题就是中文显示不全。安装一下字体包即可解决：
     ```bash
@@ -96,6 +121,39 @@
     code
     ```
     即可。
+
+    vscode是在windows上运行的，但是所需的插件需要在vscode中点击“在WSL中安装”才能正常调试。
+
+### 使用Ubuntu默认桌面
+1. 安装
+```bash
+sudo apt-get install ubuntu-desktop unity compizconfig-settings-manager
+
+```
+
+\*\*配置dbus以避免出现错误**
+
+```bash
+sudo dpkg-reconfigure dbus && service dbus restart
+```
+
+配置完之后务必重启一下WSL。
+
+
+2. 配置桌面
+先打开VcXsrv，然后
+```bash
+sudo ccsm
+```
+这个时候切换到VcXsrv可以进行一些配置，具体可以参考[这里](https://zhuanlan.zhihu.com/p/34884285)
+
+
+3. 启动
+```bash
+sudo compiz
+```
+
+> 我只在Ubuntu 16.04成功了。18.04进去是黑屏，我也不知道为什么。
 
 ## 关掉WSL的提示音
 WSL有许多毫无必要并且非常刺耳的提示音，听多了特别令人烦躁，因此可以想办法关掉它。
