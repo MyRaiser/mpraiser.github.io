@@ -7,11 +7,18 @@
 
 MCU：STM32F103RB
 
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
 - [STM32学习笔记](#stm32学习笔记)
   - [背景知识](#背景知识)
-    - [通过IDE开发与手写make开发](#通过ide开发与手写make开发)
+    - [名词解释](#名词解释)
+      - [Keil、μVision、MDK、Keil C51](#keil-μvision-mdk-keil-c51)
+      - [J-Link、ST-Link、ULink、JTAG、SWD、SWIM](#j-link-st-link-ulink-jtag-swd-swim)
+    - [开发方式](#开发方式)
       - [通过IDE开发](#通过ide开发)
-        - [关于Keil、μVision、MDK、Keil C51之间的关系](#关于keilμvisionmdkkeil-c51之间的关系)
       - [手动make开发（适合高级使用者）](#手动make开发适合高级使用者)
     - [基于寄存器开发与基于库开发](#基于寄存器开发与基于库开发)
       - [基于寄存器开发](#基于寄存器开发)
@@ -21,16 +28,59 @@ MCU：STM32F103RB
     - [实现一个"`Blink`"](#实现一个blink)
       - [一. 使用STM32CubeMX生成基础配置代码](#一-使用stm32cubemx生成基础配置代码)
       - [二. 使用Keil编写程序](#二-使用keil编写程序)
-      - [3. 编译、下载](#3-编译下载)
+      - [3. 编译、下载](#3-编译-下载)
       - [4. Debug](#4-debug)
     - [中断](#中断)
   - [Arduino-STM32](#arduino-stm32)
-  - [通过MbedOS网站提供的方式](#通过mbedos网站提供的方式)
   - [Reference](#reference)
+
+<!-- /code_chunk_output -->
+
   
 ## 背景知识
 这里是一些有的没的背景知识，归纳在这一部分。如果你很急，可以直接跳到[step-by-step-guidance](#step-by-step-guidance)。
-### 通过IDE开发与手写make开发
+### 名词解释
+#### Keil、μVision、MDK、Keil C51
+- **Keil**是公司的名称，**有时候也指Keil公司的所有软件开发工具**，目前2005年Keil由ARM公司收购，成为ARM的公司之一。
+
+- **μVision**是Keil公司开发的一个集成开发环境（IDE），和Eclipse类似。它包括工程管理，源代码编辑，编译设置，下载调试和模拟仿真等功能，μVision有μVision2、μVision3、μVision4、μVision5四个版本，目前最新的版本是μVision5。它提供一个环境，让开发者易于操作，并不提供能具体的编译和下载功能，需要软件开发者添加。μVision通用于Keil的开发工具中，例如MDK，PK51，PK166，DK251等。
+
+  > 因此，你寻找Keil IDE的入口是`UV4/UV4.exe`。
+
+- **MDK（Microcontroller Development Kit）**，也称**MDK-ARM**、**Keil MDK**、**RealView MDK**、**Keil For ARM**，都是同一个东西。ARM公司现在统一使用MDK-ARM的称呼，MDK的设备数据库中有很多厂商的芯片，是专为微控制器开发的工具，为满足基于MCU进行嵌入式软件开发的工程师需求而设计，支持ARM7，ARM9，Cortex-M4/M3/M1，Cortex-R0/R3/R4等ARM微控制器内核
+
+> ![](STM32-learning-notes/MDK5.png)
+> 从上图可以看出，MDK Core 又分成四个部分：μVision IDE with Editor（编辑器），ARM
+C/C++ Compiler（编译器），Pack Installer（包安装器），μVision Debugger with Trace（调试跟踪
+器）。
+
+#### J-Link、ST-Link、ULink、JTAG、SWD、SWIM
+- **J-Link**是德国SEGGER公司为支持仿真ARM内核芯片推出的JTAG仿真器，很多ARM芯片的接口协议是JTAG，JLink一端接电脑USB接口，一端接CPU的JTAG接口，JLink充当的作用就是USB转JTAG，支持JTAG和SWD两种模式。
+
+    - 可配合IAR EWAR，ADS，KEIL，WINARM，RealView等集成开发环境；
+    - 支持ARM7/ARM9/ARM11，Cortex M0/M1/M3/M4，Cortex A5/A8/A9等内核芯片的仿真；
+
+    ![J-Link](https://img-blog.csdnimg.cn/20200414133747798.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FsYmVydDk5Mg==,size_16,color_FFFFFF,t_70#pic_center)
+
+- **ST-Link**是ST意法半导体为评估、开发STM8/STM32系列MCU而设计的集在线仿真与下载为一体的开发工具，支持JTAG/SWD/SWIM三种模式。
+
+    - 支持所有带SWIM接口的STM8系列单片机
+    - 支持所有带JTAG/SWD接口的STM32系列单片机
+
+    ![ST-Link](https://img-blog.csdnimg.cn/20200414134116839.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L0FsYmVydDk5Mg==,size_16,color_FFFFFF,t_70#pic_center)
+
+- **JTAG**（Joint Test Action Group，联合测试行动小组）是一种国际标准测试协议（IEEE 1149.1兼容），主要用于芯片内部测试，现在多数的器件都支持JTAG协议，ARM、DSP、FPGA等，JTAG接口的单片机用电脑USB下载调试程序，需要用到J-Link（USB转JTAG）。
+
+    标准的JTAG是四线：TDI，TMS，TCK，TDO，分别对应数据输入，模式选择，时钟，数据输出，复位管脚可不接。
+
+- **SWD**全称是Serial Wire Debug（串行调试），SWD模式下用JLink给我们的板子debug时，是用标准的二线DIO和CLK，**RESET管脚可不接，当你频繁下载失败时，可接上RESET管脚再试**。
+
+- **SWIM**接口常见于ST的STM8系列单片机，ST-Link2与STM8连接只需要4根线，见表格。
+
+
+![](STM32-learning-notes/JTAG_SWD_cable_connections.png)
+
+### 开发方式
 #### 通过IDE开发
 通常来说，STM32使用IDE进行开发的较多，使用IDE也较容易上手。
 
@@ -58,16 +108,7 @@ EWARM指的是通常意义上的IAR，IAR Embedded Workbench for ARM。
 
 本文使用==MDK527==。
 
-##### 关于Keil、μVision、MDK、Keil C51之间的关系
-> - **Keil**是公司的名称，**有时候也指Keil公司的所有软件开发工具**，目前2005年Keil由ARM公司收购，成为ARM的公司之一。
-> - **μVision**是Keil公司开发的一个集成开发环境（IDE），和Eclipse类似。它包括工程管理，源代码编辑，编译设置，下载调试和模拟仿真等功能，μVision有μVision2、μVision3、μVision4、μVision5四个版本，目前最新的版本是μVision5。它提供一个环境，让开发者易于操作，并不提供能具体的编译和下载功能，需要软件开发者添加。μVision通用于Keil的开发工具中，例如MDK，PK51，PK166，DK251等。
-> - **MDK（Microcontroller Development Kit）**，也称**MDK-ARM**、**Keil MDK**、**RealView MDK**、**Keil For ARM**，都是同一个东西。ARM公司现在统一使用MDK-ARM的称呼，MDK的设备数据库中有很多厂商的芯片，是专为微控制器开发的工具，为满足基于MCU进行嵌入式软件开发的工程师需求而设计，支持ARM7，ARM9，Cortex-M4/M3/M1，Cortex-R0/R3/R4等ARM微控制器内核
 
-
-> ![](STM32-learning-notes/MDK5.png)
-> 从上图可以看出，MDK Core 又分成四个部分：μVision IDE with Editor（编辑器），ARM
-C/C++ Compiler（编译器），Pack Installer（包安装器），μVision Debugger with Trace（调试跟踪
-器）。
 #### 手动make开发（适合高级使用者）
 笔者目前也不会，先提供一个[链接](http://www.stmcu.org.cn/module/forum/thread-603753-1-1.html)以供参考。
 
@@ -159,6 +200,9 @@ HAL_Delay(100);
 ![Debug界面](STM32-learning-notes/Keil-debug-interface.png)
 ### 中断
 
+
+
+
 ## Arduino-STM32
 目前还没试验成功。
 
@@ -167,8 +211,9 @@ HAL_Delay(100);
    > You must do this step, it installs the arm-none-eabi-g++ toolchain）
 
 
-## 通过MbedOS网站提供的方式
+测试[^1]
 
 ## Reference
-1. [https://www.jianshu.com/p/e1b6503f638b](https://www.jianshu.com/p/e1b6503f638b)
+1. [菜鸟两天入门STM32开发](https://www.jianshu.com/p/e1b6503f638b)
 2. [STM32的Nucleo版用户手册](https://www.stmcu.com.cn/Designresource/design_resource_detail?file_name=UM1724_STM32%E7%9A%8464%E5%BC%95%E8%84%9ANucleo%E6%9D%BF%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C&lang=EN&ver=9&cat=user_manual)
+3. [教麦叔了解J-Link、ST-Link、ULink、JTAG、SWD、SWIM的区别](https://www.cnblogs.com/Albert992/p/12783198.html)

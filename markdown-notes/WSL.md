@@ -40,6 +40,92 @@
 > ```
 > 是因为没有以管理员权限运行。使用管理员权限打开即可。
 
+
+## 更换源
+Ubuntu自带源在国内访问速度太慢，因此可以更换国内的源，比如清华源、中科大源、[阿里云源](https://developer.aliyun.com/mirror/)等。
+
+1. 先备份一下原来的，以免搞坏了。
+    ```bash
+    cd /etc/apt
+    sudo cp sources.list sources.list.backup
+    ```
+    复制了一份并命名为`sources.list.backup`，到时候再`cp`回来就行。
+
+2. 更改源配置
+    ```bash
+    sudo vi sources.list
+    ```
+    可以把里面原来的都删掉或者注释掉，然后加上网站上复制来的源，下面提供一些[范例](https://developer.aliyun.com/mirror/ubuntu?spm=a2c6h.13651102.0.0.3e221b11waT1Yb)：
+
+    - ubuntu 16.04 配置如下：
+        ```bash
+        deb http://mirrors.aliyun.com/ubuntu/ xenial main
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial main
+
+        deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+
+        deb http://mirrors.aliyun.com/ubuntu/ xenial universe
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial universe
+        deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+
+        deb http://mirrors.aliyun.com/ubuntu/ xenial-security main
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main
+        deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+        ```
+
+    - ubuntu 18.04(bionic) 配置如下：
+        ```bash
+        deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
+        ```
+
+    - ubuntu 20.04(focal) 配置如下：
+        ```bash
+        deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
+
+        deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+        deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
+        ```
+
+3. 更新
+
+    保存退出之后，更新一下`apt`就可以正常使用了。
+    ```bash
+    sudo apt-get update
+    ```
+
+> 特别注意，源需要换对应OS版本的，不然可能会出现
+> ```
+> The following packages have unmet dependencies:
+> ```
+> 这是因为源对应系统版本不对，找不到依赖了。
+
+
 ## 给WSL加上GUI
 需要说明的是WSL本身不支持GUI，但是可以通过XServer间接实现GUI，使用的软件为[VcXsrv](https://sourceforge.net/projects/vcxsrv/)。这部分主要参考了[这篇文章](https://blog.csdn.net/w_weilan/article/details/82862913)。
 
@@ -171,88 +257,5 @@ bash
 > 来源：知乎
 
 
-## 更换源
-Ubuntu自带源在国内访问速度太慢，因此可以更换国内的源，比如清华源、中科大源、[阿里云源](https://developer.aliyun.com/mirror/)等。
-
-1. 先备份一下原来的，以免搞坏了。
-    ```bash
-    cd /etc/apt
-    sudo cp sources.list sources.list.backup
-    ```
-    复制了一份并命名为`sources.list.backup`，到时候再`cp`回来就行。
-
-2. 更改源配置
-    ```bash
-    sudo vi sources.list
-    ```
-    可以把里面原来的都删掉或者注释掉，然后加上网站上复制来的源，下面提供一些[范例](https://developer.aliyun.com/mirror/ubuntu?spm=a2c6h.13651102.0.0.3e221b11waT1Yb)：
-
-    - ubuntu 16.04 配置如下：
-        ```bash
-        deb http://mirrors.aliyun.com/ubuntu/ xenial main
-        deb-src http://mirrors.aliyun.com/ubuntu/ xenial main
-
-        deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main
-        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main
-
-        deb http://mirrors.aliyun.com/ubuntu/ xenial universe
-        deb-src http://mirrors.aliyun.com/ubuntu/ xenial universe
-        deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
-        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
-
-        deb http://mirrors.aliyun.com/ubuntu/ xenial-security main
-        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main
-        deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
-        deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security universe
-        ```
-
-    - ubuntu 18.04(bionic) 配置如下：
-        ```bash
-        deb http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ bionic main restricted universe multiverse
-
-        deb http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-security main restricted universe multiverse
-
-        deb http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-updates main restricted universe multiverse
-
-        deb http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-proposed main restricted universe multiverse
-
-        deb http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ bionic-backports main restricted universe multiverse
-        ```
-
-    - ubuntu 20.04(focal) 配置如下：
-        ```bash
-        deb http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ focal main restricted universe multiverse
-
-        deb http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ focal-security main restricted universe multiverse
-
-        deb http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ focal-updates main restricted universe multiverse
-
-        deb http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ focal-proposed main restricted universe multiverse
-
-        deb http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
-        deb-src http://mirrors.aliyun.com/ubuntu/ focal-backports main restricted universe multiverse
-        ```
-
-3. 更新
-
-    保存退出之后，更新一下`apt`就可以正常使用了。
-    ```bash
-    sudo apt-get update
-    ```
-
-> 特别注意，源需要换对应OS版本的，不然可能会出现
-> ```
-> The following packages have unmet dependencies:
-> ```
-> 这是因为源对应系统版本不对，找不到依赖了。
 
 

@@ -113,3 +113,6 @@ RE字符 | 含义
 [^a] | 取反，不包含集合中字符的集合
 
 ### 常用trick
+
+## git
+![](Linux/git_commands.png)
