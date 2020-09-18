@@ -71,9 +71,14 @@ C/C++ Compiler（编译器），Pack Installer（包安装器），μVision Debu
 
 - **JTAG**（Joint Test Action Group，联合测试行动小组）是一种国际标准测试协议（IEEE 1149.1兼容），主要用于芯片内部测试，现在多数的器件都支持JTAG协议，ARM、DSP、FPGA等，JTAG接口的单片机用电脑USB下载调试程序，需要用到J-Link（USB转JTAG）。
 
-    标准的JTAG是四线：TDI，TMS，TCK，TDO，分别对应数据输入，模式选择，时钟，数据输出，复位管脚可不接。
+    JTAG有10pin的、14pin的和20pin的，尽管引脚数和引脚的排列顺序不同，但是其中有一些引脚是一样的
+    TDI，TMS，TCK，TDO，分别对应数据输入，模式选择，时钟，数据输出，复位管脚可不接。
+
+    占用5个IO口。
 
 - **SWD**全称是Serial Wire Debug（串行调试），SWD模式下用JLink给我们的板子debug时，是用标准的二线DIO和CLK，**RESET管脚可不接，当你频繁下载失败时，可接上RESET管脚再试**。
+
+    占用2个IO口。
 
 - **SWIM**接口常见于ST的STM8系列单片机，ST-Link2与STM8连接只需要4根线，见表格。
 
