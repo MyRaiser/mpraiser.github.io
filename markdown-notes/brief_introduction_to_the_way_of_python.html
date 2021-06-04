@@ -303,15 +303,18 @@ Namespaces are one honking great idea -- let&apos;s do more of those!</p>
 </li>
 <li><a href="#%E5%8F%98%E9%87%8F%E4%B8%8E%E7%B1%BB%E5%9E%8B">&#x53D8;&#x91CF;&#x4E0E;&#x7C7B;&#x578B;</a>
 <ul>
-<li><a href="#%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B">&#x9E2D;&#x5B50;&#x7C7B;&#x578B;</a></li>
+<li><a href="#%E4%BD%BF%E7%94%A8%E5%8F%98%E9%87%8F">&#x4F7F;&#x7528;&#x53D8;&#x91CF;</a></li>
+<li><a href="#duck-typing">Duck-typing</a></li>
 <li><a href="#type-hints">Type Hints</a></li>
 <li><a href="#%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1%E4%B8%8E%E4%B8%8D%E5%8F%AF%E5%8F%98%E5%AF%B9%E8%B1%A1">&#x53EF;&#x53D8;&#x5BF9;&#x8C61;&#x4E0E;&#x4E0D;&#x53EF;&#x53D8;&#x5BF9;&#x8C61;</a></li>
 </ul>
 </li>
 <li><a href="#%E5%87%BD%E6%95%B0%E4%B8%8E%E7%B1%BB">&#x51FD;&#x6570;&#x4E0E;&#x7C7B;</a>
 <ul>
-<li><a href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0">&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;</a></li>
+<li><a href="#%E5%AE%9A%E4%B9%89%E5%92%8C%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0">&#x5B9A;&#x4E49;&#x548C;&#x4F7F;&#x7528;&#x51FD;&#x6570;</a></li>
+<li><a href="#%E5%AE%9A%E4%B9%89%E5%92%8C%E4%BD%BF%E7%94%A8%E7%B1%BB">&#x5B9A;&#x4E49;&#x548C;&#x4F7F;&#x7528;&#x7C7B;</a></li>
 <li><a href="#%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F">&#x7F16;&#x7A0B;&#x8303;&#x5F0F;</a></li>
+<li><a href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0">&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;</a></li>
 </ul>
 </li>
 <li><a href="#%E8%BF%AD%E4%BB%A3%E5%99%A8">&#x8FED;&#x4EE3;&#x5668;</a></li>
@@ -357,6 +360,8 @@ hello, world<span class="token operator">!</span>
 </pre><p>&#x5728;&#x540E;&#x6587;&#x4E2D;&#xFF0C;&#x4E3A;&#x4E86;&#x8868;&#x8FF0;&#x65B9;&#x4FBF;&#xFF0C;&#x4E24;&#x79CD;&#x6A21;&#x5F0F;&#x4F1A;&#x6DF7;&#x5408;&#x4F7F;&#x7528;&#x3002;</p>
 <h2 class="mume-header" id="%E5%8F%98%E9%87%8F%E4%B8%8E%E7%B1%BB%E5%9E%8B">&#x53D8;&#x91CF;&#x4E0E;&#x7C7B;&#x578B;</h2>
 
+<h3 class="mume-header" id="%E4%BD%BF%E7%94%A8%E5%8F%98%E9%87%8F">&#x4F7F;&#x7528;&#x53D8;&#x91CF;</h3>
+
 <p>&#x5728;<code>python</code>&#x4E2D;&#x521B;&#x5EFA;&#x4E00;&#x4E2A;&#x53D8;&#x91CF;&#x6216;&#x7ED9;&#x53D8;&#x91CF;&#x8D4B;&#x503C;&#x975E;&#x5E38;&#x7B80;&#x5355;&#xFF1A;</p>
 <pre data-role="codeBlock" data-info="py" class="language-python">x <span class="token operator">=</span> <span class="token number">1</span>
 x <span class="token operator">=</span> <span class="token string">&quot;helloworld&quot;</span>
@@ -380,7 +385,7 @@ y <span class="token operator">=</span> <span class="token string">&quot;1&quot;
 TypeError: unsupported operand type<span class="token punctuation">(</span>s<span class="token punctuation">)</span> <span class="token keyword">for</span> +: <span class="token string">&apos;int&apos;</span> and <span class="token string">&apos;str&apos;</span>
 </pre><p>&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x7531;&#x4E8E;<code>int</code>&#x548C;<code>str</code>&#x4E4B;&#x95F4;&#x4E0D;&#x652F;&#x6301;&#x201C;&#x76F8;&#x52A0;&#x201D;&#x7684;&#x64CD;&#x4F5C;&#xFF0C;&#x6267;&#x884C;&#x88AB;&#x4E2D;&#x65AD;&#x5E76;&#x629B;&#x51FA;&#x4E86;&#x4E00;&#x4E2A;<code>TypeError</code>&#x3002;</p>
 <blockquote>
-<p>&#x6CE8;&#x610F;&#x8FD9;&#x91CC;&#x8868;&#x8FBE;&#x7684;&#x5FAE;&#x5999;&#x533A;&#x522B;&#xFF0C;&#x662F;&#x7531;&#x4E8E;<code>int</code>&#x4E0E;<code>str</code>&#x4E4B;&#x95F4;&#x6CA1;&#x6709;&#x201C;&#x76F8;&#x52A0;&#x201D;&#x64CD;&#x4F5C;&#x624D;&#x5F02;&#x5E38;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x56E0;&#x4E3A;<code>int</code>&#x4E0E;<code>str</code>&#x7C7B;&#x578B;&#x4E0D;&#x540C;&#x800C;&#x5F02;&#x5E38;&#x3002;&#x89C1;<a href="#%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B">&#x9E2D;&#x5B50;&#x7C7B;&#x578B;</a>&#x3002;</p>
+<p>&#x6CE8;&#x610F;&#x8FD9;&#x91CC;&#x8868;&#x8FBE;&#x7684;&#x5FAE;&#x5999;&#x533A;&#x522B;&#xFF0C;&#x662F;&#x7531;&#x4E8E;<code>int</code>&#x4E0E;<code>str</code>&#x4E4B;&#x95F4;&#x6CA1;&#x6709;&#x201C;&#x76F8;&#x52A0;&#x201D;&#x64CD;&#x4F5C;&#x624D;&#x5F02;&#x5E38;&#xFF0C;&#x800C;&#x4E0D;&#x662F;&#x56E0;&#x4E3A;<code>int</code>&#x4E0E;<code>str</code>&#x7C7B;&#x578B;&#x4E0D;&#x540C;&#x800C;&#x5F02;&#x5E38;&#x3002;&#x89C1;<a href="#duck-typing">&#x9E2D;&#x5B50;&#x7C7B;&#x578B;</a>&#x3002;</p>
 </blockquote>
 <p>&#x76F8;&#x53CD;&#xFF0C;&#x5728;&#x4F5C;&#x4E3A;&#x4E00;&#x79CD;<strong>&#x5F31;&#x7C7B;&#x578B;</strong>&#x8BED;&#x8A00;&#x7684;<code>C</code>&#x4E2D;&#xFF1A;</p>
 <pre data-role="codeBlock" data-info="c" class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h&gt;</span></span>
@@ -401,7 +406,7 @@ TypeError: unsupported operand type<span class="token punctuation">(</span>s<spa
 </blockquote>
 <p><img src="brief_introduction_to_the_way_of_python/type_in_languages.png" alt="&#x7F16;&#x7A0B;&#x8BED;&#x8A00;&#x7C7B;&#x578B;"></p>
 <p>&#x52A8;&#x6001;&#x7C7B;&#x578B;&#x7ED9;&#x4E88;&#x4E86;&#x6211;&#x4EEC;&#x66F4;&#x5F3A;&#x7684;&#x8868;&#x8FBE;&#x80FD;&#x529B;&#x3002;</p>
-<h3 class="mume-header" id="%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B">&#x9E2D;&#x5B50;&#x7C7B;&#x578B;</h3>
+<h3 class="mume-header" id="duck-typing">Duck-typing</h3>
 
 <p>&#x9E2D;&#x5B50;&#x7C7B;&#x578B;&#xFF08;duck-typing&#xFF09;&#x6307;&#x4E00;&#x79CD;&#x7F16;&#x7A0B;&#x98CE;&#x683C;&#xFF0C;&#x5B83;&#x5E76;&#x4E0D;&#x9650;&#x5236;&#x5BF9;&#x8C61;&#x7C7B;&#x578B;&#xFF0C;&#x800C;&#x662F;&#x8981;&#x6C42;&#x5BF9;&#x8C61;&#x5177;&#x6709;&#x5BF9;&#x5E94;&#x7684;&#x65B9;&#x6CD5;&#x3002;</p>
 <blockquote>
@@ -467,6 +472,8 @@ b<span class="token punctuation">:</span> <span class="token builtin">int</span>
 <h2 class="mume-header" id="%E5%87%BD%E6%95%B0%E4%B8%8E%E7%B1%BB">&#x51FD;&#x6570;&#x4E0E;&#x7C7B;</h2>
 
 <p><code>python</code>&#x662F;&#x4E00;&#x79CD;<strong>&#x591A;&#x8303;&#x5F0F;</strong>&#x7684;&#x8BED;&#x8A00;&#xFF0C;&#x5BF9;&#x4E8E;&#x8FC7;&#x7A0B;&#x5F0F;&#x3001;&#x51FD;&#x6570;&#x5F0F;&#x4EE5;&#x53CA;&#x9762;&#x5411;&#x5BF9;&#x8C61;&#x7684;&#x5199;&#x6CD5;&#x5747;&#x63D0;&#x4F9B;&#x4E86;&#x652F;&#x6301;&#x3002;&#x6211;&#x4EEC;&#x5C06;<a href="#%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F">&#x7F16;&#x7A0B;&#x8303;&#x5F0F;</a>&#x7684;&#x95EE;&#x9898;&#x5F80;&#x540E;&#x653E;&#x4E00;&#x653E;&#xFF0C;&#x5148;&#x4ECE;&#x7B80;&#x5355;&#x7684;&#x70B9;&#x5207;&#x5165;&#x3002;</p>
+<h3 class="mume-header" id="%E5%AE%9A%E4%B9%89%E5%92%8C%E4%BD%BF%E7%94%A8%E5%87%BD%E6%95%B0">&#x5B9A;&#x4E49;&#x548C;&#x4F7F;&#x7528;&#x51FD;&#x6570;</h3>
+
 <p><code>python</code>&#x901A;&#x8FC7;<code>def</code>&#x5173;&#x952E;&#x5B57;&#x6765;&#x5B9A;&#x4E49;&#x51FD;&#x6570;&#xFF1A;</p>
 <pre data-role="codeBlock" data-info="py" class="language-python"><span class="token keyword">def</span> <span class="token function">foo</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment"># do something</span>
@@ -480,15 +487,40 @@ b<span class="token punctuation">:</span> <span class="token builtin">int</span>
 </pre><blockquote>
 <p>&#x51FD;&#x6570;&#x7684;&#x4F4D;&#x7F6E;&#x53C2;&#x6570;&#x3001;&#x53EF;&#x53D8;&#x53C2;&#x6570;&#x3001;&#x5173;&#x952E;&#x5B57;&#x53C2;&#x6570;&#x8BE6;&#x7EC6;&#x5185;&#x5BB9;&#x89C1;<a href="#%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0">&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;</a>&#x3002;</p>
 </blockquote>
+<h3 class="mume-header" id="%E5%AE%9A%E4%B9%89%E5%92%8C%E4%BD%BF%E7%94%A8%E7%B1%BB">&#x5B9A;&#x4E49;&#x548C;&#x4F7F;&#x7528;&#x7C7B;</h3>
+
 <p>&#x901A;&#x8FC7;<code>class</code>&#x5173;&#x952E;&#x5B57;&#x6765;&#x5B9A;&#x4E49;&#x7C7B;&#xFF1A;</p>
 <pre data-role="codeBlock" data-info="py" class="language-python"><span class="token keyword">class</span> <span class="token class-name">Foo</span><span class="token punctuation">(</span><span class="token builtin">object</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token comment"># do something</span>
-</pre><p>&#x4E0D;&#x533A;&#x5206;&#x53D8;&#x91CF;&#x3001;&#x51FD;&#x6570;&#x3001;&#x7C7B;&#x3001;&#x7C7B;&#x7684;&#x5B9E;&#x4F8B;&#xFF0C;&#x5B83;&#x4EEC;&#x5747;&#x4E3A;<strong>&#x5BF9;&#x8C61;</strong>&#x3002;</p>
+    name <span class="token operator">=</span> <span class="token string">&quot;Foo&quot;</span>
+
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> x<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>x <span class="token operator">=</span> x
+
+    <span class="token keyword">def</span> <span class="token function">add_one</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>x <span class="token operator">+=</span> <span class="token number">1</span>
+
+    <span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> arg<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        self<span class="token punctuation">.</span>x <span class="token operator">+=</span> arg
+
+foo <span class="token operator">=</span> Foo<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+foo<span class="token punctuation">.</span>add<span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span>
+</pre><p>&#x62EC;&#x53F7;&#x5185;&#x4E3A;&#x7C7B;<code>Foo</code>&#x7684;&#x7236;&#x7C7B;&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x5199;&#x62EC;&#x53F7;&#x548C;&#x91CC;&#x9762;&#x7684;&#x5185;&#x5BB9;&#x4E5F;&#x662F;&#x53EF;&#x4EE5;&#x7684;&#xFF0C;&#x5C06;&#x9ED8;&#x8BA4;&#x7EE7;&#x627F;<code>object</code>&#x7C7B;&#x3002;<code>object</code>&#x662F;&#x6240;&#x6709;&#x7C7B;&#x7684;&#x57FA;&#x7C7B;&#x3002;</p>
+<p><code>name</code>&#x662F;<strong>&#x7C7B;&#x5C5E;&#x6027;</strong>&#x3002;<code>__init__()</code>&#x662F;&#x7C7B;&#x7684;&#x6784;&#x9020;&#x51FD;&#x6570;&#xFF0C;&#x5728;&#x5B9E;&#x4F8B;&#x5316;&#x65F6;&#x88AB;&#x8C03;&#x7528;&#xFF0C;&#x5E76;&#x5BF9;&#x81EA;&#x8EAB;&#x9644;&#x52A0;<strong>&#x5B9E;&#x4F8B;&#x5C5E;&#x6027;</strong><code>x</code>&#x3002;</p>
+<p><code>__init__()</code>&#x3001;<code>add_one()</code>&#x4E0E;<code>add()</code>&#x5747;&#x4E3A;<strong>&#x5B9E;&#x4F8B;&#x65B9;&#x6CD5;</strong>&#xFF0C;&#x5B9E;&#x4F8B;&#x65B9;&#x6CD5;&#x7684;&#x7B2C;&#x4E00;&#x4E2A;&#x53C2;&#x6570;&#x5FC5;&#x987B;&#x4E3A;<code>self</code>&#xFF0C;&#x7528;&#x4EE5;&#x6697;&#x793A;&#x5B9E;&#x4F8B;&#x65B9;&#x6CD5;&#x4F5C;&#x7528;&#x4E8E;&#x81EA;&#x8EAB;&#x3002;&#x4F46;&#x6CE8;&#x610F;&#x5728;&#x8C03;&#x7528;&#x7684;&#x65F6;&#x5019;<code>self</code>&#x662F;&#x81EA;&#x52A8;&#x9690;&#x5F0F;&#x4F20;&#x5165;&#x7684;&#xFF0C;&#x53EA;&#x9700;&#x8981;&#x4F20;&#x5165;&#x540E;&#x9762;&#x7684;&#x53C2;&#x6570;&#x5373;&#x53EF;&#x3002;</p>
+<p><code>python</code>&#x7684;&#x7C7B;&#x652F;&#x6301;&#x591A;&#x91CD;&#x7EE7;&#x627F;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="py" class="language-python"><span class="token keyword">class</span> <span class="token class-name">C</span><span class="token punctuation">(</span>A<span class="token punctuation">,</span> B<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__init__<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</pre><p><code>super()</code>&#x662F;&#x7528;&#x4E8E;&#x8C03;&#x7528;&#x7236;&#x7C7B;&#x65B9;&#x6CD5;&#x7684;&#x51FD;&#x6570;&#xFF0C;&#x63A8;&#x8350;&#x4F7F;&#x7528;<code>super()</code>&#x800C;&#x4E0D;&#x662F;&#x5177;&#x4F53;&#x7684;&#x7C7B;&#x540D;&#x8C03;&#x7528;&#x7236;&#x7C7B;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x8FD9;&#x964D;&#x4F4E;&#x4E86;&#x4EE3;&#x7801;&#x8026;&#x5408;&#x3002;</p>
+<p><code>super()</code>&#x80FD;&#x591F;&#x4F7F;&#x7528;MRO&#x6B63;&#x786E;&#x5904;&#x7406;&#x591A;&#x91CD;&#x7EE7;&#x627F;&#x65F6;&#x7684;&#x94BB;&#x77F3;&#x7EE7;&#x627F;&#x95EE;&#x9898;&#xFF0C;&#x8FD9;&#x4E5F;&#x662F;&#x4F7F;&#x7528;<code>super()</code>&#x7684;&#x4E00;&#x4E2A;&#x5F3A;&#x6709;&#x529B;&#x7684;&#x7406;&#x7531;&#x3002;</p>
+<h3 class="mume-header" id="%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F">&#x7F16;&#x7A0B;&#x8303;&#x5F0F;</h3>
+
+<p>&#x4E0D;&#x533A;&#x5206;&#x53D8;&#x91CF;&#x3001;&#x51FD;&#x6570;&#x3001;&#x7C7B;&#x3001;&#x7C7B;&#x7684;&#x5B9E;&#x4F8B;&#xFF0C;&#x5B83;&#x4EEC;&#x5747;&#x4E3A;<strong>&#x5BF9;&#x8C61;</strong>&#x3002;</p>
+<p>&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8FC7;&#x7A0B;&#x5F0F;&#x7684;&#x5199;&#x6CD5;&#xFF1A;</p>
 <p>&#x51FD;&#x6570;&#x5F0F;&#x7F16;&#x7A0B;&#x6307;&#x5357;</p>
 <h3 class="mume-header" id="%E5%87%BD%E6%95%B0%E7%9A%84%E5%8F%82%E6%95%B0">&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;</h3>
 
-<h3 class="mume-header" id="%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F">&#x7F16;&#x7A0B;&#x8303;&#x5F0F;</h3>
-
+<p>&#x51FD;&#x6570;&#x7684;&#x53C2;&#x6570;</p>
 <h2 class="mume-header" id="%E8%BF%AD%E4%BB%A3%E5%99%A8">&#x8FED;&#x4EE3;&#x5668;</h2>
 
 <p>&#x65E0;&#x9650;&#x5927;&#x7684;&#x6D41;</p>
