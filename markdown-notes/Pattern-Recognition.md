@@ -239,8 +239,12 @@ $$\Delta w_i = -\eta \frac{\partial E}{\partial w_i}$$
 
 剩下的问题是如何求$\dfrac{\partial E}{\partial w_i}$。
 
-------
+对于神经网络来说，损失函数的形式具有不同可选择的形式。损失函数的选取往往与输出层的结构有关。常见的有：
 
+- Softmax + 交叉熵
+- Sigmoid + 均方误差
+
+##### Sigmoid + 均方误差
 
 下面给出以三层感知机网络为例的BP权值更新公式推导过程。用作分类（Classification）。其中隐层有$l$个神经元，采用sigmoid函数；输出层有$m$个神经元，激活函数也采用sigmoid。以**均方误差**作为损失函数。
 
@@ -314,11 +318,95 @@ $$\Delta v_{ij} = \eta \delta_{H,j} H_{out,k} $$
 --------
 激活函数采用softmax。以交叉熵为损失函数。
 
+##### Softmax + 交叉熵
+
+下面整理一个以Softmax为输出层（常常用作分类），使用交叉熵作为损失函数的BP权值迭代公式推导过程：
+
+损失函数和目标为：
+
+$$E=-\sum_{k=1}^{l}L_k\ln{\hat{L}_k}$$
+
+$$w_{jk}^*,\cdots,v_{ij}^*,\cdots = \argmin_{w_{jk},\cdots,v_{ij},\cdots}E$$
+
+其中
+
+$$\left\{\begin{aligned}
+  \hat{L}_k = O_{out,k} = s_k(O_{in,k}) \\
+  O_{in,k} = \sum_{j=1}^{m} w_{jk}H_{out,k} \\
+  H_{out,k} = f(H_{in,k}) \\
+  H_{in,k} = \sum_{i=1}^{n} v_{ij}x_i
+\end{aligned}\right.$$
+
+梯度下降的形式为：
+
+$$\Delta w_{jk} = - \eta \frac{\partial E}{\partial w_{jk}} $$
+
+由链式法则：
+
+$$\frac{\partial E}{\partial w_{jk}} = \frac{\partial E}{\partial O_{in,k}} \cdot \frac{\partial O_{in,k}}{\partial w_{jk}}$$ 
+
+首先先给出sigmoid函数导数的性质：
+
+$$f(x) = \frac{1}{1+e^{-x}}$$
+
+$$\frac{\partial f}{\partial x} = f(x)[1-f(x)]$$
+
+softmax函数有性质：
+
+$$s_i(x_i)=\frac{e^{x_i}}{\sum_a e^{x_a}}$$
+
+$$\frac{\partial s_i}{\partial x_i} = \frac{e^{x_i}(\sum_a e^{x_a}-e^{x_i})}{(\sum_a e^{x_a})^2} = s_i[1-s_i]$$
+
+$$\frac{\partial s_i}{\partial x_j} = \frac{-e^{x_i}e^{x_j}}{(\sum_a e^{x_a})^2},\quad i \not= j$$
+
+
+由于softmax对每个输出层神经元都有连接：
+
+$$\begin{aligned}
+    \frac{\partial E}{\partial O_{in,k}} &= \sum_k \frac{\partial E}{\partial O_{out,k}} \frac{\partial O_{out,k}}{\partial O_{in,k}} \\
+    &= -\frac{L_k}{O_{out,k}} O_{out,k}(1-O_{out,k}) + 
+    \sum_{k^{'}\not=k} \left[ -\frac{L_{k^{'}}}{O_{out,k^{'}}} (-O_{out,k^{'}} O_{out,k})\right] \\
+    &= (\sum_k L_k)O_{out,k}-L_k
+\end{aligned}$$
+
+由于用作分类，所以标签$L_k$一定只有一个为$1$，其他均为$0$，即有$\displaystyle{\sum_k L_k=1}$
+
+又记输出层误差信号
+
+$$\begin{aligned}
+  \delta_{O,k} = - \frac{\partial E}{\partial O_{in,k}} = L_k - O_{out,k}
+\end{aligned}$$
+
+则有输出层权值更新公式：
+
+$$\Delta w_{jk} = \eta \delta_{O,k} H_{out,j} $$
+
+对于隐层的权值更新公式同理：
+
+$$\Delta v_{ij} = - \eta \frac{\partial E}{\partial v_{ij}} $$
+
+$$\frac{\partial E}{\partial v_{ij}} = \frac{\partial E}{\partial H_{in,k}} \cdot \frac{\partial H_{in,k}}{\partial v_{ij}}$$ 
+
+有
+
+$$\begin{aligned}
+  \frac{\partial E}{\partial H_{in,k}} &= \sum_{k=1}^{l} \frac{\partial E}{\partial O_{in,k}} \cdot \frac{\partial O_{in,k}}{\partial H_{out,k}} \cdot \frac{\partial H_{out,k}}{\partial H_{in,k}} \\
+  &= -\sum_{k=1}^{l} \delta_{O,k} w_{jk} f(H_{in,k})[1-f(H_{in,k})]
+\end{aligned}$$
+
+同样记输出层误差信号
+
+$$\delta_{H,j} = -\frac{\partial E}{\partial H_{in,k}} = \sum_{k=1}^{l} \delta_{O,k} w_{jk} f(H_{in,k})[1-f(H_{in,k})]$$
+
+隐层权值更新公式为：
+
+$$\Delta v_{ij} = \eta \delta_{H,j} I_{out,i} $$
+
 ### CNN
 
 ### RNN
 ## 支持向量机（SVM, Support Vector Machine）
-~~这个名字我十分想吐槽，第一次看到的时候以为是支持向量的机器，然而并没有什么关系。~~
+~~这个名字我十分想吐槽，其实是“支持向量 - 机”，而不是“支持 - 向量 - 机”~~
 ### 线性SVM
 #### 点到超平面的距离
 
