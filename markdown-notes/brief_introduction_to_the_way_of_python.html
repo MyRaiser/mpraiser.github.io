@@ -320,6 +320,7 @@ Namespaces are one honking great idea -- let&apos;s do more of those!</p>
 <li><a href="#list%E4%B8%8Etuple">List&#x4E0E;Tuple</a></li>
 <li><a href="#dict%E4%B8%8Eset">Dict&#x4E0E;Set</a></li>
 <li><a href="#%E8%BF%AD%E4%BB%A3%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%9A%84%E5%85%83%E7%B4%A0">&#x8FED;&#x4EE3;&#x5BB9;&#x5668;&#x4E2D;&#x7684;&#x5143;&#x7D20;</a></li>
+<li><a href="#%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F">&#x5217;&#x8868;&#x63A8;&#x5BFC;&#x5F0F;</a></li>
 </ul>
 </li>
 <li><a href="#%E5%87%BD%E6%95%B0%E4%B8%8E%E7%B1%BB">&#x51FD;&#x6570;&#x4E0E;&#x7C7B;</a>
@@ -338,9 +339,15 @@ Namespaces are one honking great idea -- let&apos;s do more of those!</p>
 <li><a href="#%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F">&#x7F16;&#x7A0B;&#x8303;&#x5F0F;</a></li>
 </ul>
 </li>
+<li><a href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8">&#x8FED;&#x4EE3;&#x5668;&#x4E0E;&#x751F;&#x6210;&#x5668;</a>
+<ul>
+<li><a href="#%E5%8F%AF%E8%BF%AD%E4%BB%A3">&#x53EF;&#x8FED;&#x4EE3;</a></li>
 <li><a href="#%E8%BF%AD%E4%BB%A3%E5%99%A8">&#x8FED;&#x4EE3;&#x5668;</a></li>
+</ul>
+</li>
 <li><a href="#%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97">&#x5BFC;&#x5165;&#x6A21;&#x5757;</a></li>
 <li><a href="#%E5%BC%82%E5%B8%B8">&#x5F02;&#x5E38;</a></li>
+<li><a href="#%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83pep-8">&#x7F16;&#x7801;&#x89C4;&#x8303;&#xFF1A;PEP 8</a></li>
 <li><a href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE">&#x53C2;&#x8003;&#x6587;&#x732E;</a></li>
 </ul>
 </li>
@@ -638,6 +645,30 @@ b <span class="token operator">=</span> <span class="token punctuation">(</span>
 </pre><blockquote>
 <p><strong>&#x53EF;&#x8FED;&#x4EE3;</strong>&#x5177;&#x6709;&#x66F4;&#x6DF1;&#x5C42;&#x6B21;&#x7684;&#x5185;&#x6DB5;&#xFF0C;&#x4F60;&#x53EF;&#x80FD;&#x4F1A;&#x5BF9;<a href="#%E8%BF%AD%E4%BB%A3%E5%99%A8">&#x8FED;&#x4EE3;&#x5668;</a>&#x611F;&#x5174;&#x8DA3;&#x3002;</p>
 </blockquote>
+<h3 class="mume-header" id="%E5%88%97%E8%A1%A8%E6%8E%A8%E5%AF%BC%E5%BC%8F">&#x5217;&#x8868;&#x63A8;&#x5BFC;&#x5F0F;</h3>
+
+<p><strong>&#x5217;&#x8868;&#x63A8;&#x5BFC;&#x5F0F;</strong>&#xFF08;List Comprehensions&#xFF09;&#x662F;<code>python</code>&#x5F88;&#x68D2;&#x7684;&#x4E00;&#x4E2A;&#x8BED;&#x6CD5;&#x7CD6;&#xFF0C;&#x5B83;&#x53EF;&#x4EE5;&#x5927;&#x5927;&#x7B80;&#x5316;&#x8BED;&#x53E5;&#xFF0C;&#x800C;&#x4F7F;&#x5F97;&#x7A0B;&#x5E8F;&#x5458;&#x6CE8;&#x610F;&#x529B;&#x96C6;&#x4E2D;&#x5728;&#x66F4;&#x52A0;&#x5173;&#x952E;&#x7684;&#x5730;&#x65B9;&#x3002;</p>
+<p>&#x6BD4;&#x5982;&#x8981;&#x751F;&#x6210;&#x57FA;&#x5E95;&#x4E3A;<code>0</code>&#x5230;<code>9</code>&#x7684;&#x5E73;&#x65B9;&#x6570;&#xFF0C;&#x53EF;&#x4EE5;&#x8FD9;&#x4E48;&#x5199;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="py" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> a <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token operator">**</span> <span class="token number">2</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> a
+<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">25</span><span class="token punctuation">,</span> <span class="token number">36</span><span class="token punctuation">,</span> <span class="token number">49</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">81</span><span class="token punctuation">]</span>
+</pre><p>&#x5B83;&#x4E0E;&#x4EE5;&#x4E0B;&#x4EE3;&#x7801;&#x5B8C;&#x5168;&#x7B49;&#x4EF7;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="py" class="language-python">a <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    a<span class="token punctuation">.</span>append<span class="token punctuation">(</span>i <span class="token operator">**</span> <span class="token number">2</span><span class="token punctuation">)</span>
+</pre><p>&#x5217;&#x8868;&#x63A8;&#x5BFC;&#x5F0F;&#x4E2D;&#x53EF;&#x4EE5;&#x52A0;&#x5224;&#x65AD;&#x4EE5;&#x8DF3;&#x8FC7;&#x4E00;&#x4E9B;&#x5143;&#x7D20;&#xFF0C;&#x6BD4;&#x5982;&#x53EA;&#x8981;&#x6240;&#x6709;&#x7684;&#x5076;&#x6570;<code>i</code>&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="py" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> a <span class="token operator">=</span> <span class="token punctuation">[</span>i <span class="token operator">**</span> <span class="token number">2</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token keyword">if</span> i <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> a
+<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">36</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">]</span>
+</pre><p>&#x524D;&#x9762;&#x7684;<code>i ** 2</code>&#x53EF;&#x4EE5;&#x4E3A;&#x4EFB;&#x610F;&#x8868;&#x8FBE;&#x5F0F;&#xFF0C;&#x7528;&#x4E8E;&#x5F97;&#x5230;&#x751F;&#x6210;&#x5143;&#x7D20;&#x7684;&#x503C;&#xFF0C;&#x6240;&#x4EE5;&#x4F60;&#x751A;&#x81F3;&#x53EF;&#x4EE5;&#x8FD9;&#x4E48;&#x5199;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="py" class="language-python"><span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> a <span class="token operator">=</span> <span class="token punctuation">[</span>x <span class="token keyword">if</span> <span class="token punctuation">(</span>x <span class="token punctuation">:</span><span class="token operator">=</span> i<span class="token operator">**</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">&gt;=</span> <span class="token number">16</span> <span class="token keyword">else</span> <span class="token number">0</span> <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token keyword">if</span> i <span class="token operator">%</span> <span class="token number">2</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">]</span>
+<span class="token operator">&gt;&gt;</span><span class="token operator">&gt;</span> a
+<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">36</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">]</span>
+</pre><p>&#x8BE5;&#x5217;&#x8868;&#x751F;&#x6210;&#x5F0F;&#x7684;&#x542B;&#x4E49;&#x662F;&#x627E;&#x51FA;<code>10</code>&#x4EE5;&#x5185;&#x6240;&#x6709;&#x5076;&#x6570;&#x7684;&#x5E73;&#x65B9;&#xFF0C;&#x5982;&#x679C;&#x4E0D;&#x5927;&#x4E8E;&#x7B49;&#x4E8E;<code>16</code>&#xFF0C;&#x5219;&#x7F6E;<code>0</code>&#x3002;</p>
+<p>&#x6B63;&#x5982;&#x4F60;&#x6240;&#x89C1;&#xFF0C;&#x8FC7;&#x5EA6;&#x6EE5;&#x7528;&#x8BED;&#x6CD5;&#x7CD6;&#x53EF;&#x80FD;&#x4F1A;&#x53CD;&#x800C;&#x964D;&#x4F4E;&#x53EF;&#x8BFB;&#x6027;&#xFF0C;&#x5728;&#x5B9E;&#x9645;&#x7F16;&#x5199;&#x4EE3;&#x7801;&#x65F6;&#x52A1;&#x5FC5;&#x968F;&#x65F6;&#x6CE8;&#x610F;&#x3002;</p>
+<blockquote>
+<p><code>dict</code>&#x3001;<code>set</code>&#x4E5F;&#x5177;&#x6709;&#x7C7B;&#x4F3C;&#x7684;&#x63A8;&#x5BFC;&#x5F0F;&#xFF0C;&#x8BF7;&#x81EA;&#x884C;&#x67E5;&#x9605;&#x6587;&#x6863;&#xFF0C;&#x518D;&#x6B21;&#x4E0D;&#x4F5C;&#x8D58;&#x8FF0;&#x3002;</p>
+</blockquote>
 <h2 class="mume-header" id="%E5%87%BD%E6%95%B0%E4%B8%8E%E7%B1%BB">&#x51FD;&#x6570;&#x4E0E;&#x7C7B;</h2>
 
 <p><code>python</code>&#x662F;&#x4E00;&#x79CD;<strong>&#x591A;&#x8303;&#x5F0F;</strong>&#x7684;&#x8BED;&#x8A00;&#xFF0C;&#x5BF9;&#x4E8E;&#x8FC7;&#x7A0B;&#x5F0F;&#x3001;&#x51FD;&#x6570;&#x5F0F;&#x4EE5;&#x53CA;&#x9762;&#x5411;&#x5BF9;&#x8C61;&#x7684;&#x5199;&#x6CD5;&#x5747;&#x63D0;&#x4F9B;&#x4E86;&#x652F;&#x6301;&#x3002;&#x6211;&#x4EEC;&#x5C06;<a href="#%E7%BC%96%E7%A8%8B%E8%8C%83%E5%BC%8F">&#x7F16;&#x7A0B;&#x8303;&#x5F0F;</a>&#x7684;&#x95EE;&#x9898;&#x5F80;&#x540E;&#x653E;&#x4E00;&#x653E;&#xFF0C;&#x5148;&#x4ECE;&#x7B80;&#x5355;&#x7684;&#x70B9;&#x5207;&#x5165;&#x3002;</p>
@@ -790,15 +821,32 @@ foo<span class="token punctuation">.</span>add<span class="token punctuation">(<
 <p>&#x4E0D;&#x533A;&#x5206;&#x53D8;&#x91CF;&#x3001;&#x51FD;&#x6570;&#x3001;&#x7C7B;&#x3001;&#x7C7B;&#x7684;&#x5B9E;&#x4F8B;&#xFF0C;&#x5B83;&#x4EEC;&#x5747;&#x4E3A;<strong>&#x5BF9;&#x8C61;</strong>&#x3002;</p>
 <p>&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x8FC7;&#x7A0B;&#x5F0F;&#x7684;&#x5199;&#x6CD5;&#xFF1A;</p>
 <p>&#x51FD;&#x6570;&#x5F0F;&#x7F16;&#x7A0B;&#x6307;&#x5357;</p>
-<h2 class="mume-header" id="%E8%BF%AD%E4%BB%A3%E5%99%A8">&#x8FED;&#x4EE3;&#x5668;</h2>
+<h2 class="mume-header" id="%E8%BF%AD%E4%BB%A3%E5%99%A8%E4%B8%8E%E7%94%9F%E6%88%90%E5%99%A8">&#x8FED;&#x4EE3;&#x5668;&#x4E0E;&#x751F;&#x6210;&#x5668;</h2>
 
-<p>&#x5F53;&#x6211;&#x4EEC;&#x4ECE;&#x4E00;&#x4E2A;&#x66F4;&#x9AD8;&#x7684;&#x89D2;&#x5EA6;&#x6765;&#x5BA1;&#x89C6;&#x201C;&#x8FED;&#x4EE3;&#x201D;&#x8FD9;&#x4EF6;&#x4E8B;&#x7684;&#x65F6;&#x5019;&#xFF0C;</p>
+<h3 class="mume-header" id="%E5%8F%AF%E8%BF%AD%E4%BB%A3">&#x53EF;&#x8FED;&#x4EE3;</h3>
+
+<p>&#x5F53;&#x6211;&#x4EEC;&#x4ECE;&#x4E00;&#x4E2A;&#x66F4;&#x9AD8;&#x7684;&#x89D2;&#x5EA6;&#x6765;&#x5BA1;&#x89C6;&#x201C;&#x8FED;&#x4EE3;&#x201D;&#x8FD9;&#x4EF6;&#x4E8B;&#x5230;&#x5E95;&#x5728;&#x505A;&#x4EC0;&#x4E48;&#x7684;&#x65F6;&#x5019;&#xFF0C;&#x6211;&#x4EEC;&#x53EF;&#x4EE5;&#x53D1;&#x73B0;&#x201C;&#x8FED;&#x4EE3;&#x201D;&#x6240;&#x505A;&#x7684;&#x4E8B;&#x60C5;&#xFF0C;&#x4E0D;&#x8FC7;&#x662F;&#x4E00;&#x76F4;&#x5728;&#x8BD5;&#x56FE;&#x83B7;&#x53D6;&#x201C;&#x4E0B;&#x4E00;&#x4E2A;&#x503C;&#x201D;&#x3002;&#x56E0;&#x6B64;&#xFF0C;&#x652F;&#x6301;<code>__next__</code>&#x65B9;&#x6CD5;&#x7684;&#x5BF9;&#x8C61;&#x6211;&#x4EEC;<em>&#x5927;&#x7EA6;</em>&#x53EF;&#x4EE5;&#x79F0;&#x4E4B;&#x4E3A;&#x201C;&#x53EF;&#x8FED;&#x4EE3;&#x201D;&#x3002;</p>
+<blockquote>
+<p>&#x6280;&#x672F;&#x4E0A;&#x6765;&#x8BF4;&#xFF0C;&#x8868;&#x8FF0;&#x5730;&#x4E0D;&#x662F;&#x5F88;&#x4E25;&#x8C28;&#x3002;&#x8BF7;&#x5F80;&#x4E0B;&#x9605;&#x8BFB;&#x3002;</p>
+</blockquote>
+<h3 class="mume-header" id="%E8%BF%AD%E4%BB%A3%E5%99%A8">&#x8FED;&#x4EE3;&#x5668;</h3>
+
+<p><strong>&#x8FED;&#x4EE3;&#x5668;&#x534F;&#x8BAE;</strong>&#x8981;&#x6C42;&#x5BF9;&#x8C61;&#x5177;&#x6709;&#x4EE5;&#x4E0B;&#x4E24;&#x4E2A;&#x65B9;&#x6CD5;&#xFF0C;&#x5219;&#x53EF;&#x4EE5;&#x79F0;&#x4F5C;<code>Iterator</code>&#xFF1A;</p>
+<ul>
+<li><code>__iter__</code></li>
+<li><code>__next__</code></li>
+</ul>
+<p><code>__iter__</code>&#x662F;&#x5141;&#x8BB8;&#x5BF9;&#x8C61;&#x914D;&#x5408;<code>for ... in</code>&#x8BED;&#x53E5;&#x4F7F;&#x7528;&#x7684;&#x65B9;&#x6CD5;&#xFF0C;&#x8FD4;&#x56DE;&#x8FED;&#x4EE3;&#x5668;&#x672C;&#x8EAB;&#x3002;</p>
+<p><code>__next__</code>&#x7528;&#x4E8E;&#x4ECE;&#x5BB9;&#x5668;&#x4E2D;&#x8FD4;&#x56DE;&#x4E0B;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x5982;&#x679C;&#x6CA1;&#x6709;&#x4E0B;&#x4E00;&#x4E2A;&#x5BF9;&#x8C61;&#xFF0C;&#x5219;&#x5E94;&#x5F53;&#x5F15;&#x53D1;<code>StopIteration</code>&#x5F02;&#x5E38;&#x3002;</p>
 <p>&#x65E0;&#x9650;&#x5927;&#x7684;&#x6D41;</p>
 <h2 class="mume-header" id="%E5%AF%BC%E5%85%A5%E6%A8%A1%E5%9D%97">&#x5BFC;&#x5165;&#x6A21;&#x5757;</h2>
 
+<p>&#x4F7F;&#x7528;<code>import this</code>&#x4F1A;&#x5728;&#x5C4F;&#x5E55;&#x4E0A;&#x6253;&#x5370;&#x76EE;&#x5F55;&#x524D;&#x7684;&#x201C;python&#x4E4B;&#x7985;&#x201D;</p>
 <h2 class="mume-header" id="%E5%BC%82%E5%B8%B8">&#x5F02;&#x5E38;</h2>
 
 <p>EAFP</p>
+<h2 class="mume-header" id="%E7%BC%96%E7%A0%81%E8%A7%84%E8%8C%83pep-8">&#x7F16;&#x7801;&#x89C4;&#x8303;&#xFF1A;PEP 8</h2>
+
 <h2 class="mume-header" id="%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE">&#x53C2;&#x8003;&#x6587;&#x732E;</h2>
 
 <ol>
