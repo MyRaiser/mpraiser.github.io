@@ -13,3 +13,9 @@
 ## 不务正业
 [WSL](markdown-notes/WSL.html)
 [Linux基本操作](markdown-notes/Linux.html)
+
+---
+
+<center>
+<a href="http://beian.miit.gov.cn/" target="_blank">苏ICP备16045178号</a>
+</center>
