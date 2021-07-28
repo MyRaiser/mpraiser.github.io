@@ -208,3 +208,129 @@ luci-static | 存放HTML相关文件，包含CSS、JS及网页图片等文件。
 
 顾名思义，存放了与LUA相关的文件，在LUA脚本中，通过require命令引用的脚本及函数，起始路径都是该目录。同时，不同模型及主题的luasrc文件夹都拷贝到/usr/lib/lua/luci目录下，通过/etc/config/luci中的mediaurlbase字段决定当前使用的主题及语言。
 
+## 配置开发环境
+
+根据官方文档[^modules_how_to]，LuCI的开发方式主要有两种:
+
+[^modules_how_to]: https://github.com/openwrt/luci/wiki/ModulesHowTo
+
+1. 部署环境开发
+2. 开发环境开发
+
+前者即直接在烧写好了OpenWrt的板上进行代码编写，写完刷新一下即可在网页看到效果。
+
+> 凡是修改`controller/`文件夹中的配置，都需要重启板子或把`/tmp/`目录下`luci-indexcache`、`luci-modulecache/luci-sessions/`删除才能生效，其他几个文件夹修改可不用，刷新一下网页即可。
+
+后者是在LuCI的git仓库中进行代码编写，写完需要编译固件并烧写到板上才能看到效果。
+
+> 也就是说，LuCI的开发缺少一个“脚手架”？
+
+两种开发方法大同小异，各有优劣。
+
+
+# 搭建VMware运行的x86 OpenWrt
+
+### 编译固件
+
+执行
+
+```bash
+make menuconfig
+```
+
+`Target System`选择`x86`，`Subtarget`选择`x86_64`，`Target Profile`默认为`Generic`。
+
+在`Target Images`中勾选`Build Vmware image files (VMDK)`，这样会生成`.vmdk`格式的镜像，可以直接供VMware使用。
+
+在`LuCI -> 1. Collections`里勾选`luci`和`luci-ssl-openssl`，之后
+
+```bash
+make
+```
+
+之后生成的固件在`./bin/targets/x86/64`下，文件名如`openwrt-x86-64-combined-ext4.vmdk`。
+
+
+### 设置虚拟机
+
+本文使用的VMware版本为`VMware Workstation Pro 15`，下面记录在虚拟机中安装上文编译的OpenWrt镜像的步骤。
+
+1. 打开`文件 -> 新建虚拟机`
+
+2. 选择`自定义（高级）`
+
+3. 硬件兼容性可以保留默认`Workstation 15.x`
+
+4. 选择`稍后安装操作系统`
+
+5. 客户机操作系统：
+
+    选择`Linux`；由于我编译的`OpenWrt`中内核源码版本为`4.14`，故版本选择`其他Linux 4.x 64位`
+
+6. 设置名称和路径、处理器数量、内存大小等，合适即可
+
+7. 网络连接、I/O控制器类型、虚拟磁盘类型可以选择默认值
+
+8. 磁盘选择`使用现有虚拟磁盘`，选择上一步编译生成的`.vmdk`文件
+
+    如果弹出`将现有虚拟磁盘转换为更新的格式？`，可以选择`转换`
+
+9. **配置网卡**，选择`自定义硬件`：
+
+    OpenWrt需要一个WAN口和一个LAN口，所以至少需要两个`网络适配器`，其中用于WAN口的选择`桥接模式`，用于LAN口的可以选择`自定义`中任意一个未被使用的虚拟网络。我使用的配置是：
+
+    设备 | 摘要
+    :-: | :-:
+    网络适配器 | 自定义（VMnet2）
+    网络适配器2 | 桥接模式（自动）
+
+10. 至此虚拟机建立完成，启动虚拟机
+
+11. **设置网络参数**：
+
+    进入OpenWrt系统，敲一下回车进入命令行，然后修改网络配置文件：
+
+    ```bash
+    vim /etc/config/network
+    ```
+
+    主要是保证`'lan'`和`'wan'`这两个配置没问题，这里需要打开VMWare中`编辑 -> 虚拟网络编辑器`查看VMnet的网段。
+
+    这里我的`VMnet2`的子网地址是`192.168.233.0`，并且我的宿主机为`192.168.233.1`，因此只需要将`'lan'`下的`option ipaddr`修改到同一网段下的另一个IP即可。
+
+    `wan`我这里保持的默认`dhcp`没有出现问题。
+
+    给出一个我的参考：
+    ```bash
+    config interface 'lan'
+        option type 'bridge'
+        option ifname 'eth0'
+        option proto 'static'
+        option ipaddr '192.168.233.10'
+        option netmask '255.255.255.0'
+        option ip6assign '60'
+
+    config interface 'wan'
+        option ifname 'eth1'
+        option proto 'dhcp'
+    ```
+
+    之后使用
+
+    ```bash
+    service network restart
+    ```
+
+    如果WAN口配置没有问题，那在OpenWrt虚拟机中应该可以直接ping通外网，如
+
+    ```bash
+    ping www.baidu.com
+    ```
+
+    如果LAN口没有问题，那宿主机和OpenWrt应该可以互相ping通，比如在宿主机ping虚拟机：
+
+    ```bash
+    ping 192.168.233.10
+    ```
+
+         

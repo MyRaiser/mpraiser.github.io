@@ -298,6 +298,13 @@ pre[data-line] .line-highlight[data-end]:after {
 <li><a href="#%E6%9D%BF%E4%B8%8A%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">&#x677F;&#x4E0A;&#x76EE;&#x5F55;&#x7ED3;&#x6784;</a></li>
 </ul>
 </li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83">&#x914D;&#x7F6E;&#x5F00;&#x53D1;&#x73AF;&#x5883;</a></li>
+</ul>
+</li>
+<li><a href="#%E6%90%AD%E5%BB%BAvmware%E8%BF%90%E8%A1%8C%E7%9A%84x86-openwrt">&#x642D;&#x5EFA;VMware&#x8FD0;&#x884C;&#x7684;x86 OpenWrt</a>
+<ul>
+<li><a href="#%E7%BC%96%E8%AF%91%E5%9B%BA%E4%BB%B6">&#x7F16;&#x8BD1;&#x56FA;&#x4EF6;</a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E8%99%9A%E6%8B%9F%E6%9C%BA">&#x8BBE;&#x7F6E;&#x865A;&#x62DF;&#x673A;</a></li>
 </ul>
 </li>
 </ul>
@@ -593,10 +600,121 @@ make clean
 <li><code>/usr/lib/lua</code>&#x4E0B;</li>
 </ol>
 <p>&#x987E;&#x540D;&#x601D;&#x4E49;&#xFF0C;&#x5B58;&#x653E;&#x4E86;&#x4E0E;LUA&#x76F8;&#x5173;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x5728;LUA&#x811A;&#x672C;&#x4E2D;&#xFF0C;&#x901A;&#x8FC7;require&#x547D;&#x4EE4;&#x5F15;&#x7528;&#x7684;&#x811A;&#x672C;&#x53CA;&#x51FD;&#x6570;&#xFF0C;&#x8D77;&#x59CB;&#x8DEF;&#x5F84;&#x90FD;&#x662F;&#x8BE5;&#x76EE;&#x5F55;&#x3002;&#x540C;&#x65F6;&#xFF0C;&#x4E0D;&#x540C;&#x6A21;&#x578B;&#x53CA;&#x4E3B;&#x9898;&#x7684;luasrc&#x6587;&#x4EF6;&#x5939;&#x90FD;&#x62F7;&#x8D1D;&#x5230;/usr/lib/lua/luci&#x76EE;&#x5F55;&#x4E0B;&#xFF0C;&#x901A;&#x8FC7;/etc/config/luci&#x4E2D;&#x7684;mediaurlbase&#x5B57;&#x6BB5;&#x51B3;&#x5B9A;&#x5F53;&#x524D;&#x4F7F;&#x7528;&#x7684;&#x4E3B;&#x9898;&#x53CA;&#x8BED;&#x8A00;&#x3002;</p>
+<h2 class="mume-header" id="%E9%85%8D%E7%BD%AE%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83">&#x914D;&#x7F6E;&#x5F00;&#x53D1;&#x73AF;&#x5883;</h2>
+
+<p>&#x6839;&#x636E;&#x5B98;&#x65B9;&#x6587;&#x6863;<sup class="footnote-ref"><a href="#fn2" id="fnref2">[2]</a></sup>&#xFF0C;LuCI&#x7684;&#x5F00;&#x53D1;&#x65B9;&#x5F0F;&#x4E3B;&#x8981;&#x6709;&#x4E24;&#x79CD;:</p>
+<ol>
+<li>&#x90E8;&#x7F72;&#x73AF;&#x5883;&#x5F00;&#x53D1;</li>
+<li>&#x5F00;&#x53D1;&#x73AF;&#x5883;&#x5F00;&#x53D1;</li>
+</ol>
+<p>&#x524D;&#x8005;&#x5373;&#x76F4;&#x63A5;&#x5728;&#x70E7;&#x5199;&#x597D;&#x4E86;OpenWrt&#x7684;&#x677F;&#x4E0A;&#x8FDB;&#x884C;&#x4EE3;&#x7801;&#x7F16;&#x5199;&#xFF0C;&#x5199;&#x5B8C;&#x5237;&#x65B0;&#x4E00;&#x4E0B;&#x5373;&#x53EF;&#x5728;&#x7F51;&#x9875;&#x770B;&#x5230;&#x6548;&#x679C;&#x3002;</p>
+<blockquote>
+<p>&#x51E1;&#x662F;&#x4FEE;&#x6539;<code>controller/</code>&#x6587;&#x4EF6;&#x5939;&#x4E2D;&#x7684;&#x914D;&#x7F6E;&#xFF0C;&#x90FD;&#x9700;&#x8981;&#x91CD;&#x542F;&#x677F;&#x5B50;&#x6216;&#x628A;<code>/tmp/</code>&#x76EE;&#x5F55;&#x4E0B;<code>luci-indexcache</code>&#x3001;<code>luci-modulecache/luci-sessions/</code>&#x5220;&#x9664;&#x624D;&#x80FD;&#x751F;&#x6548;&#xFF0C;&#x5176;&#x4ED6;&#x51E0;&#x4E2A;&#x6587;&#x4EF6;&#x5939;&#x4FEE;&#x6539;&#x53EF;&#x4E0D;&#x7528;&#xFF0C;&#x5237;&#x65B0;&#x4E00;&#x4E0B;&#x7F51;&#x9875;&#x5373;&#x53EF;&#x3002;</p>
+</blockquote>
+<p>&#x540E;&#x8005;&#x662F;&#x5728;LuCI&#x7684;git&#x4ED3;&#x5E93;&#x4E2D;&#x8FDB;&#x884C;&#x4EE3;&#x7801;&#x7F16;&#x5199;&#xFF0C;&#x5199;&#x5B8C;&#x9700;&#x8981;&#x7F16;&#x8BD1;&#x56FA;&#x4EF6;&#x5E76;&#x70E7;&#x5199;&#x5230;&#x677F;&#x4E0A;&#x624D;&#x80FD;&#x770B;&#x5230;&#x6548;&#x679C;&#x3002;</p>
+<blockquote>
+<p>&#x4E5F;&#x5C31;&#x662F;&#x8BF4;&#xFF0C;LuCI&#x7684;&#x5F00;&#x53D1;&#x7F3A;&#x5C11;&#x4E00;&#x4E2A;&#x201C;&#x811A;&#x624B;&#x67B6;&#x201D;&#xFF1F;</p>
+</blockquote>
+<p>&#x4E24;&#x79CD;&#x5F00;&#x53D1;&#x65B9;&#x6CD5;&#x5927;&#x540C;&#x5C0F;&#x5F02;&#xFF0C;&#x5404;&#x6709;&#x4F18;&#x52A3;&#x3002;</p>
+<h1 class="mume-header" id="%E6%90%AD%E5%BB%BAvmware%E8%BF%90%E8%A1%8C%E7%9A%84x86-openwrt">&#x642D;&#x5EFA;VMware&#x8FD0;&#x884C;&#x7684;x86 OpenWrt</h1>
+
+<h3 class="mume-header" id="%E7%BC%96%E8%AF%91%E5%9B%BA%E4%BB%B6">&#x7F16;&#x8BD1;&#x56FA;&#x4EF6;</h3>
+
+<p>&#x6267;&#x884C;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">make</span> menuconfig
+</pre><p><code>Target System</code>&#x9009;&#x62E9;<code>x86</code>&#xFF0C;<code>Subtarget</code>&#x9009;&#x62E9;<code>x86_64</code>&#xFF0C;<code>Target Profile</code>&#x9ED8;&#x8BA4;&#x4E3A;<code>Generic</code>&#x3002;</p>
+<p>&#x5728;<code>Target Images</code>&#x4E2D;&#x52FE;&#x9009;<code>Build Vmware image files (VMDK)</code>&#xFF0C;&#x8FD9;&#x6837;&#x4F1A;&#x751F;&#x6210;<code>.vmdk</code>&#x683C;&#x5F0F;&#x7684;&#x955C;&#x50CF;&#xFF0C;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;&#x4F9B;VMware&#x4F7F;&#x7528;&#x3002;</p>
+<p>&#x5728;<code>LuCI -&gt; 1. Collections</code>&#x91CC;&#x52FE;&#x9009;<code>luci</code>&#x548C;<code>luci-ssl-openssl</code>&#xFF0C;&#x4E4B;&#x540E;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">make</span>
+</pre><p>&#x4E4B;&#x540E;&#x751F;&#x6210;&#x7684;&#x56FA;&#x4EF6;&#x5728;<code>./bin/targets/x86/64</code>&#x4E0B;&#xFF0C;&#x6587;&#x4EF6;&#x540D;&#x5982;<code>openwrt-x86-64-combined-ext4.vmdk</code>&#x3002;</p>
+<h3 class="mume-header" id="%E8%AE%BE%E7%BD%AE%E8%99%9A%E6%8B%9F%E6%9C%BA">&#x8BBE;&#x7F6E;&#x865A;&#x62DF;&#x673A;</h3>
+
+<p>&#x672C;&#x6587;&#x4F7F;&#x7528;&#x7684;VMware&#x7248;&#x672C;&#x4E3A;<code>VMware Workstation Pro 15</code>&#xFF0C;&#x4E0B;&#x9762;&#x8BB0;&#x5F55;&#x5728;&#x865A;&#x62DF;&#x673A;&#x4E2D;&#x5B89;&#x88C5;&#x4E0A;&#x6587;&#x7F16;&#x8BD1;&#x7684;OpenWrt&#x955C;&#x50CF;&#x7684;&#x6B65;&#x9AA4;&#x3002;</p>
+<ol>
+<li>
+<p>&#x6253;&#x5F00;<code>&#x6587;&#x4EF6; -&gt; &#x65B0;&#x5EFA;&#x865A;&#x62DF;&#x673A;</code></p>
+</li>
+<li>
+<p>&#x9009;&#x62E9;<code>&#x81EA;&#x5B9A;&#x4E49;&#xFF08;&#x9AD8;&#x7EA7;&#xFF09;</code></p>
+</li>
+<li>
+<p>&#x786C;&#x4EF6;&#x517C;&#x5BB9;&#x6027;&#x53EF;&#x4EE5;&#x4FDD;&#x7559;&#x9ED8;&#x8BA4;<code>Workstation 15.x</code></p>
+</li>
+<li>
+<p>&#x9009;&#x62E9;<code>&#x7A0D;&#x540E;&#x5B89;&#x88C5;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;</code></p>
+</li>
+<li>
+<p>&#x5BA2;&#x6237;&#x673A;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#xFF1A;</p>
+<p>&#x9009;&#x62E9;<code>Linux</code>&#xFF1B;&#x7531;&#x4E8E;&#x6211;&#x7F16;&#x8BD1;&#x7684;<code>OpenWrt</code>&#x4E2D;&#x5185;&#x6838;&#x6E90;&#x7801;&#x7248;&#x672C;&#x4E3A;<code>4.14</code>&#xFF0C;&#x6545;&#x7248;&#x672C;&#x9009;&#x62E9;<code>&#x5176;&#x4ED6;Linux 4.x 64&#x4F4D;</code></p>
+</li>
+<li>
+<p>&#x8BBE;&#x7F6E;&#x540D;&#x79F0;&#x548C;&#x8DEF;&#x5F84;&#x3001;&#x5904;&#x7406;&#x5668;&#x6570;&#x91CF;&#x3001;&#x5185;&#x5B58;&#x5927;&#x5C0F;&#x7B49;&#xFF0C;&#x5408;&#x9002;&#x5373;&#x53EF;</p>
+</li>
+<li>
+<p>&#x7F51;&#x7EDC;&#x8FDE;&#x63A5;&#x3001;I/O&#x63A7;&#x5236;&#x5668;&#x7C7B;&#x578B;&#x3001;&#x865A;&#x62DF;&#x78C1;&#x76D8;&#x7C7B;&#x578B;&#x53EF;&#x4EE5;&#x9009;&#x62E9;&#x9ED8;&#x8BA4;&#x503C;</p>
+</li>
+<li>
+<p>&#x78C1;&#x76D8;&#x9009;&#x62E9;<code>&#x4F7F;&#x7528;&#x73B0;&#x6709;&#x865A;&#x62DF;&#x78C1;&#x76D8;</code>&#xFF0C;&#x9009;&#x62E9;&#x4E0A;&#x4E00;&#x6B65;&#x7F16;&#x8BD1;&#x751F;&#x6210;&#x7684;<code>.vmdk</code>&#x6587;&#x4EF6;</p>
+<p>&#x5982;&#x679C;&#x5F39;&#x51FA;<code>&#x5C06;&#x73B0;&#x6709;&#x865A;&#x62DF;&#x78C1;&#x76D8;&#x8F6C;&#x6362;&#x4E3A;&#x66F4;&#x65B0;&#x7684;&#x683C;&#x5F0F;&#xFF1F;</code>&#xFF0C;&#x53EF;&#x4EE5;&#x9009;&#x62E9;<code>&#x8F6C;&#x6362;</code></p>
+</li>
+<li>
+<p><strong>&#x914D;&#x7F6E;&#x7F51;&#x5361;</strong>&#xFF0C;&#x9009;&#x62E9;<code>&#x81EA;&#x5B9A;&#x4E49;&#x786C;&#x4EF6;</code>&#xFF1A;</p>
+<p>OpenWrt&#x9700;&#x8981;&#x4E00;&#x4E2A;WAN&#x53E3;&#x548C;&#x4E00;&#x4E2A;LAN&#x53E3;&#xFF0C;&#x6240;&#x4EE5;&#x81F3;&#x5C11;&#x9700;&#x8981;&#x4E24;&#x4E2A;<code>&#x7F51;&#x7EDC;&#x9002;&#x914D;&#x5668;</code>&#xFF0C;&#x5176;&#x4E2D;&#x7528;&#x4E8E;WAN&#x53E3;&#x7684;&#x9009;&#x62E9;<code>&#x6865;&#x63A5;&#x6A21;&#x5F0F;</code>&#xFF0C;&#x7528;&#x4E8E;LAN&#x53E3;&#x7684;&#x53EF;&#x4EE5;&#x9009;&#x62E9;<code>&#x81EA;&#x5B9A;&#x4E49;</code>&#x4E2D;&#x4EFB;&#x610F;&#x4E00;&#x4E2A;&#x672A;&#x88AB;&#x4F7F;&#x7528;&#x7684;&#x865A;&#x62DF;&#x7F51;&#x7EDC;&#x3002;&#x6211;&#x4F7F;&#x7528;&#x7684;&#x914D;&#x7F6E;&#x662F;&#xFF1A;</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">&#x8BBE;&#x5907;</th>
+<th style="text-align:center">&#x6458;&#x8981;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">&#x7F51;&#x7EDC;&#x9002;&#x914D;&#x5668;</td>
+<td style="text-align:center">&#x81EA;&#x5B9A;&#x4E49;&#xFF08;VMnet2&#xFF09;</td>
+</tr>
+<tr>
+<td style="text-align:center">&#x7F51;&#x7EDC;&#x9002;&#x914D;&#x5668;2</td>
+<td style="text-align:center">&#x6865;&#x63A5;&#x6A21;&#x5F0F;&#xFF08;&#x81EA;&#x52A8;&#xFF09;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p>&#x81F3;&#x6B64;&#x865A;&#x62DF;&#x673A;&#x5EFA;&#x7ACB;&#x5B8C;&#x6210;&#xFF0C;&#x542F;&#x52A8;&#x865A;&#x62DF;&#x673A;</p>
+</li>
+<li>
+<p><strong>&#x8BBE;&#x7F6E;&#x7F51;&#x7EDC;&#x53C2;&#x6570;</strong>&#xFF1A;</p>
+<p>&#x8FDB;&#x5165;OpenWrt&#x7CFB;&#x7EDF;&#xFF0C;&#x6572;&#x4E00;&#x4E0B;&#x56DE;&#x8F66;&#x8FDB;&#x5165;&#x547D;&#x4EE4;&#x884C;&#xFF0C;&#x7136;&#x540E;&#x4FEE;&#x6539;&#x7F51;&#x7EDC;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">vim</span> /etc/config/network
+</pre><p>&#x4E3B;&#x8981;&#x662F;&#x4FDD;&#x8BC1;<code>&apos;lan&apos;</code>&#x548C;<code>&apos;wan&apos;</code>&#x8FD9;&#x4E24;&#x4E2A;&#x914D;&#x7F6E;&#x6CA1;&#x95EE;&#x9898;&#xFF0C;&#x8FD9;&#x91CC;&#x9700;&#x8981;&#x6253;&#x5F00;VMWare&#x4E2D;<code>&#x7F16;&#x8F91; -&gt; &#x865A;&#x62DF;&#x7F51;&#x7EDC;&#x7F16;&#x8F91;&#x5668;</code>&#x67E5;&#x770B;VMnet&#x7684;&#x7F51;&#x6BB5;&#x3002;</p>
+<p>&#x8FD9;&#x91CC;&#x6211;&#x7684;<code>VMnet2</code>&#x7684;&#x5B50;&#x7F51;&#x5730;&#x5740;&#x662F;<code>192.168.233.0</code>&#xFF0C;&#x5E76;&#x4E14;&#x6211;&#x7684;&#x5BBF;&#x4E3B;&#x673A;&#x4E3A;<code>192.168.233.1</code>&#xFF0C;&#x56E0;&#x6B64;&#x53EA;&#x9700;&#x8981;&#x5C06;<code>&apos;lan&apos;</code>&#x4E0B;&#x7684;<code>option ipaddr</code>&#x4FEE;&#x6539;&#x5230;&#x540C;&#x4E00;&#x7F51;&#x6BB5;&#x4E0B;&#x7684;&#x53E6;&#x4E00;&#x4E2A;IP&#x5373;&#x53EF;&#x3002;</p>
+<p><code>wan</code>&#x6211;&#x8FD9;&#x91CC;&#x4FDD;&#x6301;&#x7684;&#x9ED8;&#x8BA4;<code>dhcp</code>&#x6CA1;&#x6709;&#x51FA;&#x73B0;&#x95EE;&#x9898;&#x3002;</p>
+<p>&#x7ED9;&#x51FA;&#x4E00;&#x4E2A;&#x6211;&#x7684;&#x53C2;&#x8003;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">config interface <span class="token string">&apos;lan&apos;</span>
+    option <span class="token builtin class-name">type</span> <span class="token string">&apos;bridge&apos;</span>
+    option ifname <span class="token string">&apos;eth0&apos;</span>
+    option proto <span class="token string">&apos;static&apos;</span>
+    option ipaddr <span class="token string">&apos;192.168.233.10&apos;</span>
+    option netmask <span class="token string">&apos;255.255.255.0&apos;</span>
+    option ip6assign <span class="token string">&apos;60&apos;</span>
+
+config interface <span class="token string">&apos;wan&apos;</span>
+    option ifname <span class="token string">&apos;eth1&apos;</span>
+    option proto <span class="token string">&apos;dhcp&apos;</span>
+</pre><p>&#x4E4B;&#x540E;&#x4F7F;&#x7528;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">service</span> network restart
+</pre><p>&#x5982;&#x679C;WAN&#x53E3;&#x914D;&#x7F6E;&#x6CA1;&#x6709;&#x95EE;&#x9898;&#xFF0C;&#x90A3;&#x5728;OpenWrt&#x865A;&#x62DF;&#x673A;&#x4E2D;&#x5E94;&#x8BE5;&#x53EF;&#x4EE5;&#x76F4;&#x63A5;ping&#x901A;&#x5916;&#x7F51;&#xFF0C;&#x5982;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">ping</span> www.baidu.com
+</pre><p>&#x5982;&#x679C;LAN&#x53E3;&#x6CA1;&#x6709;&#x95EE;&#x9898;&#xFF0C;&#x90A3;&#x5BBF;&#x4E3B;&#x673A;&#x548C;OpenWrt&#x5E94;&#x8BE5;&#x53EF;&#x4EE5;&#x4E92;&#x76F8;ping&#x901A;&#xFF0C;&#x6BD4;&#x5982;&#x5728;&#x5BBF;&#x4E3B;&#x673A;ping&#x865A;&#x62DF;&#x673A;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">ping</span> <span class="token number">192.168</span>.233.10
+</pre></li>
+</ol>
 <hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
 <li id="fn1" class="footnote-item"><p><a href="https://openwrt.org/zh/docs/guide-developer/quickstart-build-images">https://openwrt.org/zh/docs/guide-developer/quickstart-build-images</a> <a href="#fnref1" class="footnote-backref">&#x21A9;&#xFE0E;</a></p>
+</li>
+<li id="fn2" class="footnote-item"><p><a href="https://github.com/openwrt/luci/wiki/ModulesHowTo">https://github.com/openwrt/luci/wiki/ModulesHowTo</a> <a href="#fnref2" class="footnote-backref">&#x21A9;&#xFE0E;</a></p>
 </li>
 </ol>
 </section>
