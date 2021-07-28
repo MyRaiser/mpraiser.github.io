@@ -7,8 +7,9 @@
 [CUDA](markdown-notes/CUDA.html)
 [数字信号处理](markdown-notes/Digital-Signal-Processing.html)
 
-## Coding
+## Dev
 [Python入坑指北](markdown-notes/brief_introduction_to_the_way_of_python.html)
+[OpenWrt开发笔记](markdown-notes/openwrt.html)
 
 ## 不务正业
 [WSL](markdown-notes/WSL.html)

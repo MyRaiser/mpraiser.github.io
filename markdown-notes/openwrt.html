@@ -1,0 +1,616 @@
+<!DOCTYPE html><html><head>
+      <title>openwrt</title>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.13.11/dist/katex.min.css">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <style>
+      /**
+ * prism.js Github theme based on GitHub's theme.
+ * @author Sam Clarke
+ */
+code[class*="language-"],
+pre[class*="language-"] {
+  color: #333;
+  background: none;
+  font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace;
+  text-align: left;
+  white-space: pre;
+  word-spacing: normal;
+  word-break: normal;
+  word-wrap: normal;
+  line-height: 1.4;
+
+  -moz-tab-size: 8;
+  -o-tab-size: 8;
+  tab-size: 8;
+
+  -webkit-hyphens: none;
+  -moz-hyphens: none;
+  -ms-hyphens: none;
+  hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+  padding: .8em;
+  overflow: auto;
+  /* border: 1px solid #ddd; */
+  border-radius: 3px;
+  /* background: #fff; */
+  background: #f5f5f5;
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+  padding: .1em;
+  border-radius: .3em;
+  white-space: normal;
+  background: #f5f5f5;
+}
+
+.token.comment,
+.token.blockquote {
+  color: #969896;
+}
+
+.token.cdata {
+  color: #183691;
+}
+
+.token.doctype,
+.token.punctuation,
+.token.variable,
+.token.macro.property {
+  color: #333;
+}
+
+.token.operator,
+.token.important,
+.token.keyword,
+.token.rule,
+.token.builtin {
+  color: #a71d5d;
+}
+
+.token.string,
+.token.url,
+.token.regex,
+.token.attr-value {
+  color: #183691;
+}
+
+.token.property,
+.token.number,
+.token.boolean,
+.token.entity,
+.token.atrule,
+.token.constant,
+.token.symbol,
+.token.command,
+.token.code {
+  color: #0086b3;
+}
+
+.token.tag,
+.token.selector,
+.token.prolog {
+  color: #63a35c;
+}
+
+.token.function,
+.token.namespace,
+.token.pseudo-element,
+.token.class,
+.token.class-name,
+.token.pseudo-class,
+.token.id,
+.token.url-reference .token.variable,
+.token.attr-name {
+  color: #795da3;
+}
+
+.token.entity {
+  cursor: help;
+}
+
+.token.title,
+.token.title .token.punctuation {
+  font-weight: bold;
+  color: #1d3e81;
+}
+
+.token.list {
+  color: #ed6a43;
+}
+
+.token.inserted {
+  background-color: #eaffea;
+  color: #55a532;
+}
+
+.token.deleted {
+  background-color: #ffecec;
+  color: #bd2c00;
+}
+
+.token.bold {
+  font-weight: bold;
+}
+
+.token.italic {
+  font-style: italic;
+}
+
+
+/* JSON */
+.language-json .token.property {
+  color: #183691;
+}
+
+.language-markup .token.tag .token.punctuation {
+  color: #333;
+}
+
+/* CSS */
+code.language-css,
+.language-css .token.function {
+  color: #0086b3;
+}
+
+/* YAML */
+.language-yaml .token.atrule {
+  color: #63a35c;
+}
+
+code.language-yaml {
+  color: #183691;
+}
+
+/* Ruby */
+.language-ruby .token.function {
+  color: #333;
+}
+
+/* Markdown */
+.language-markdown .token.url {
+  color: #795da3;
+}
+
+/* Makefile */
+.language-makefile .token.symbol {
+  color: #795da3;
+}
+
+.language-makefile .token.variable {
+  color: #183691;
+}
+
+.language-makefile .token.builtin {
+  color: #0086b3;
+}
+
+/* Bash */
+.language-bash .token.keyword {
+  color: #0086b3;
+}
+
+/* highlight */
+pre[data-line] {
+  position: relative;
+  padding: 1em 0 1em 3em;
+}
+pre[data-line] .line-highlight-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: block;
+  width: 100%;
+}
+
+pre[data-line] .line-highlight {
+  position: absolute;
+  left: 0;
+  right: 0;
+  padding: inherit 0;
+  margin-top: 1em;
+  background: hsla(24, 20%, 50%,.08);
+  background: linear-gradient(to right, hsla(24, 20%, 50%,.1) 70%, hsla(24, 20%, 50%,0));
+  pointer-events: none;
+  line-height: inherit;
+  white-space: pre;
+}
+
+pre[data-line] .line-highlight:before, 
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-start);
+  position: absolute;
+  top: .4em;
+  left: .6em;
+  min-width: 1em;
+  padding: 0 .5em;
+  background-color: hsla(24, 20%, 50%,.4);
+  color: hsl(24, 20%, 95%);
+  font: bold 65%/1.5 sans-serif;
+  text-align: center;
+  vertical-align: .3em;
+  border-radius: 999px;
+  text-shadow: none;
+  box-shadow: 0 1px white;
+}
+
+pre[data-line] .line-highlight[data-end]:after {
+  content: attr(data-end);
+  top: auto;
+  bottom: .4em;
+}html body{font-family:"Helvetica Neue",Helvetica,"Segoe UI",Arial,freesans,sans-serif;font-size:16px;line-height:1.6;color:#333;background-color:#fff;overflow:initial;box-sizing:border-box;word-wrap:break-word}html body>:first-child{margin-top:0}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{line-height:1.2;margin-top:1em;margin-bottom:16px;color:#000}html body h1{font-size:2.25em;font-weight:300;padding-bottom:.3em}html body h2{font-size:1.75em;font-weight:400;padding-bottom:.3em}html body h3{font-size:1.5em;font-weight:500}html body h4{font-size:1.25em;font-weight:600}html body h5{font-size:1.1em;font-weight:600}html body h6{font-size:1em;font-weight:600}html body h1,html body h2,html body h3,html body h4,html body h5{font-weight:600}html body h5{font-size:1em}html body h6{color:#5c5c5c}html body strong{color:#000}html body del{color:#5c5c5c}html body a:not([href]){color:inherit;text-decoration:none}html body a{color:#08c;text-decoration:none}html body a:hover{color:#00a3f5;text-decoration:none}html body img{max-width:100%}html body>p{margin-top:0;margin-bottom:16px;word-wrap:break-word}html body>ul,html body>ol{margin-bottom:16px}html body ul,html body ol{padding-left:2em}html body ul.no-list,html body ol.no-list{padding:0;list-style-type:none}html body ul ul,html body ul ol,html body ol ol,html body ol ul{margin-top:0;margin-bottom:0}html body li{margin-bottom:0}html body li.task-list-item{list-style:none}html body li>p{margin-top:0;margin-bottom:0}html body .task-list-item-checkbox{margin:0 .2em .25em -1.8em;vertical-align:middle}html body .task-list-item-checkbox:hover{cursor:pointer}html body blockquote{margin:16px 0;font-size:inherit;padding:0 15px;color:#5c5c5c;background-color:#f0f0f0;border-left:4px solid #d6d6d6}html body blockquote>:first-child{margin-top:0}html body blockquote>:last-child{margin-bottom:0}html body hr{height:4px;margin:32px 0;background-color:#d6d6d6;border:0 none}html body table{margin:10px 0 15px 0;border-collapse:collapse;border-spacing:0;display:block;width:100%;overflow:auto;word-break:normal;word-break:keep-all}html body table th{font-weight:bold;color:#000}html body table td,html body table th{border:1px solid #d6d6d6;padding:6px 13px}html body dl{padding:0}html body dl dt{padding:0;margin-top:16px;font-size:1em;font-style:italic;font-weight:bold}html body dl dd{padding:0 16px;margin-bottom:16px}html body code{font-family:Menlo,Monaco,Consolas,'Courier New',monospace;font-size:.85em !important;color:#000;background-color:#f0f0f0;border-radius:3px;padding:.2em 0}html body code::before,html body code::after{letter-spacing:-0.2em;content:"\00a0"}html body pre>code{padding:0;margin:0;font-size:.85em !important;word-break:normal;white-space:pre;background:transparent;border:0}html body .highlight{margin-bottom:16px}html body .highlight pre,html body pre{padding:1em;overflow:auto;font-size:.85em !important;line-height:1.45;border:#d6d6d6;border-radius:3px}html body .highlight pre{margin-bottom:0;word-break:normal}html body pre code,html body pre tt{display:inline;max-width:initial;padding:0;margin:0;overflow:initial;line-height:inherit;word-wrap:normal;background-color:transparent;border:0}html body pre code:before,html body pre tt:before,html body pre code:after,html body pre tt:after{content:normal}html body p,html body blockquote,html body ul,html body ol,html body dl,html body pre{margin-top:0;margin-bottom:16px}html body kbd{color:#000;border:1px solid #d6d6d6;border-bottom:2px solid #c7c7c7;padding:2px 4px;background-color:#f0f0f0;border-radius:3px}@media print{html body{background-color:#fff}html body h1,html body h2,html body h3,html body h4,html body h5,html body h6{color:#000;page-break-after:avoid}html body blockquote{color:#5c5c5c}html body pre{page-break-inside:avoid}html body table{display:table}html body img{display:block;max-width:100%;max-height:100%}html body pre,html body code{word-wrap:break-word;white-space:pre}}.markdown-preview{width:100%;height:100%;box-sizing:border-box}.markdown-preview .pagebreak,.markdown-preview .newpage{page-break-before:always}.markdown-preview pre.line-numbers{position:relative;padding-left:3.8em;counter-reset:linenumber}.markdown-preview pre.line-numbers>code{position:relative}.markdown-preview pre.line-numbers .line-numbers-rows{position:absolute;pointer-events:none;top:1em;font-size:100%;left:0;width:3em;letter-spacing:-1px;border-right:1px solid #999;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.markdown-preview pre.line-numbers .line-numbers-rows>span{pointer-events:none;display:block;counter-increment:linenumber}.markdown-preview pre.line-numbers .line-numbers-rows>span:before{content:counter(linenumber);color:#999;display:block;padding-right:.8em;text-align:right}.markdown-preview .mathjax-exps .MathJax_Display{text-align:center !important}.markdown-preview:not([for="preview"]) .code-chunk .btn-group{display:none}.markdown-preview:not([for="preview"]) .code-chunk .status{display:none}.markdown-preview:not([for="preview"]) .code-chunk .output-div{margin-bottom:16px}.scrollbar-style::-webkit-scrollbar{width:8px}.scrollbar-style::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}.scrollbar-style::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode]){position:relative;width:100%;height:100%;top:0;left:0;margin:0;padding:0;overflow:auto}html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{position:relative;top:0}@media screen and (min-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em calc(50% - 457px + 2em)}}@media screen and (max-width:914px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode]) .markdown-preview{font-size:14px !important;padding:1em}}@media print{html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{display:none}}html body[for="html-export"]:not([data-presentation-mode]) #sidebar-toc-btn{position:fixed;bottom:8px;left:8px;font-size:28px;cursor:pointer;color:inherit;z-index:99;width:32px;text-align:center;opacity:.4}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] #sidebar-toc-btn{opacity:1}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc{position:fixed;top:0;left:0;width:300px;height:100%;padding:32px 0 48px 0;font-size:14px;box-shadow:0 0 4px rgba(150,150,150,0.33);box-sizing:border-box;overflow:auto;background-color:inherit}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar{width:8px}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-track{border-radius:10px;background-color:transparent}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc::-webkit-scrollbar-thumb{border-radius:5px;background-color:rgba(150,150,150,0.66);border:4px solid rgba(150,150,150,0.66);background-clip:content-box}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc a{text-decoration:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{padding:0 1.6em;margin-top:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc li{margin-bottom:.8em}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .md-sidebar-toc ul{list-style-type:none}html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{left:300px;width:calc(100% -  300px);padding:2em calc(50% - 457px -  150px);margin:0;box-sizing:border-box}@media screen and (max-width:1274px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{padding:2em}}@media screen and (max-width:450px){html body[for="html-export"]:not([data-presentation-mode])[html-show-sidebar-toc] .markdown-preview{width:100%}}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .markdown-preview{left:50%;transform:translateX(-50%)}html body[for="html-export"]:not([data-presentation-mode]):not([html-show-sidebar-toc]) .md-sidebar-toc{display:none}
+/* Please visit the URL below for more information: */
+/*   https://shd101wyy.github.io/markdown-preview-enhanced/#/customize-css */
+
+      </style>
+    </head>
+    <body for="html-export">
+      <div class="mume markdown-preview  ">
+      <h1 class="mume-header" id="openwrt%E5%85%A5%E9%97%A8">OpenWrt&#x5165;&#x95E8;</h1>
+
+<p>&#x8BB0;&#x5F55;&#x4E86;OpenWrt&#x7684;&#x5165;&#x95E8;&#x6B65;&#x9AA4;&#x548C;&#x8E29;&#x7684;&#x4E00;&#x4E9B;&#x5751;&#x3002;</p>
+<ul>
+<li><a href="#openwrt%E5%85%A5%E9%97%A8">OpenWrt&#x5165;&#x95E8;</a>
+<ul>
+<li><a href="#helloworldhelloworld">Helloworld</a>
+<ul>
+<li><a href="#%E6%9E%84%E5%BB%BA%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83">&#x6784;&#x5EFA;&#x7F16;&#x8BD1;&#x73AF;&#x5883;</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96openwrt%E7%9A%84%E6%BA%90%E4%BB%A3%E7%A0%81">&#x83B7;&#x53D6;OpenWrt&#x7684;&#x6E90;&#x4EE3;&#x7801;</a></li>
+<li><a href="#%E6%9B%B4%E6%96%B0%E5%92%8C%E5%AE%89%E8%A3%85feeds">&#x66F4;&#x65B0;&#x548C;&#x5B89;&#x88C5;<code>feeds</code></a></li>
+<li><a href="#%E8%AE%BE%E7%BD%AE%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9">&#x8BBE;&#x7F6E;&#x7F16;&#x8BD1;&#x9009;&#x9879;</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85luci">&#x5B89;&#x88C5;LuCI</a></li>
+</ul>
+</li>
+<li><a href="#%E7%BC%96%E8%AF%91">&#x7F16;&#x8BD1;</a></li>
+<li><a href="#%E7%83%A7%E5%86%99">&#x70E7;&#x5199;</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8u-boot-tftp%E7%83%A7%E5%86%99">&#x4F7F;&#x7528;u-boot + TFTP&#x70E7;&#x5199;</a></li>
+</ul>
+</li>
+<li><a href="#%E5%B7%B2%E7%9F%A5%E9%97%AE%E9%A2%98">&#x5DF2;&#x77E5;&#x95EE;&#x9898;</a></li>
+</ul>
+</li>
+<li><a href="#openwrt%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">OpenWrt&#x76EE;&#x5F55;&#x7ED3;&#x6784;</a></li>
+</ul>
+</li>
+<li><a href="#luci">LuCI</a>
+<ul>
+<li><a href="#%E7%BB%93%E6%9E%84">&#x7ED3;&#x6784;</a>
+<ul>
+<li><a href="#%E4%BB%93%E5%BA%93%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">&#x4ED3;&#x5E93;&#x76EE;&#x5F55;&#x7ED3;&#x6784;</a></li>
+<li><a href="#module%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">module&#x76EE;&#x5F55;&#x7ED3;&#x6784;</a></li>
+<li><a href="#%E6%9D%BF%E4%B8%8A%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">&#x677F;&#x4E0A;&#x76EE;&#x5F55;&#x7ED3;&#x6784;</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 class="mume-header" id="helloworldhelloworld">Helloworld<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></h2>
+
+<h3 class="mume-header" id="%E6%9E%84%E5%BB%BA%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83">&#x6784;&#x5EFA;&#x7F16;&#x8BD1;&#x73AF;&#x5883;</h3>
+
+<p>&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#xFF1A;Ubuntu 20.04 LTS<br>
+&#x5F00;&#x53D1;&#x677F;&#xFF1A;JS9331&#x5F00;&#x53D1;&#x677F;</p>
+<p>&#x53EF;&#x4EE5;&#x5148;&#x66F4;&#x6362;&#x56FD;&#x5185;&#x6E90;&#x3002;</p>
+<p>&#x5B89;&#x88C5;&#x4F9D;&#x8D56;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info class="language-"><code>sudo apt-get install subversion g++ zlib1g-dev build-essential git python rsync man-db
+sudo apt-get install libncurses5-dev gawk gettext unzip file libssl-dev wget zip time
+</code></pre><h3 class="mume-header" id="%E8%8E%B7%E5%8F%96openwrt%E7%9A%84%E6%BA%90%E4%BB%A3%E7%A0%81">&#x83B7;&#x53D6;OpenWrt&#x7684;&#x6E90;&#x4EE3;&#x7801;</h3>
+
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">git</span> clone https://git.openwrt.org/openwrt/openwrt.git/
+<span class="token builtin class-name">cd</span> openwrt
+</pre><ul>
+<li>&#x5982;&#x679C;&#x65E0;&#x6CD5;&#x4ECE;&#x5730;&#x5740;<code>git clone</code>&#xFF0C;&#x53EF;&#x4EE5;&#x8BBF;&#x95EE;&#x955C;&#x50CF;&#xFF1A;</li>
+</ul>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">git</span> clone https://github.com/openwrt/openwrt.git
+</pre><p>&#x5207;&#x6362;&#x5230;&#x6307;&#x5B9A;&#x7684;&#x7248;&#x672C;&#xFF0C;&#x9996;&#x5148;&#x67E5;&#x770B;&#x53EF;&#x7528;&#x7684;&#x7248;&#x672C;&#x53F7;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">git</span> tag
+</pre><p>&#x5207;&#x6362;&#x5230;<code>v17.01.7</code></p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">git</span> checkout v17.01.7
+</pre><h3 class="mume-header" id="%E6%9B%B4%E6%96%B0%E5%92%8C%E5%AE%89%E8%A3%85feeds">&#x66F4;&#x65B0;&#x548C;&#x5B89;&#x88C5;<code>feeds</code></h3>
+
+<p>&#x5207;&#x6362;&#x5230;<code>./scripts</code>&#x6587;&#x4EF6;&#x5939;&#x4E0B;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info class="language-"><code>cd scripts
+./feeds update -a
+./feeds install -a
+</code></pre><blockquote>
+<p><code>feeds install</code>&#x4F7F;&#x5F97;&#x4E0B;&#x8F7D;&#x7684;&#x5305;&#x5728;<code>make menuconfig</code>&#x4E2D;&#x53EF;&#x7528;&#x3002;</p>
+</blockquote>
+<ul>
+<li>&#x5728;<code>./feeds update -a</code>&#x65F6;&#x9047;&#x5230;&#x7AEF;&#x53E3;443&#x62D2;&#x63A5;&#x8BBF;&#x95EE;&#xFF1A;</li>
+</ul>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">fatal: &#x65E0;&#x6CD5;&#x8BBF;&#x95EE; <span class="token string">&apos;https://git.lede-project.org/feed/packages.git/&apos;</span>&#xFF1A;
+Failed to connect to git.lede-project.org port <span class="token number">443</span>: &#x62D2;&#x7EDD;&#x8FDE;&#x63A5;
+</pre><p>&#x53EF;&#x4EE5;&#x5728;&#x6839;&#x76EE;&#x5F55;&#x7684;<code>feeds.conf.default</code>&#x4E2D;&#x628A;&#x6240;&#x6709;&#x7684;<code>https://</code>&#x6539;&#x4E3A;<code>git://</code>&#x3002;</p>
+<h3 class="mume-header" id="%E8%AE%BE%E7%BD%AE%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9">&#x8BBE;&#x7F6E;&#x7F16;&#x8BD1;&#x9009;&#x9879;</h3>
+
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">make</span> menuconfig
+</pre><h4 class="mume-header" id="%E5%AE%89%E8%A3%85luci">&#x5B89;&#x88C5;LuCI</h4>
+
+<p>&#x5982;&#x679C;&#x4E0A;&#x4E00;&#x6B65;<code>./feeds install -a</code>&#x6B63;&#x786E;&#xFF0C;&#x90A3;<code>menuconfig</code>&#x91CC;&#x5E94;&#x8BE5;&#x4F1A;&#x591A;&#x51FA;<code>LuCI</code>&#x7684;&#x9009;&#x9879;&#x3002;</p>
+<p>&#x5728;<code>LuCI -&gt; 1. Collections</code>&#x91CC;&#x52FE;&#x9009;&#xFF1A;</p>
+<ul>
+<li>luci</li>
+<li>luci-ssl-openssl</li>
+</ul>
+<p>&#x8981;&#x6DFB;&#x52A0;&#x4E2D;&#x6587;&#x652F;&#x6301;&#xFF0C;&#x5728;<code>LuCI -&gt; 2. Modules -&gt; Translation</code>&#x91CC;&#x52FE;&#x9009;&#xFF1A;</p>
+<ul>
+<li>Chinese</li>
+</ul>
+<blockquote>
+<p>&#x53D1;&#x73B0;&#x8FD9;&#x4E48;&#x8BBE;&#x7F6E;&#x540E;&#x65E0;&#x8BBA;&#x662F;&#x5426;&#x52FE;&#x9009;<code>3. Applications -&gt; luci-app-uhttpd</code>&#x6700;&#x7EC8;&#x751F;&#x6210;&#x7684;&#x56FA;&#x4EF6;&#x4E2D;&#x90FD;&#x4F1A;&#x5305;&#x542B;<code>httpd</code></p>
+</blockquote>
+<h3 class="mume-header" id="%E7%BC%96%E8%AF%91">&#x7F16;&#x8BD1;</h3>
+
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">make</span>
+</pre><p>&#x5982;&#x679C;&#x62A5;&#x9519;&#x4E86;&#xFF0C;&#x4F7F;&#x7528;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">make</span> -j1 <span class="token assign-left variable">V</span><span class="token operator">=</span>s
+</pre><p>&#x67E5;&#x770B;&#x5177;&#x4F53;&#x62A5;&#x9519;&#x4FE1;&#x606F;&#x3002;</p>
+<p>&#x751F;&#x6210;&#x7684;<code>.bin</code>&#x6587;&#x4EF6;&#x4F4D;&#x4E8E;<code>.bin/targets/</code>&#x4E2D;&#xFF0C;&#x5BF9;&#x5E94;<code>menuconfig</code>&#x91CC;&#x9762;&#x9009;&#x62E9;&#x7684;target&#x3002;</p>
+<p>&#x5982;&#x679C;&#x51FA;&#x73B0;&#x4E86;&#x5404;&#x79CD;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">check_data_file_clashes: Package libustream-openssl20150806 wants to <span class="token function">install</span> <span class="token function">file</span> /home/b/Desktop/test_openwrt/openwrt/build_dir/target-i386_pentium4_musl/root-x86/lib/libustream-ssl.so
+But that <span class="token function">file</span> is already provided by package * libustream-mbedtls20150806
+</pre><p>&#x53EF;&#x4EE5;&#x68C0;&#x67E5;<code>menuconfig</code>&#x7684;&#x9009;&#x9879;&#xFF0C;&#x5F80;&#x5F80;&#x662F;&#x914D;&#x7F6E;&#x6709;&#x95EE;&#x9898;&#xFF0C;&#x5B9E;&#x5728;&#x4E0D;&#x884C;&#x53EA;&#x80FD;&#x5220;&#x6389;&#x914D;&#x7F6E;&#x3001;&#x6E05;&#x7A7A;&#x6587;&#x4EF6;&#x7136;&#x540E;&#x91CD;&#x65B0;&#x7F16;&#x8BD1;&#x3002;&#x7531;&#x4E8E;&#x7B2C;&#x4E00;&#x6B21;&#x7F16;&#x8BD1;&#x65F6;&#x95F4;&#x5B9E;&#x5728;&#x662F;&#x592A;&#x957F;&#x4E86;&#xFF0C;&#x6211;&#x4EEC;&#x4E0D;&#x559C;&#x6B22;&#x8FD9;&#x4E48;&#x5E72;&#x3002;</p>
+<pre data-role="codeBlock" data-info class="language-"><code>mv .config .config.bak
+make clean
+</code></pre><h3 class="mume-header" id="%E7%83%A7%E5%86%99">&#x70E7;&#x5199;</h3>
+
+<h4 class="mume-header" id="%E4%BD%BF%E7%94%A8u-boot-tftp%E7%83%A7%E5%86%99">&#x4F7F;&#x7528;u-boot + TFTP&#x70E7;&#x5199;</h4>
+
+<h3 class="mume-header" id="%E5%B7%B2%E7%9F%A5%E9%97%AE%E9%A2%98">&#x5DF2;&#x77E5;&#x95EE;&#x9898;</h3>
+
+<p><code>OpenWrt 19.07.7</code>&#x7F16;&#x8BD1;&#x4F1A;&#x62A5;&#x8B66;&#x544A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">WARNING: Makefile <span class="token string">&apos;package/feeds/packages/ksmbd/Makefile&apos;</span> has a dependency on <span class="token string">&apos;kmod-crypto-arc4&apos;</span>, <span class="token function">which</span> does not exist
+</pre><p>&#x4F46;&#x662F;&#x5B9E;&#x9645;&#x4E0D;&#x5F71;&#x54CD;&#x7F16;&#x8BD1;&#x548C;&#x4F7F;&#x7528;&#xFF0C;&#x539F;&#x56E0;&#x672A;&#x77E5;&#x3002;</p>
+<h2 class="mume-header" id="openwrt%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">OpenWrt&#x76EE;&#x5F55;&#x7ED3;&#x6784;</h2>
+
+<p><img src="openwrt/dir_structure.png" alt></p>
+<p>&#x5982;&#x56FE;&#xFF0C;&#x7B2C;&#x4E00;&#x884C;&#x662F;&#x539F;&#x59CB;&#x76EE;&#x5F55;&#xFF08;&#x7531;<code>Git</code>&#x7BA1;&#x7406;&#x7684; + &#x4E0B;&#x8F7D;&#x7684;&#xFF09;&#xFF0C;&#x7B2C;&#x4E8C;&#x884C;&#x662F;&#x7F16;&#x8BD1;&#x751F;&#x6210;&#x7684;&#x76EE;&#x5F55;&#xFF0C;&#x4F5C;&#x7528;&#x5206;&#x522B;&#x662F;&#xFF1A;</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">&#x76EE;&#x5F55;&#x540D;</th>
+<th style="text-align:center">&#x4F5C;&#x7528;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">tools</td>
+<td style="text-align:center">&#x7F16;&#x8BD1;&#x65F6;&#x9700;&#x8981;&#x4E00;&#x4E9B;&#x5DE5;&#x5177;&#xFF0C; tools&#x91CC;&#x5305;&#x542B;&#x4E86;&#x83B7;&#x53D6;&#x548C;&#x7F16;&#x8BD1;&#x8FD9;&#x4E9B;&#x5DE5;&#x5177;&#x7684;&#x547D;&#x4EE4;&#x3002;&#x91CC;&#x9762;&#x662F;&#x4E00;&#x4E9B;Makefile&#xFF0C;&#x6709;&#x7684;&#x53EF;&#x80FD;&#x8FD8;&#x6709;patch&#x3002;&#x6BCF;&#x4E2A;Makefile&#x91CC;&#x90FD;&#x6709;&#x4E00;&#x53E5; <code>$(eval $(call HostBuild))</code>&#xFF0C;&#x8868;&#x793A;&#x7F16;&#x8BD1;&#x8FD9;&#x4E2A;&#x5DE5;&#x5177;&#x662F;&#x4E3A;&#x4E86;&#x5728;&#x4E3B;&#x673A;&#x4E0A;&#x4F7F;&#x7528;&#x7684;&#x3002;</td>
+</tr>
+<tr>
+<td style="text-align:center">toolchain</td>
+<td style="text-align:center">&#x5305;&#x542B;&#x4E00;&#x4E9B;&#x547D;&#x4EE4;&#x53BB;&#x83B7;&#x53D6;kernel headers, C library, bin-utils, compiler, debugger</td>
+</tr>
+<tr>
+<td style="text-align:center">target</td>
+<td style="text-align:center">&#x5404;&#x5E73;&#x53F0;&#x5728;&#x8FD9;&#x4E2A;&#x76EE;&#x5F55;&#x91CC;&#x5B9A;&#x4E49;&#x4E86;firmware&#x548C;kernel&#x7684;&#x7F16;&#x8BD1;&#x8FC7;&#x7A0B;&#x3002;</td>
+</tr>
+<tr>
+<td style="text-align:center">package</td>
+<td style="text-align:center">&#x5305;&#x542B;&#x9488;&#x5BF9;&#x5404;&#x4E2A;&#x8F6F;&#x4EF6;&#x5305;&#x7684;Makefile&#x3002;openwrt&#x5B9A;&#x4E49;&#x4E86;&#x4E00;&#x5957;Makefile&#x6A21;&#x677F;&#xFF0C;&#x5404;&#x8F6F;&#x4EF6;&#x53C2;&#x7167;&#x8FD9;&#x4E2A;&#x6A21;&#x677F;&#x5B9A;&#x4E49;&#x4E86;&#x81EA;&#x5DF1;&#x7684;&#x4FE1;&#x606F;&#xFF0C;&#x5982;&#x8F6F;&#x4EF6;&#x5305;&#x7684;&#x7248;&#x672C;&#x3001;&#x4E0B;&#x8F7D;&#x5730;&#x5740;&#x3001;&#x7F16;&#x8BD1;&#x65B9;&#x5F0F;&#x3001;&#x5B89;&#x88C5;&#x5730;&#x5740;&#x7B49;&#x3002;</td>
+</tr>
+<tr>
+<td style="text-align:center">include</td>
+<td style="text-align:center">openwrt&#x7684;Makefile&#x90FD;&#x5B58;&#x653E;&#x5728;&#x8FD9;&#x91CC;&#x3002;</td>
+</tr>
+<tr>
+<td style="text-align:center">scripts</td>
+<td style="text-align:center">&#x4E00;&#x4E9B;perl&#x811A;&#x672C;&#xFF0C;&#x7528;&#x4E8E;&#x8F6F;&#x4EF6;&#x5305;&#x7BA1;&#x7406;&#x3002;</td>
+</tr>
+<tr>
+<td style="text-align:center">dl</td>
+<td style="text-align:center">&#x8F6F;&#x4EF6;&#x5305;&#x4E0B;&#x8F7D;&#x540E;&#x90FD;&#x653E;&#x5230;&#x8FD9;&#x4E2A;&#x76EE;&#x5F55;&#x91CC;</td>
+</tr>
+<tr>
+<td style="text-align:center">build_dir</td>
+<td style="text-align:center">&#x8F6F;&#x4EF6;&#x5305;&#x90FD;&#x89E3;&#x538B;&#x5230;build_dir/&#x91CC;&#xFF0C;&#x7136;&#x540E;&#x5728;&#x6B64;&#x7F16;&#x8BD1;</td>
+</tr>
+<tr>
+<td style="text-align:center">staging_dir</td>
+<td style="text-align:center">&#x6700;&#x7EC8;&#x5B89;&#x88C5;&#x76EE;&#x5F55;&#x3002;tools, toolchain&#x88AB;&#x5B89;&#x88C5;&#x5230;&#x8FD9;&#x91CC;&#xFF0C;rootfs&#x4E5F;&#x4F1A;&#x653E;&#x5230;&#x8FD9;&#x91CC;&#x3002;</td>
+</tr>
+<tr>
+<td style="text-align:center">feeds</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td style="text-align:center">bin</td>
+<td style="text-align:center">&#x7F16;&#x8BD1;&#x5B8C;&#x6210;&#x4E4B;&#x540E;&#xFF0C;firmware&#x548C;&#x5404;ipk&#x4F1A;&#x653E;&#x5230;&#x6B64;&#x76EE;&#x5F55;&#x4E0B;&#x3002;</td>
+</tr>
+</tbody>
+</table>
+<h1 class="mume-header" id="luci">LuCI</h1>
+
+<p>Lua Configuration Interface</p>
+<h2 class="mume-header" id="%E7%BB%93%E6%9E%84">&#x7ED3;&#x6784;</h2>
+
+<h3 class="mume-header" id="%E4%BB%93%E5%BA%93%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">&#x4ED3;&#x5E93;&#x76EE;&#x5F55;&#x7ED3;&#x6784;</h3>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center">&#x76EE;&#x5F55;&#x540D;</th>
+<th style="text-align:center">&#x4F5C;&#x7528;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">applications</td>
+<td style="text-align:center">&#x9488;&#x5BF9;&#x5176;&#x4ED6;&#x6A21;&#x5757;&#x6216;&#x8005;&#x5E94;&#x7528;&#x7684;&#x5355;&#x72EC;&#x7684;&#x4E00;&#x4E2A;&#x5E94;&#x7528;&#x6216;&#x8005;&#x63D2;&#x4EF6;&#xFF0C;&#x53EF;&#x7406;&#x89E3;&#x4E3A;&#x529F;&#x80FD;&#x6A21;&#x5757;</td>
+</tr>
+<tr>
+<td style="text-align:center">i18n</td>
+<td style="text-align:center">&#x56FD;&#x9645;&#x5316;</td>
+</tr>
+<tr>
+<td style="text-align:center">modules</td>
+<td style="text-align:center">&#x5E94;&#x7528;&#x96C6; &#xFF1F;&#x5305;&#x542B;&#x4E3B;&#x8981;&#x7684;&#x7528;&#x6237;&#x6587;&#x4EF6;&#x3001;&#x6838;&#x5FC3;&#x6587;&#x4EF6;</td>
+</tr>
+<tr>
+<td style="text-align:center">theme</td>
+<td style="text-align:center">&#x4E3B;&#x9898;</td>
+</tr>
+<tr>
+<td style="text-align:center">build</td>
+<td style="text-align:center">&#x7F16;&#x8BD1;&#x8FC7;&#x7A0B;&#x7684;&#x811A;&#x672C;</td>
+</tr>
+<tr>
+<td style="text-align:center">host</td>
+<td style="text-align:center">&#x7F16;&#x8BD1;&#x4EA7;&#x751F;&#x7684;&#xFF1A;&#x5C06;&#x8BED;&#x8A00;&#x6253;&#x5305;&#x4E3A;&#x4E8C;&#x8FDB;&#x5236;&#x683C;&#x5F0F;</td>
+</tr>
+<tr>
+<td style="text-align:center">contrib</td>
+<td style="text-align:center">/</td>
+</tr>
+<tr>
+<td style="text-align:center">ipkg-ramips_24kec</td>
+<td style="text-align:center">&#x7F16;&#x8BD1;&#x4EA7;&#x751F;&#x7684;&#xFF1A;&#x5C01;&#x88C5;make menuconfig&#x9636;&#x6BB5;&#x9009;&#x4E2D;&#x7684;&#x9875;&#x9762;&#x548C;&#x529F;&#x80FD;</td>
+</tr>
+<tr>
+<td style="text-align:center">libs</td>
+<td style="text-align:center">&#x72EC;&#x7ACB;&#x7684;&#x5E93;&#x51FD;&#x6570;&#xFF1A;&#x63A7;&#x4EF6;&#x3001;&#x63A5;&#x53E3;&#x3001;cbi.js&#x3001;</td>
+</tr>
+<tr>
+<td style="text-align:center">po</td>
+<td style="text-align:center">&#x8BED;&#x8A00;&#x6587;&#x4EF6;</td>
+</tr>
+</tbody>
+</table>
+<p><code>modules</code>&#x4E0B;&#x7684;<code>luci-base</code>&#x548C;<code>luci-mod-admin-full</code>&#x5305;&#x542B;&#x4E86;&#x7F51;&#x9875;&#x7684;&#x57FA;&#x672C;&#x529F;&#x80FD;&#x3002;</p>
+<h3 class="mume-header" id="module%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">module&#x76EE;&#x5F55;&#x7ED3;&#x6784;</h3>
+
+<table>
+<thead>
+<tr>
+<th style="text-align:center">&#x6587;&#x4EF6;/&#x76EE;&#x5F55;&#x540D;</th>
+<th style="text-align:center">&#x5B50;&#x76EE;&#x5F55;&#x540D;</th>
+<th style="text-align:center">&#x4F5C;&#x7528;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">htdocs</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">html+docs&#xFF0C;&#x6B64;&#x76EE;&#x5F55;&#x5B58;&#x653E;HTML&#x76F8;&#x5173;&#x6587;&#x4EF6;&#xFF0C;&#x4E3B;&#x8981;&#x5305;&#x542B;&#x4EE5;&#x4E0B;&#x4E24;&#x4E2A;&#x76EE;&#x5F55;&#xFF0C;&#x5F53;&#x70E7;&#x5F55;&#x5230;&#x786C;&#x4EF6;&#x8BBE;&#x5907;&#x540E;&#xFF0C;&#x5C06;&#x62F7;&#x8D1D;&#x5230;/www&#x6839;&#x76EE;&#x5F55;&#x4E0B;</td>
+</tr>
+<tr>
+<td style="text-align:center">/</td>
+<td style="text-align:center">cgi-bin</td>
+<td style="text-align:center">&#x5B58;&#x653E;luci&#x542F;&#x52A8;&#x811A;&#x672C;</td>
+</tr>
+<tr>
+<td style="text-align:center">/</td>
+<td style="text-align:center">luci-static</td>
+<td style="text-align:center">&#x5B58;&#x653E;HTML&#x76F8;&#x5173;&#x6587;&#x4EF6;&#xFF0C;&#x5305;&#x542B;CSS&#x3001;JS&#x53CA;&#x7F51;&#x9875;&#x56FE;&#x7247;&#x7B49;&#x6587;&#x4EF6;</td>
+</tr>
+<tr>
+<td style="text-align:center">luasrc</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">lua+src&#xFF0C;&#x6B64;&#x76EE;&#x5F55;&#x5B58;&#x653E;&#x7CFB;&#x7EDF;&#x529F;&#x80FD;&#x7684;LUA&#x6587;&#x4EF6;&#x53CA;M&#xFF08;model&#xFF09;&#x3001;V&#xFF08;view&#xFF09;&#x3001;C&#xFF08;controller&#xFF09;&#x6587;&#x4EF6;&#x5939;&#xFF0C;&#x5F53;&#x70E7;&#x5F55;&#x5230;&#x786C;&#x4EF6;&#x8BBE;&#x5907;&#x540E;&#xFF0C;&#x5C06;&#x62F7;&#x8D1D;&#x5230;/usr/lib/lua/luci&#x76EE;&#x5F55;&#x4E0B;</td>
+</tr>
+<tr>
+<td style="text-align:center">/</td>
+<td style="text-align:center">controller</td>
+<td style="text-align:center">&#x63A7;&#x5236;&#x5668;&#xFF0C;&#x751F;&#x6210;&#x9875;&#x9762;&#x7684;&#x83DC;&#x5355;&#x680F;&#x5E76;&#x5B9A;&#x4E49;&#x5404;&#x4E2A;&#x9875;&#x9762;&#x7684;&#x8C03;&#x7528;&#x65B9;&#x6CD5;</td>
+</tr>
+<tr>
+<td style="text-align:center">/</td>
+<td style="text-align:center">model</td>
+<td style="text-align:center">&#x6570;&#x636E;&#x6A21;&#x578B;&#xFF0C;&#x6839;&#x636E;&#x5E95;&#x5C42;UCI&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#x751F;&#x6210;&#x9875;&#x9762;</td>
+</tr>
+<tr>
+<td style="text-align:center">/</td>
+<td style="text-align:center">view</td>
+<td style="text-align:center">&#x89C6;&#x56FE;&#xFF0C;HTML&#x9875;&#x9762;</td>
+</tr>
+<tr>
+<td style="text-align:center">po</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">&#x5B9A;&#x4E49;&#x9875;&#x9762;&#x7684;&#x8BED;&#x8A00;&#x98CE;&#x683C;</td>
+</tr>
+<tr>
+<td style="text-align:center">root</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">&#x5B58;&#x653E;&#x914D;&#x7F6E;&#x6587;&#x4EF6;&#xFF0C;&#x8BE5;&#x76EE;&#x5F55;&#x4E0B;&#x7684;&#x6240;&#x6709;&#x6587;&#x4EF6;&#x5C06;&#x62F7;&#x8D1D;&#x5230;&#x786C;&#x4EF6;&#x8BBE;&#x5907;&#x6839;&#x76EE;&#x5F55;&#x4E0B;</td>
+</tr>
+<tr>
+<td style="text-align:center">src</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">&#x751F;&#x6210;&#x6240;&#x9700;&#x8981;&#x7684;&#x5E93;&#x6587;&#x4EF6;&#x53CA;LUA&#x811A;&#x672C;</td>
+</tr>
+<tr>
+<td style="text-align:center">Makefile</td>
+<td style="text-align:center">/</td>
+<td style="text-align:center">&#x5B9A;&#x4E49;&#x6A21;&#x5757;&#x7684;&#x7F16;&#x8BD1;&#x65B9;&#x6CD5;</td>
+</tr>
+</tbody>
+</table>
+<h3 class="mume-header" id="%E6%9D%BF%E4%B8%8A%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">&#x677F;&#x4E0A;&#x76EE;&#x5F55;&#x7ED3;&#x6784;</h3>
+
+<ol>
+<li><code>/www</code>&#x4E0B;</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">&#x6587;&#x4EF6;/&#x76EE;&#x5F55;&#x540D;</th>
+<th style="text-align:center">&#x4F5C;&#x7528;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">cgi-bin</td>
+<td style="text-align:center">&#x6B64;&#x6587;&#x4EF6;&#x4ECE;luci-base&#x4E0B;&#x62F7;&#x8D1D;&#x8FC7;&#x6765;&#x7684;&#xFF0C;&#x5B58;&#x653E;luci&#x542F;&#x52A8;&#x811A;&#x672C;</td>
+</tr>
+<tr>
+<td style="text-align:center">index.html</td>
+<td style="text-align:center">http&#x8BF7;&#x6C42;&#x7684;&#x4E3B;&#x9875;&#x9762;&#xFF0C;&#x9ED8;&#x8BA4;&#x662F;/www/index.html&#xFF0C;&#x8FD9;&#x4E2A;&#x6587;&#x4EF6;&#x91CC;&#x663E;&#x793A;&#x4E86;&#x767B;&#x5F55;&#x65F6;&#x5E38;&#x770B;&#x89C1;&#x7684;&#x90A3;&#x53E5;&#x8BDD;&#x201C;LuCI - Lua Configuration Interface&#x201D;&#xFF0C;&#x540C;&#x65F6;&#x4E5F;&#x6307;&#x5B9A;&#x4E86;href&#x94FE;&#x63A5;/cgi-bin/luci</td>
+</tr>
+<tr>
+<td style="text-align:center">luci-static</td>
+<td style="text-align:center">&#x5B58;&#x653E;HTML&#x76F8;&#x5173;&#x6587;&#x4EF6;&#xFF0C;&#x5305;&#x542B;CSS&#x3001;JS&#x53CA;&#x7F51;&#x9875;&#x56FE;&#x7247;&#x7B49;&#x6587;&#x4EF6;&#x3002;&#x4E0D;&#x540C;&#x4E3B;&#x9898;&#x7684;htdocs/luci-static&#x90FD;&#x5C06;&#x62F7;&#x8D1D;&#x5230;&#x8FD9;&#x4E2A;&#x76EE;&#x5F55;&#x4E0B;</td>
+</tr>
+</tbody>
+</table>
+<ol start="2">
+<li><code>/usr/lib/lua</code>&#x4E0B;</li>
+</ol>
+<p>&#x987E;&#x540D;&#x601D;&#x4E49;&#xFF0C;&#x5B58;&#x653E;&#x4E86;&#x4E0E;LUA&#x76F8;&#x5173;&#x7684;&#x6587;&#x4EF6;&#xFF0C;&#x5728;LUA&#x811A;&#x672C;&#x4E2D;&#xFF0C;&#x901A;&#x8FC7;require&#x547D;&#x4EE4;&#x5F15;&#x7528;&#x7684;&#x811A;&#x672C;&#x53CA;&#x51FD;&#x6570;&#xFF0C;&#x8D77;&#x59CB;&#x8DEF;&#x5F84;&#x90FD;&#x662F;&#x8BE5;&#x76EE;&#x5F55;&#x3002;&#x540C;&#x65F6;&#xFF0C;&#x4E0D;&#x540C;&#x6A21;&#x578B;&#x53CA;&#x4E3B;&#x9898;&#x7684;luasrc&#x6587;&#x4EF6;&#x5939;&#x90FD;&#x62F7;&#x8D1D;&#x5230;/usr/lib/lua/luci&#x76EE;&#x5F55;&#x4E0B;&#xFF0C;&#x901A;&#x8FC7;/etc/config/luci&#x4E2D;&#x7684;mediaurlbase&#x5B57;&#x6BB5;&#x51B3;&#x5B9A;&#x5F53;&#x524D;&#x4F7F;&#x7528;&#x7684;&#x4E3B;&#x9898;&#x53CA;&#x8BED;&#x8A00;&#x3002;</p>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a href="https://openwrt.org/zh/docs/guide-developer/quickstart-build-images">https://openwrt.org/zh/docs/guide-developer/quickstart-build-images</a> <a href="#fnref1" class="footnote-backref">&#x21A9;&#xFE0E;</a></p>
+</li>
+</ol>
+</section>
+
+      </div>
+      
+      
+    
+    
+    
+    
+    
+    
+    
+    
+  
+    </body></html>
