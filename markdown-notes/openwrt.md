@@ -6,6 +6,12 @@
 
 ## Helloworld[^helloworld]
 
+## 增加启动脚本
+
+在`./target/linux/<arch_name>/base-files/`下的文件会包含在生成的固件中的对应位置。
+
+需要`chmod 777`
+
 ### 构建编译环境
 
 [^helloworld]: https://openwrt.org/zh/docs/guide-developer/quickstart-build-images
@@ -135,6 +141,7 @@ WARNING: Makefile 'package/feeds/packages/ksmbd/Makefile' has a dependency on 'k
 
 
 
+
 ## OpenWrt目录结构
 ![](openwrt/dir_structure.png)
 
@@ -154,14 +161,212 @@ staging_dir | 最终安装目录。tools, toolchain被安装到这里，rootfs�
 feeds |
 bin | 编译完成之后，firmware和各ipk会放到此目录下。
 
+## UCI
 
-# LuCI
+### UCI配置文件
 
-Lua Configuration Interface
+UCI（Unified Configuration Interface）是OpenWrt中所有系统的统一配置接口，当应用提供UCI接口时，用户只需通过UCI配置文件进行配置，而不用处理各应用各不相同的分散的配置文件。UCI配置文件位于`/etc/config/`下，用户通过文本编辑器直接编辑，或者使用C/Lua/Shell的UCI工具配置，之后执行`/etc/init.d/`下的对应脚本即可完成一个配置。
 
-## 结构
+比如Samba/CIFS程序，其原配置文件是在`/etc/samba/smb.conf`，而对应的UCI文件是`/etc/config/samba`，当`/etc/config/samba文`件被修改了之后，需要运行一次
 
-### 仓库目录结构
+```bash
+/etc/init.d/samba start
+```
+
+### UCI命令行工具
+
+以`/etc/config/network`为例，其原内容为：
+
+```bash
+config interface 'loopback'
+        option ifname 'lo'
+        option proto 'static'
+        option ipaddr '127.0.0.1'
+        option netmask '255.0.0.0'
+
+config globals 'globals'
+        option ula_prefix 'fd89:5984:253b::/48'
+
+config interface 'lan'
+        option type 'bridge'
+        option ifname 'eth1'
+        option proto 'static'
+        option ipaddr '192.168.1.1'
+        option netmask '255.255.255.0'
+        option ip6assign '60'
+
+config interface 'wan'
+        option ifname 'eth0'
+        option proto 'dhcp'
+
+config interface 'wan6'
+        option ifname 'eth0'
+        option proto 'dhcpv6'
+```
+
+可以发现一个**config**文件由若干个**section**组成，每个**section**又含有若干不同值的**option**。
+
+大致结构为：
+
+- config
+    - section / list[section]
+        - option / list[option]
+
+如果我们想要添加的内容是：
+
+```bash
+config route 'custom_static_route'
+        option target '1.1.1.1'
+        option gateway '1.1.1.1'
+        option interface 'lan'
+```
+
+可以使用
+
+```bash
+uci set network.custom_static_route=route
+uci set network.custom_static_route.target=1.1.1.1
+uci set network.custom_static_route.gateway=1.1.1.1
+uci set network.custom_static_route.interface=lan
+
+uci commit
+```
+
+所有`uci set`和`uci add`只会暂存更改，使用`uci commit`后才会正式提交到UCI文件中。特别注意，当创建section和创建option时参数的含义不同：
+
+- 创建section时，等号前为section的自定义名称，等号后为section的类型
+- 创建option时，等号前是option的属性名，等号后为值
+
+> 通过LuCI页面创建的section往往无命名，在UCI文件里会形如：
+> 
+> ```bash
+> config route
+>         option target '1.1.1.1'
+>         option gateway '1.1.1.1'
+>         option interface 'lan'
+> 
+> config route
+>         option target '2.2.2.2'
+>         option gateway '2.2.2.2'
+>         option interface 'lan'
+> ```
+> 
+> 这个时候得用list方式分别访问这两个section，`uci show network`得到的相关部分内容会是：
+> 
+> ```
+> network.@route[0]=route
+> network.@route[0].target='1.1.1.1'
+> network.@route[0].gateway='1.1.1.1'
+> network.@route[0].interface='lan'
+> network.@route[1]=route
+> network.@route[1].target='2.2.2.2'
+> network.@route[1].gateway='2.2.2.2'
+> network.@route[1].interface='lan'
+> ```
+>
+> 这里的`@foo[i]`是访问list形式的section或者option的方法。 
+
+## LuCI
+
+UCI（Unified Configuration Interface）是OpenWrt中所有系统的统一配置接口，LuCI（Lua Configuration Interface）是使用LuCI开发的供用户使用的一套配置界面
+
+
+### Helloworld[^luci_module_helloworld]
+
+[^luci_module_helloworld]: https://blog.csdn.net/qq_28812525/article/details/103870169
+
+#### 关于开发环境
+
+根据官方文档[^modules_how_to]，LuCI的开发方式主要有两种:
+
+[^modules_how_to]: https://github.com/openwrt/luci/wiki/ModulesHowTo
+
+1. 部署环境开发
+2. 开发环境开发
+
+前者即直接在烧写好了OpenWrt的板上进行代码编写，写完刷新一下即可在网页看到效果。
+
+> 凡是修改`controller/`文件夹中的配置，都需要重启板子或把`/tmp/`目录下`luci-indexcache`、`luci-modulecache/luci-sessions/`删除才能生效，其他几个文件夹修改可不用，刷新一下网页即可。
+
+后者是在LuCI的git仓库中进行代码编写，写完需要编译固件并烧写到板上才能看到效果。
+
+两种开发方法大同小异，各有优劣。本文推荐的方法是先在本地按项目结构开发，需要预览的时候通过SCP直接拷入板内即可。直接板上开发过于麻烦。
+
+#### 创建目录结构
+
+在`luci`目录的`application`文件夹下新建如下结构：
+
+- luci-app-myapplication
+    - luasrc
+        - controller
+            - myapp
+                - new_tab.lua
+        - model
+            - cbi
+                - myapp-mymodule
+                    - gateway_sn.lua
+        - view
+            - myapp-mymodule
+                - helloworld.htm
+
+特别注意要确保行尾符是LF，如果是在windows下开发，推荐用vscode选择行尾符为LF。
+
+`new_tab.lua`的内容为：
+
+```lua
+module("luci.controller.myapp.new_tab", package.seeall)
+
+function index()
+    entry({"admin", "new_tab"}, firstchild(), translate("cfg"), 1).dependent=false)
+    entry({"admin", "new_tab", "sn"}, cbi("myapp-mymodule/gateway_sn"), translate("sn"), 2)
+    entry({"admin", "new_tab", "hellworld"}, template("myapp-mymodule/helloworld"), _("HelloWorld"), 3)
+end
+```
+
+`gateway_sn.lua`的内容为：
+
+```lua
+m = Map("sn_file", translate("产品序列号")) -- cbi_file is the config file in /etc/config
+d = m:section(TypedSection, "gateway_sn")  -- info is the section called info in cbi_file
+a = d:option(Value, "sn", translate("序列号"));
+a.optional=false; 
+a.rmempty = false;  -- name is the option in the cbi_file
+return m
+```
+
+`helloworld.htm`的内容为：
+
+```html
+<%+header%>
+<h1><%: HelloWorld %></h1>
+<%+footer%>
+```
+
+整个目录内的内容拷贝到板上`/usr/lib/lua/luci`，`reboot`后重新进入LuCI即可看到效果。
+
+### dispatching tree
+
+LuCI使用dispatching tree加载每个controller中的`index()`函数。LuCI页面整个呈一个树形结构，使用`luci.dispatcher`中`entry()`来进行注册：
+
+```lua
+entry(path, target, title=nil, order=nil)
+```
+
+- path: path描述了dispatching tree中自身的位置，比如网页中的`/cgi-bin/luci/foo/bar/baz`在register时写`foo.bar.baz`。
+
+- target: 有三类，`call`、`template`和`cbi`：
+
+```
+config route
+        option target '127.0.0.1'
+        option gateway '127.0.0.1'
+        option interface 'lan'
+```
+
+
+### 结构
+
+#### 仓库目录结构
 
 目录名 | 作用
 :-: | :-:
@@ -178,7 +383,7 @@ po | 语言文件
 
 `modules`下的`luci-base`和`luci-mod-admin-full`包含了网页的基本功能。
 
-### module目录结构
+#### module目录结构
 
 文件/目录名 | 子目录名 | 作用
 :-: | :-: | :-:
@@ -194,7 +399,7 @@ root | / | 存放配置文件，该目录下的所有文件将拷贝到硬件设
 src | / | 生成所需要的库文件及LUA脚本
 Makefile | / | 定义模块的编译方法
 
-### 板上目录结构
+#### 板上目录结构
 
 1. `/www`下
 
@@ -208,27 +413,8 @@ luci-static | 存放HTML相关文件，包含CSS、JS及网页图片等文件。
 
 顾名思义，存放了与LUA相关的文件，在LUA脚本中，通过require命令引用的脚本及函数，起始路径都是该目录。同时，不同模型及主题的luasrc文件夹都拷贝到/usr/lib/lua/luci目录下，通过/etc/config/luci中的mediaurlbase字段决定当前使用的主题及语言。
 
-## 配置开发环境
 
-根据官方文档[^modules_how_to]，LuCI的开发方式主要有两种:
-
-[^modules_how_to]: https://github.com/openwrt/luci/wiki/ModulesHowTo
-
-1. 部署环境开发
-2. 开发环境开发
-
-前者即直接在烧写好了OpenWrt的板上进行代码编写，写完刷新一下即可在网页看到效果。
-
-> 凡是修改`controller/`文件夹中的配置，都需要重启板子或把`/tmp/`目录下`luci-indexcache`、`luci-modulecache/luci-sessions/`删除才能生效，其他几个文件夹修改可不用，刷新一下网页即可。
-
-后者是在LuCI的git仓库中进行代码编写，写完需要编译固件并烧写到板上才能看到效果。
-
-> 也就是说，LuCI的开发缺少一个“脚手架”？
-
-两种开发方法大同小异，各有优劣。
-
-
-# 搭建VMware运行的x86 OpenWrt
+## 搭建VMware运行的x86 OpenWrt
 
 ### 编译固件
 
