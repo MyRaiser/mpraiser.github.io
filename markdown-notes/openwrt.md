@@ -4,13 +4,7 @@
 
 [TOC]
 
-## Helloworld[^helloworld]
-
-## 增加启动脚本
-
-在`./target/linux/<arch_name>/base-files/`下的文件会包含在生成的固件中的对应位置。
-
-需要`chmod 777`
+## 固件编译Helloworld[^helloworld]
 
 ### 构建编译环境
 
@@ -139,7 +133,81 @@ WARNING: Makefile 'package/feeds/packages/ksmbd/Makefile' has a dependency on 'k
 但是实际不影响编译和使用，原因未知。
 
 
+## 写一个init.d脚本
 
+### sysv风格[^sysv_style][^openwrt_wiki_sysv_style]
+
+[^sysv_style]: https://www.cnblogs.com/milton/p/6345621.html
+[^openwrt_wiki_sysv_style]: https://openwrt.org/docs/techref/initscripts
+
+在`/etc/init.d/`下的脚本在系统启动时会被调用，脚本的格式如下
+
+假设文件为`/etc/init.d/example`，内容是：
+
+```bash
+#!/bin/sh /etc/rc.common
+# Example script
+ 
+START=10
+STOP=15
+ 
+start() {        
+        echo start
+        # commands to launch application
+}                 
+ 
+stop() {          
+        echo stop
+        # commands to kill application 
+}
+```
+
+第一行指明使用`/bin/sh /etc/rc.common`作为脚本解释器并在执行脚本前调用`main`和检查脚本。
+
+> `#!`称作“Shebang”，用于指明执行这个脚本文件的解释器：
+> 1. 如果脚本文件中没有#!这一行，那么执行时会默认采用当前Shell去解释这个脚本(即：$SHELL环境变量）。
+> 2. 如果`#!`之后的解释程序是一个可执行文件，那么执行这个脚本时，它就会把文件名及其参数一起作为参数传给那个解释程序去执行。
+> 3. 如果`#!`指定的解释程序没有可执行权限，则会报错`bad interpreter: Permission denied`。如果`#!`指定的解释程序不是一个可执行文件，那么指定的解释程序会被忽略，转而交给当前的SHELL去执行这个脚本。
+> 4. 如果`#!`指定的解释程序不存在，那么会报错`bad interpreter: No such file or directory`。注意：`#!`之后的解释程序，需要写其绝对路径（如：`#!/bin/bash`），它是不会自动到`$PATH`中寻找解释器的。
+> 5. 当然，如果你使用类似于`bash test.sh`这样的命令来执行脚本，那么`#!`这一行将会被忽略掉，解释器当然是用命令行中显式指定的bash。
+> 6. 脚本文件必须拥有可执行权限。
+
+`START=10`和`STOP=15`分别指定脚本启动时的次序，分别对应`/etc/rc.d`中软链接的名字，比如这里会对应`/etc/rc.d/S10example`和`/etc/rc.d/K15example`。
+
+`start()`和`stop()`是脚本的方法，公用的 init script 方法有：
+
+```bash
+start   # 启动服务
+stop    # 停止服务
+restart # 重启服务
+reload  # 重新载入配置文件, 如果失败则重启
+enable  # 启用开机自启动, 实际上是在/etc/rc.d/下创建S??和K??开头的软链
+disable  # 禁用开机自启动, 实际上是删除/etc/rc.d/下对应的软链
+```
+
+其中`start()`和`stop()`是必须的，缺少了会导致不工作。
+
+### procd风格[^procd_style][^openwrt_wiki_procd_style]
+
+[^procd_style]: https://www.cnblogs.com/rohens-hbg/p/5386427.html
+[^openwrt_wiki_procd_style]: https://openwrt.org/docs/guide-developer/procd-init-scripts
+
+Procd：Openwrt的进程管理守护进程（process management daemon）,它与初始化脚本（/etc/init.d/*）保持联系，当进程相关联的配置文件更改时，会触发procd去重启或启动脚本。Procd代替了原本的Hotplug2。
+
+主要区别是：
+
+1. shebang不同：
+
+    ```bash
+    #!/bin/sh /etc/rc.common
+    ```
+
+2. 需要指明`USE_PROCD=1`：
+
+    ```bash
+    USE_PROCD=1
+    ```
+3. 主要包含`start_service()`和`stop_service()`函数
 
 
 ## OpenWrt目录结构
@@ -160,6 +228,12 @@ build_dir | 软件包都解压到build_dir/里，然后在此编译
 staging_dir | 最终安装目录。tools, toolchain被安装到这里，rootfs也会放到这里。
 feeds |
 bin | 编译完成之后，firmware和各ipk会放到此目录下。
+
+### 在编译时包含脚本
+
+在`./target/linux/<arch_name>/base-files/`下的文件会包含在生成的固件中的对应位置，只要将写好的脚本置于此处，在编译后生成的固件就能自动调用启动脚本。
+
+> 可能需要`chmod 777`
 
 ## UCI
 
@@ -270,12 +344,7 @@ uci commit
 
 UCI（Unified Configuration Interface）是OpenWrt中所有系统的统一配置接口，LuCI（Lua Configuration Interface）是使用LuCI开发的供用户使用的一套配置界面
 
-
-### Helloworld[^luci_module_helloworld]
-
-[^luci_module_helloworld]: https://blog.csdn.net/qq_28812525/article/details/103870169
-
-#### 关于开发环境
+### 关于开发环境
 
 根据官方文档[^modules_how_to]，LuCI的开发方式主要有两种:
 
@@ -291,6 +360,10 @@ UCI（Unified Configuration Interface）是OpenWrt中所有系统的统一配置
 后者是在LuCI的git仓库中进行代码编写，写完需要编译固件并烧写到板上才能看到效果。
 
 两种开发方法大同小异，各有优劣。本文推荐的方法是先在本地按项目结构开发，需要预览的时候通过SCP直接拷入板内即可。直接板上开发过于麻烦。
+
+### LuCI app开发Helloworld[^luci_module_helloworld]
+
+[^luci_module_helloworld]: https://blog.csdn.net/qq_28812525/article/details/103870169
 
 #### 创建目录结构
 
@@ -355,13 +428,6 @@ entry(path, target, title=nil, order=nil)
 - path: path描述了dispatching tree中自身的位置，比如网页中的`/cgi-bin/luci/foo/bar/baz`在register时写`foo.bar.baz`。
 
 - target: 有三类，`call`、`template`和`cbi`：
-
-```
-config route
-        option target '127.0.0.1'
-        option gateway '127.0.0.1'
-        option interface 'lan'
-```
 
 
 ### 结构
