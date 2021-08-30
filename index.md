@@ -10,6 +10,7 @@
 ## Dev
 [Python入坑指北](markdown-notes/brief_introduction_to_the_way_of_python.html)
 [OpenWrt开发笔记](markdown-notes/openwrt.html)
+[面经八股](markdown-notes/eight-part-essays.html)
 
 ## 不务正业
 [WSL](markdown-notes/WSL.html)
