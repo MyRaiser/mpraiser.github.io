@@ -1,20 +1,20 @@
 # Helloworld!
 ## 学习笔记
-[傅里叶变换及其相关](markdown-notes/Fourier.html)
-[STM32](markdown-notes/STM32-learning-notes.html)
-[模式识别](markdown-notes/Pattern-Recognition.html)
-[图像分析复习](markdown-notes/DIA-review.html)
-[CUDA](markdown-notes/CUDA.html)
-[数字信号处理](markdown-notes/Digital-Signal-Processing.html)
+[傅里叶变换及其相关](markdown/Fourier.html)
+[STM32](markdown/stm32_learning_notes.html)
+[模式识别](markdown/pattern_recognition.html)
+[数字图像分析](markdown/digital_image_analysis.html)
+[CUDA](markdown/cuda.html)
+[数字信号处理](markdown/digital_signal_processing.html)
 
 ## Dev
-[Python入坑指北](markdown-notes/brief_introduction_to_the_way_of_python.html)
-[OpenWrt开发笔记](markdown-notes/openwrt.html)
-[面经八股](markdown-notes/eight-part-essays.html)
+[Python入坑指北](markdown/brief_introduction_to_the_way_of_python.html)
+[OpenWrt开发笔记](markdown/openwrt.html)
+[面经八股](markdown/eight_part_essays.html)
 
 ## 不务正业
-[WSL](markdown-notes/WSL.html)
-[Linux基本操作](markdown-notes/Linux.html)
+[WSL](markdown/WSL.html)
+[Linux基本操作](markdown/Linux.html)
 
 ---
 

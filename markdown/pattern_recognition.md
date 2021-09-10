@@ -1,5 +1,5 @@
 # 模式识别
-![模式识别与机器学习](Pattern-Recognition/PR&ML.png)
+![模式识别与机器学习](pattern_recognition/PR&ML.png)
 
 [TOC]
   
@@ -135,7 +135,7 @@ $$f(\boldsymbol{x}_i)=\frac{1}{1+e^{-\boldsymbol{w}^T \boldsymbol{x}_i+b}}$$
 [^sigmoid]:Sigmoid即S形函数。
 [^对数几率回归]:译名来自周志华《机器学习》。图也是。
 
-![单位阶跃函数和Logistic函数](Pattern-Recognition/logistic&sgn.png)
+![单位阶跃函数和Logistic函数](pattern_recognition/logistic&sgn.png)
 
 Logistic Regression说是回归（Regression），实际上用作分类（Classification）。
 
@@ -168,7 +168,7 @@ $$\displaystyle{
   {softmax}_i(x_i) = \dfrac{e^{z_i}}{ \displaystyle{\sum_{j=1}^{m}e^{z_j}} }
 }$$
 
-![softmax](Pattern-Recognition/softmax.png)
+![softmax](pattern_recognition/softmax.png)
 
 映射到$[0,1]$上
 顾名思义softmax是一种“软”求最大值

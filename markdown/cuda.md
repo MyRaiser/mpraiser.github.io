@@ -1,14 +1,17 @@
 # CUDA
+
 > CUDA（Compute Unified Device Architecture），是显卡厂商NVIDIA推出的运算平台。 CUDA™是一种由NVIDIA推出的通用并行计算架构，该架构使GPU能够解决复杂的计算问题。 它包含了CUDA指令集架构（ISA）以及GPU内部的并行计算引擎。 开发人员现在可以使用C语言来为CUDA™架构编写程序，C语言是应用最广泛的一种高级编程语言。所编写出的程序可以在支持CUDA™的处理器上以超高性能运行。
 
 [toc]
 
 ## CUDA执行的典型流程
+
 在讨论之前，我们先对所用术语进行一些定义。在CUDA中，CPU为Host，GPU为Device，一个Kernal函数为一个由CPU调用，在GPU进行执行的函数。如图：
 
-![](CUDA/cuda-definition.png)
+![](cuda/cuda-definition.png)
 
-CUDA所做的事情就是CPU将数据交给GPU执行并行计算。不失一般性的，可以将CUDA的流程描述为：
+cuda所做的事情就是CPU将数据交给GPU执行并行计算。不失一般性的，可以将CUDA的流程描述为：
+
 1. 将数据从Host加载到Device，包括：
     ```c
     //在GPU上创建变量的储存空间
@@ -26,7 +29,9 @@ CUDA所做的事情就是CPU将数据交给GPU执行并行计算。不失一般�
     ```
 
 ## CUDA的架构
+
 ### 简说GPU并行计算与CPU串行计算
+
 CUDA执行Kernal的最基本单元是Thread，在CPU调用Kernal时，GPU每个thread**同时、并行**执行**同一个**Kernal（exactly same kernal）。因此，在函数内部通常通过线程ID的不同，来实现对不同数据的访问，而不是传入不同数据。在调用时，传入的是数组的指针。
 
 CUDA内部提供的获取线程ID的方法为`threadIdx`，简单起见只考虑一维情况下，对一向量进行翻倍的操作，其Kernal为：
@@ -52,7 +57,8 @@ void double_vector(float *x){
 这体现了在面对大批量、无耦合数据的计算时通过CUDA进行并行计算的优越性。但是话虽这么说，在计算量不足够大的情况下往往会发现通过CUDA优化的并行程序计算时间并不比CPU执行的更快，差不多，甚至更慢，这是因为数据在CPU和GPU之间传输需要的时间较长导致的，即`cudaMemcpy()`较慢。因此，在CUDA编程中要尽量减少Host和Device之间的数据交互，以一批上传，一批计算，再一批取回为好。
 
 ### CUDA的线程架构
-![](CUDA/thread-architechture.png)
+
+![](cuda/thread-architechture.png)
 CUDA中，Kernal执行的基本单元（理论）是**thread**。thread的集合为**block**。block可以为一维、二维或者三维（如果不需要多维，令其他维度为1即可），即一个block中有线程ID`(x,y,z)`，获取block中线程ID的方法为：
 
 ```c
@@ -79,7 +85,8 @@ y = blockIdy.y;
 在同一个block里的thread具有共享的shared memory，其访问速度较快。反过来说，分布在不同block进行执行的thread的问题是不能共用一shared memory，这是由硬件架构限制的。
 
 ### CUDA的内存
-![](CUDA/memory-architechture.png)
+
+![](cuda/memory-architechture.png)
 
 在选用储存类型上，主要考虑点差异点有：
 - 每个grid（若干个block）共用自己的global memory

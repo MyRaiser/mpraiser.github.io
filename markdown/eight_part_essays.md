@@ -8,7 +8,7 @@
 
 #### 线程的状态模型
 
-![](eight-part-essays/thread_states.png)
+![](eight_part_essays/thread_states.png)
 
 #### 线程与进程
 
@@ -61,7 +61,7 @@
 
 ##### 三次握手
 
-![](eight-part-essays/tcp_connect.png)
+![](eight_part_essays/tcp_connect.png)
 
 建立端对端**可靠**通信所需的最低通信次数是三次。双方均需要确知对方能够正确接收自身发送的数据，需要：
 
@@ -74,7 +74,7 @@
 
 ##### 四次挥手
 
-![](eight-part-essays/tcp_disconnect.png)
+![](eight_part_essays/tcp_disconnect.png)
 
 客户端主动发送FIN关闭连接，停止发送报文，服务器端需要发送完剩余的报文。
 

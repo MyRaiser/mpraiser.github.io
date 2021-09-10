@@ -60,7 +60,7 @@ $$D(p,q)=\left( |x-s|^p + |y-t|^p \right)^{\frac{1}{p}}$$
     $$N_8(p)=\{r|D_8(p,r)=1\}$$
 3. **对角邻域：**$N_D(p)$
 
-![像素的邻域](Image-Processing/neighbourhood.png)
+![像素的邻域](digital_image_analysis/neighbourhood.png)
 
 ### 连接
 连接（connectivity）：
@@ -100,9 +100,9 @@ m-连接可以消除8-连接产生的歧义性。
 ### 颜色迁移
 
 ## 边缘检测
-![](Image-Processing/edge-model.png)
+![](digital_image_analysis/edge-model.png)
 ### 正交梯度算子
-![](Image-Processing/gradient-operator.png)
+![](digital_image_analysis/gradient-operator.png)
 ### 方向微分算子
 
 ### 二阶导数算子

@@ -381,7 +381,7 @@ $$\begin{aligned}
 ### 自适应滤波器基本原理
 自适应滤波是维纳滤波器的发展/推广，可以在工作中逐渐估计所需的统计特性。
 
-![](Digital-Signal-Processing/adaptive-filter.png)
+![](digital_signal_processing/adaptive-filter.png)
 
 $d(n)$称为参考信号，是自适应滤波器的输入之一，有：
 

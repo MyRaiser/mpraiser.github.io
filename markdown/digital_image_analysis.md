@@ -1,4 +1,4 @@
-# 数字图像分析复习
+# 数字图像分析
 
 [TOC]
 
@@ -65,7 +65,7 @@ $$D(p,q)=\left( |x-s|^p + |y-t|^p \right)^{\frac{1}{p}}$$
     $$N_8(p)=\{r|D_8(p,r)=1\}$$
 3. **对角邻域：**$N_D(p)$
 
-![像素的邻域](Image-Processing/neighbourhood.png)
+![像素的邻域](digital_image_analysis/neighbourhood.png)
 
 #### 连接
 连接（connectivity）：
@@ -131,7 +131,7 @@ m-连接可以消除8-连接产生的歧义性。
 
 如果不承认这一点，可以产生以下的矛盾，即连通悖论：
 
-![](Image-Processing/connection-paradox.png)
+![](digital_image_analysis/connection-paradox.png)
 
 图(a)为区域$R$
 图(b)内部8-连通，边界4-连通
@@ -146,11 +146,11 @@ m-连接可以消除8-连接产生的歧义性。
 
 阐述悖论的最简图形：
 
-![](Image-Processing/connection-paradox-simplest-example.png)
+![](digital_image_analysis/connection-paradox-simplest-example.png)
 
 最简局部分析（个人想法）：
 
-![](Image-Processing/connection-paradox-simplest-analysis.png)
+![](digital_image_analysis/connection-paradox-simplest-analysis.png)
 
 其中实心点属于区域$R$，空心点不属于区域$R$。关键在于：
 
@@ -451,10 +451,10 @@ $$DT^{(t)}(p) = \min_{k,j}\{DT^{(t-1)}(q) + M(q-p)\}$$
 #### 并行实现
 
 ## 4 边缘检测
-![](Image-Processing/edge-model.png)
+![](digital_image_analysis/edge-model.png)
 
 ### 正交梯度算子
-![](Image-Processing/gradient-operator.png)
+![](digital_image_analysis/gradient-operator.png)
 
 ### 方向微分算子
 
@@ -1177,7 +1177,7 @@ $$C = \frac{\mu_R}{\sigma_R}$$
 
 ### 拓扑描述符
 
-![](Image-Processing/topology-description.png)
+![](digital_image_analysis/topology-description.png)
 
 1. 0：孤立点
 2. 1：边界点或内部点
@@ -1195,7 +1195,7 @@ $$D_{chamfer}(T,I) = \frac{1}{|T|}\sum_{t\in T}d_I(t)$$
 
 ### Shape Context: local matching
 
-![](Image-Processing/shape-context.png)
+![](digital_image_analysis/shape-context.png)
 
 ## 11 纹理分析
 ### 纹理描述的统计方法
@@ -1217,7 +1217,7 @@ $$
 
 所以LBP码为252。
 
-![](Image-Processing/LBP.png)
+![](digital_image_analysis/LBP.png)
 
 #### 自相关函数
 - 粗糙纹理  函数缓慢下降
@@ -1234,7 +1234,7 @@ $S$为区域$R$中具有特定空间联系（可由位置算子确定）的像�
 
 $$p(g_1,g_2) = \frac{\#\{[(x_1,y_1),(x_2,y_2)]\in S|f(x_1,y_1)=g_1\& f(x_2,y_2)=g_2\}}{\# S}$$
 
-![](Image-Processing/GLCM.png)
+![](digital_image_analysis/GLCM.png)
 
 ### 分形计算方法 
 #### 盒计数方法
@@ -1248,7 +1248,7 @@ $$N(r) \sim r^{-d}$$
 
 有$d = -\dfrac{\log N}{\log r} = \dfrac{\log N}{\log(1/r)} $
 
-![](Image-Processing/fractal.png)
+![](digital_image_analysis/fractal.png)
 
 ## 12 二值形态学
 定义$A$为图像集合，$B$为结构元素。
@@ -1314,7 +1314,7 @@ $$X_k = (X_{k-1} \oplus B)\cap A^c$$
 ### 相机运动建模
 平移旋转
 
-![](Image-Processing/camera-motion.png)
+![](digital_image_analysis/camera-motion.png)
 
 - 跟(track)
 - 吊(boom)
@@ -1361,7 +1361,7 @@ $$\|\nabla\psi\|v_n + \frac{\partial\psi}{\partial t} = 0$$
 
 ### 运动表达方法（4种）
 
-![](Image-Processing/motion-expression.png)
+![](digital_image_analysis/motion-expression.png)
 
 ### 运动估计准则
 - 基于位移帧差准则 (DFD criterion)
@@ -1376,10 +1376,10 @@ $$\|\nabla\psi\|v_n + \frac{\partial\psi}{\partial t} = 0$$
 > MV即运动向量？
 
 #### 穷举块匹配算法(EBMA)
-![](Image-Processing/EBMA.png)
+![](digital_image_analysis/EBMA.png)
 
 #### 层级块匹配算法(HBMA)
-![](Image-Processing/HBMA.png)
+![](digital_image_analysis/HBMA.png)
 
 ### 相位相关法
 $$\psi_1(X) = \psi_2(X+d)$$
