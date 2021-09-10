@@ -135,10 +135,10 @@ WARNING: Makefile 'package/feeds/packages/ksmbd/Makefile' has a dependency on 'k
 
 ## 写一个init.d脚本
 
-### sysv风格[^sysv_style][^openwrt_wiki_sysv_style]
+### sysv风格[^sysv_style][^openwrt_doc_initscripts]
 
 [^sysv_style]: https://www.cnblogs.com/milton/p/6345621.html
-[^openwrt_wiki_sysv_style]: https://openwrt.org/docs/techref/initscripts
+[^openwrt_doc_initscripts]: https://openwrt.org/docs/techref/initscripts
 
 在`/etc/init.d/`下的脚本在系统启动时会被调用，脚本的格式如下
 
@@ -209,6 +209,12 @@ Procd：Openwrt的进程管理守护进程（process management daemon）,它与
     ```
 3. 主要包含`start_service()`和`stop_service()`函数
 
+### 在编译时包含脚本
+
+在`./target/linux/<arch_name>/base-files/`下的文件会包含在生成的固件中的对应位置，只要将写好的脚本置于此处，OpenWrt会在构建中（使用`enable()`及`disable()`）使其生效[^openwrt_doc_initscripts]，在编译后生成的固件就能自动调用启动脚本。
+
+> 可能需要`chmod 777`
+
 
 ## OpenWrt目录结构
 ![](openwrt/dir_structure.png)
@@ -229,11 +235,7 @@ staging_dir | 最终安装目录。tools, toolchain被安装到这里，rootfs�
 feeds |
 bin | 编译完成之后，firmware和各ipk会放到此目录下。
 
-### 在编译时包含脚本
 
-在`./target/linux/<arch_name>/base-files/`下的文件会包含在生成的固件中的对应位置，只要将写好的脚本置于此处，在编译后生成的固件就能自动调用启动脚本。
-
-> 可能需要`chmod 777`
 
 ## UCI
 
