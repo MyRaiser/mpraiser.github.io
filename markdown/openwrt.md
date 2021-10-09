@@ -587,4 +587,194 @@ make
     ping 192.168.233.10
     ```
 
-         
+## 使用docker在高版本Ubuntu下编译旧版本OpenWrt
+
+由于高版本的gnulib与低版本不兼容的问题，在高版本Ubuntu下编译一个依赖低版本gnulib的OpenWrt版本可能会遇到`freadahead.c`，`fseterr.c`相关的报错问题，比如：
+
+```bash
+freadahead.c:91:3: error: #error "Please port gnulib freadahead.c to your platform! Look at the definition of fflush, fread, ungetc on your system, then report this to bug-gnulib."
+```
+
+解决方法是降低本系统内gnuilb版本，或者手动修改受影响的源代码，或者直接换一个旧版本Ubuntu。百度的方法绝大多数都如这种：
+
+```bash
+cd /opt/p2/openwrt/build_dir/host/m4-1.4.17/
+sed -i 's/IO_ftrylockfile/IO_EOF_SEEN/' lib/*.c
+echo "#define _IO_IN_BACKUP 0x100" >> lib/stdio-impl.h
+```
+
+是直接修改了受影响的代码。但是这些都很麻烦，受影响的地方多且琐碎，如果我们仍想用高版本的Ubuntu如20.04，可以使用docker来进行编译，使用一个Ubuntu 16.04的docker镜像就可以了。
+
+### 安装docker
+
+Docker本身是跨平台的，在Windows或者Mac OS上运行docker需要安装[Docker Desktop](https://docs.docker.com/desktop/)，大体上Docker Desktop运行了一个Linux虚拟机，在虚拟机中再运行docker。本文是在Ubuntu 20.04下安装[Docker Engine](https://docs.docker.com/engine/)的流程[^docker_install_ubuntu]。
+
+[^docker_install_ubuntu]: https://docs.docker.com/engine/install/ubuntu/
+
+首先移除系统中可能存在的旧版本docker：
+
+```bash
+sudo apt-get remove docker docker-engine docker.io containerd runc
+```
+
+添加docker源，先安装让apt可以用HTTPS源的依赖：
+
+```bash
+sudo apt-get update
+sudo apt-get install \
+apt-transport-https \
+ca-certificates \
+curl \
+gnupg \
+lsb-release
+```
+
+添加docker官方的GPG key：
+
+```bash
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+````
+
+设置稳定版的源：
+
+```bash
+echo \
+"deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+```
+
+安装Docker Engine：
+
+```bash
+sudo apt-get update
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+如果安装没有问题，可以用`docker run hello-world`进行验证，会自动从Docker Hub上拉取hello-world镜像并且运行。
+
+### 配置镜像和其中的编译环境
+
+拉取一个Ubuntu 16.04的镜像：
+
+```bash
+sudo docker pull ubuntu:16.04
+```
+
+以交互式方式运行容器：
+
+```bash
+sudo docker run -ti ubuntu:16.04
+```
+
+由于国内网络问题，可以给`apt`换源，首先安装vim：
+
+```bash
+apt update
+apt install vim
+```
+
+备份和修改sources.list：
+
+```bash
+cd /etc/apt
+cp sources.list sources.list.bak
+rm sources.list
+vim sources.list
+```
+
+sources.list中的内容写为如下，这里使用的是阿里云的源：
+
+```bash
+deb http://mirrors.aliyun.com/ubuntu/ xenial main
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial main
+
+deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+
+deb http://mirrors.aliyun.com/ubuntu/ xenial universe
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial universe
+deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+
+deb http://mirrors.aliyun.com/ubuntu/ xenial-security main
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main
+deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+```
+
+安装OpenWrt的依赖：
+
+```bash
+apt update
+apt install subversion g++ zlib1g-dev build-essential git python rsync man-db
+apt install libncurses5-dev gawk gettext unzip file libssl-dev wget zip time
+```
+
+<!-- 特别注意还要安装一下bzip2，这个在官方镜像里没有附带但是编译需要：
+
+```bash
+apt install bzip2
+``` -->
+
+缩减体积，然后退出：
+
+```bash
+apt clean
+exit
+```
+
+接下来将刚才所做的修改保存为新的镜像，首先查看运行的容器
+
+```bash
+sudo docker ps -l
+```
+
+内容大致如：
+
+```bash
+CONTAINER ID   IMAGE          COMMAND       CREATED          STATUS                      PORTS     NAMES
+2116d340b12f   ubuntu:16.04   "/bin/bash"   11 minutes ago   Exited (0) 40 seconds ago             wizardly_elbakyan
+```
+
+将对应的CONTAINER ID保存为镜像：
+
+```bash
+sudo docker commit 2116d340b12f ubuntu-16.04-openwrt
+```
+
+使用以下命令可以查看已有的镜像：
+
+```bash
+sudo docket images
+```
+
+### 在容器中编译OpenWrt
+
+运行容器，并使用`-v`将本机上的OpenWrt目录（`/home/openwrt`）挂载到容器中（`/openwrt`）：
+
+```bash
+sudo docker run -ti -v /home/openwrt:/openwrt ubuntu-16.04-openwrt
+```
+
+切换到目录下并编译：
+
+```bash
+cd /openwrt
+make
+```
+
+因为容器中默认是以root用户进行操作的，有可能会遇到OpenWrt不允许root编译的报错：
+
+```bash
+you should not run configure as root (set FORCE_UNSAFE_CONFIGURE=1 in environment to bypass this
+```
+
+按照提示配置一下环境变量即可：
+
+```bash
+export FORCE_UNSAFE_CONFIGURE=1
+```
+
+
+
+

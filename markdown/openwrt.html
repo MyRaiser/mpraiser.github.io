@@ -324,6 +324,13 @@ pre[data-line] .line-highlight[data-end]:after {
 <li><a href="#%E8%AE%BE%E7%BD%AE%E8%99%9A%E6%8B%9F%E6%9C%BA">&#x8BBE;&#x7F6E;&#x865A;&#x62DF;&#x673A;</a></li>
 </ul>
 </li>
+<li><a href="#%E4%BD%BF%E7%94%A8docker%E5%9C%A8%E9%AB%98%E7%89%88%E6%9C%ACubuntu%E4%B8%8B%E7%BC%96%E8%AF%91%E6%97%A7%E7%89%88%E6%9C%ACopenwrt">&#x4F7F;&#x7528;docker&#x5728;&#x9AD8;&#x7248;&#x672C;Ubuntu&#x4E0B;&#x7F16;&#x8BD1;&#x65E7;&#x7248;&#x672C;OpenWrt</a>
+<ul>
+<li><a href="#%E5%AE%89%E8%A3%85docker">&#x5B89;&#x88C5;docker</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E9%95%9C%E5%83%8F%E5%92%8C%E5%85%B6%E4%B8%AD%E7%9A%84%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83">&#x914D;&#x7F6E;&#x955C;&#x50CF;&#x548C;&#x5176;&#x4E2D;&#x7684;&#x7F16;&#x8BD1;&#x73AF;&#x5883;</a></li>
+<li><a href="#%E5%9C%A8%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%BC%96%E8%AF%91openwrt">&#x5728;&#x5BB9;&#x5668;&#x4E2D;&#x7F16;&#x8BD1;OpenWrt</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -955,7 +962,96 @@ config interface <span class="token string">&apos;wan&apos;</span>
 <pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">ping</span> <span class="token number">192.168</span>.233.10
 </pre></li>
 </ol>
-<hr class="footnotes-sep">
+<h2 class="mume-header" id="%E4%BD%BF%E7%94%A8docker%E5%9C%A8%E9%AB%98%E7%89%88%E6%9C%ACubuntu%E4%B8%8B%E7%BC%96%E8%AF%91%E6%97%A7%E7%89%88%E6%9C%ACopenwrt">&#x4F7F;&#x7528;docker&#x5728;&#x9AD8;&#x7248;&#x672C;Ubuntu&#x4E0B;&#x7F16;&#x8BD1;&#x65E7;&#x7248;&#x672C;OpenWrt</h2>
+
+<p>&#x7531;&#x4E8E;&#x9AD8;&#x7248;&#x672C;&#x7684;gnulib&#x4E0E;&#x4F4E;&#x7248;&#x672C;&#x4E0D;&#x517C;&#x5BB9;&#x7684;&#x95EE;&#x9898;&#xFF0C;&#x5728;&#x9AD8;&#x7248;&#x672C;Ubuntu&#x4E0B;&#x7F16;&#x8BD1;&#x4E00;&#x4E2A;&#x4F9D;&#x8D56;&#x4F4E;&#x7248;&#x672C;gnulib&#x7684;OpenWrt&#x7248;&#x672C;&#x53EF;&#x80FD;&#x4F1A;&#x9047;&#x5230;<code>freadahead.c</code>&#xFF0C;<code>fseterr.c</code>&#x76F8;&#x5173;&#x7684;&#x62A5;&#x9519;&#x95EE;&#x9898;&#xFF0C;&#x6BD4;&#x5982;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">freadahead.c:91:3: error: <span class="token comment">#error &quot;Please port gnulib freadahead.c to your platform! Look at the definition of fflush, fread, ungetc on your system, then report this to bug-gnulib.&quot;</span>
+</pre><p>&#x89E3;&#x51B3;&#x65B9;&#x6CD5;&#x662F;&#x964D;&#x4F4E;&#x672C;&#x7CFB;&#x7EDF;&#x5185;gnuilb&#x7248;&#x672C;&#xFF0C;&#x6216;&#x8005;&#x624B;&#x52A8;&#x4FEE;&#x6539;&#x53D7;&#x5F71;&#x54CD;&#x7684;&#x6E90;&#x4EE3;&#x7801;&#xFF0C;&#x6216;&#x8005;&#x76F4;&#x63A5;&#x6362;&#x4E00;&#x4E2A;&#x65E7;&#x7248;&#x672C;Ubuntu&#x3002;&#x767E;&#x5EA6;&#x7684;&#x65B9;&#x6CD5;&#x7EDD;&#x5927;&#x591A;&#x6570;&#x90FD;&#x5982;&#x8FD9;&#x79CD;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token builtin class-name">cd</span> /opt/p2/openwrt/build_dir/host/m4-1.4.17/
+<span class="token function">sed</span> -i <span class="token string">&apos;s/IO_ftrylockfile/IO_EOF_SEEN/&apos;</span> lib/*.c
+<span class="token builtin class-name">echo</span> <span class="token string">&quot;#define _IO_IN_BACKUP 0x100&quot;</span> <span class="token operator">&gt;&gt;</span> lib/stdio-impl.h
+</pre><p>&#x662F;&#x76F4;&#x63A5;&#x4FEE;&#x6539;&#x4E86;&#x53D7;&#x5F71;&#x54CD;&#x7684;&#x4EE3;&#x7801;&#x3002;&#x4F46;&#x662F;&#x8FD9;&#x4E9B;&#x90FD;&#x5F88;&#x9EBB;&#x70E6;&#xFF0C;&#x53D7;&#x5F71;&#x54CD;&#x7684;&#x5730;&#x65B9;&#x591A;&#x4E14;&#x7410;&#x788E;&#xFF0C;&#x5982;&#x679C;&#x6211;&#x4EEC;&#x4ECD;&#x60F3;&#x7528;&#x9AD8;&#x7248;&#x672C;&#x7684;Ubuntu&#x5982;20.04&#xFF0C;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;docker&#x6765;&#x8FDB;&#x884C;&#x7F16;&#x8BD1;&#xFF0C;&#x4F7F;&#x7528;&#x4E00;&#x4E2A;Ubuntu 16.04&#x7684;docker&#x955C;&#x50CF;&#x5C31;&#x53EF;&#x4EE5;&#x4E86;&#x3002;</p>
+<h3 class="mume-header" id="%E5%AE%89%E8%A3%85docker">&#x5B89;&#x88C5;docker</h3>
+
+<p>Docker&#x672C;&#x8EAB;&#x662F;&#x8DE8;&#x5E73;&#x53F0;&#x7684;&#xFF0C;&#x5728;Windows&#x6216;&#x8005;Mac OS&#x4E0A;&#x8FD0;&#x884C;docker&#x9700;&#x8981;&#x5B89;&#x88C5;<a href="https://docs.docker.com/desktop/">Docker Desktop</a>&#xFF0C;&#x5927;&#x4F53;&#x4E0A;Docker Desktop&#x8FD0;&#x884C;&#x4E86;&#x4E00;&#x4E2A;Linux&#x865A;&#x62DF;&#x673A;&#xFF0C;&#x5728;&#x865A;&#x62DF;&#x673A;&#x4E2D;&#x518D;&#x8FD0;&#x884C;docker&#x3002;&#x672C;&#x6587;&#x662F;&#x5728;Ubuntu 20.04&#x4E0B;&#x5B89;&#x88C5;<a href="https://docs.docker.com/engine/">Docker Engine</a>&#x7684;&#x6D41;&#x7A0B;<sup class="footnote-ref"><a href="#fn8" id="fnref8">[8]</a></sup>&#x3002;</p>
+<p>&#x9996;&#x5148;&#x79FB;&#x9664;&#x7CFB;&#x7EDF;&#x4E2D;&#x53EF;&#x80FD;&#x5B58;&#x5728;&#x7684;&#x65E7;&#x7248;&#x672C;docker&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> remove docker docker-engine docker.io containerd runc
+</pre><p>&#x6DFB;&#x52A0;docker&#x6E90;&#xFF0C;&#x5148;&#x5B89;&#x88C5;&#x8BA9;apt&#x53EF;&#x4EE5;&#x7528;HTTPS&#x6E90;&#x7684;&#x4F9D;&#x8D56;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> update
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token punctuation">\</span>
+apt-transport-https <span class="token punctuation">\</span>
+ca-certificates <span class="token punctuation">\</span>
+<span class="token function">curl</span> <span class="token punctuation">\</span>
+gnupg <span class="token punctuation">\</span>
+lsb-release
+</pre><p>&#x6DFB;&#x52A0;docker&#x5B98;&#x65B9;&#x7684;GPG key&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">curl</span> -fsSL https://download.docker.com/linux/ubuntu/gpg <span class="token operator">|</span> <span class="token function">sudo</span> gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+</pre><p>&#x8BBE;&#x7F6E;&#x7A33;&#x5B9A;&#x7248;&#x7684;&#x6E90;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token builtin class-name">echo</span> <span class="token punctuation">\</span>
+<span class="token string">&quot;deb [arch=<span class="token variable"><span class="token variable">$(</span>dpkg --print-architecture<span class="token variable">)</span></span> signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+<span class="token variable"><span class="token variable">$(</span>lsb_release -cs<span class="token variable">)</span></span> stable&quot;</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /etc/apt/sources.list.d/docker.list <span class="token operator">&gt;</span> /dev/null
+</pre><p>&#x5B89;&#x88C5;Docker Engine&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> update
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> docker-ce docker-ce-cli containerd.io
+</pre><p>&#x5982;&#x679C;&#x5B89;&#x88C5;&#x6CA1;&#x6709;&#x95EE;&#x9898;&#xFF0C;&#x53EF;&#x4EE5;&#x7528;<code>docker run hello-world</code>&#x8FDB;&#x884C;&#x9A8C;&#x8BC1;&#xFF0C;&#x4F1A;&#x81EA;&#x52A8;&#x4ECE;Docker Hub&#x4E0A;&#x62C9;&#x53D6;hello-world&#x955C;&#x50CF;&#x5E76;&#x4E14;&#x8FD0;&#x884C;&#x3002;</p>
+<h3 class="mume-header" id="%E9%85%8D%E7%BD%AE%E9%95%9C%E5%83%8F%E5%92%8C%E5%85%B6%E4%B8%AD%E7%9A%84%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83">&#x914D;&#x7F6E;&#x955C;&#x50CF;&#x548C;&#x5176;&#x4E2D;&#x7684;&#x7F16;&#x8BD1;&#x73AF;&#x5883;</h3>
+
+<p>&#x62C9;&#x53D6;&#x4E00;&#x4E2A;Ubuntu 16.04&#x7684;&#x955C;&#x50CF;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">sudo</span> docker pull ubuntu:16.04
+</pre><p>&#x4EE5;&#x4EA4;&#x4E92;&#x5F0F;&#x65B9;&#x5F0F;&#x8FD0;&#x884C;&#x5BB9;&#x5668;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">sudo</span> docker run -ti ubuntu:16.04
+</pre><p>&#x7531;&#x4E8E;&#x56FD;&#x5185;&#x7F51;&#x7EDC;&#x95EE;&#x9898;&#xFF0C;&#x53EF;&#x4EE5;&#x7ED9;<code>apt</code>&#x6362;&#x6E90;&#xFF0C;&#x9996;&#x5148;&#x5B89;&#x88C5;vim&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">apt</span> update
+<span class="token function">apt</span> <span class="token function">install</span> <span class="token function">vim</span>
+</pre><p>&#x5907;&#x4EFD;&#x548C;&#x4FEE;&#x6539;sources.list&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token builtin class-name">cd</span> /etc/apt
+<span class="token function">cp</span> sources.list sources.list.bak
+<span class="token function">rm</span> sources.list
+<span class="token function">vim</span> sources.list
+</pre><p>sources.list&#x4E2D;&#x7684;&#x5185;&#x5BB9;&#x5199;&#x4E3A;&#x5982;&#x4E0B;&#xFF0C;&#x8FD9;&#x91CC;&#x4F7F;&#x7528;&#x7684;&#x662F;&#x963F;&#x91CC;&#x4E91;&#x7684;&#x6E90;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">deb http://mirrors.aliyun.com/ubuntu/ xenial main
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial main
+
+deb http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates main
+
+deb http://mirrors.aliyun.com/ubuntu/ xenial universe
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial universe
+deb http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-updates universe
+
+deb http://mirrors.aliyun.com/ubuntu/ xenial-security main
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security main
+deb http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+deb-src http://mirrors.aliyun.com/ubuntu/ xenial-security universe
+</pre><p>&#x5B89;&#x88C5;OpenWrt&#x7684;&#x4F9D;&#x8D56;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">apt</span> update
+<span class="token function">apt</span> <span class="token function">install</span> subversion g++ zlib1g-dev build-essential <span class="token function">git</span> python <span class="token function">rsync</span> man-db
+<span class="token function">apt</span> <span class="token function">install</span> libncurses5-dev <span class="token function">gawk</span> gettext <span class="token function">unzip</span> <span class="token function">file</span> libssl-dev <span class="token function">wget</span> <span class="token function">zip</span> <span class="token function">time</span>
+</pre><p>&#x7F29;&#x51CF;&#x4F53;&#x79EF;&#xFF0C;&#x7136;&#x540E;&#x9000;&#x51FA;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">apt</span> clean
+<span class="token builtin class-name">exit</span>
+</pre><p>&#x63A5;&#x4E0B;&#x6765;&#x5C06;&#x521A;&#x624D;&#x6240;&#x505A;&#x7684;&#x4FEE;&#x6539;&#x4FDD;&#x5B58;&#x4E3A;&#x65B0;&#x7684;&#x955C;&#x50CF;&#xFF0C;&#x9996;&#x5148;&#x67E5;&#x770B;&#x8FD0;&#x884C;&#x7684;&#x5BB9;&#x5668;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">sudo</span> docker <span class="token function">ps</span> -l
+</pre><p>&#x5185;&#x5BB9;&#x5927;&#x81F4;&#x5982;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">CONTAINER ID   IMAGE          COMMAND       CREATED          STATUS                      PORTS     NAMES
+2116d340b12f   ubuntu:16.04   <span class="token string">&quot;/bin/bash&quot;</span>   <span class="token number">11</span> minutes ago   Exited <span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span> <span class="token number">40</span> seconds ago             wizardly_elbakyan
+</pre><p>&#x5C06;&#x5BF9;&#x5E94;&#x7684;CONTAINER ID&#x4FDD;&#x5B58;&#x4E3A;&#x955C;&#x50CF;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">sudo</span> docker commit 2116d340b12f ubuntu-16.04-openwrt
+</pre><p>&#x4F7F;&#x7528;&#x4EE5;&#x4E0B;&#x547D;&#x4EE4;&#x53EF;&#x4EE5;&#x67E5;&#x770B;&#x5DF2;&#x6709;&#x7684;&#x955C;&#x50CF;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">sudo</span> docket images
+</pre><h3 class="mume-header" id="%E5%9C%A8%E5%AE%B9%E5%99%A8%E4%B8%AD%E7%BC%96%E8%AF%91openwrt">&#x5728;&#x5BB9;&#x5668;&#x4E2D;&#x7F16;&#x8BD1;OpenWrt</h3>
+
+<p>&#x8FD0;&#x884C;&#x5BB9;&#x5668;&#xFF0C;&#x5E76;&#x4F7F;&#x7528;<code>-v</code>&#x5C06;&#x672C;&#x673A;&#x4E0A;&#x7684;OpenWrt&#x76EE;&#x5F55;&#xFF08;<code>/home/openwrt</code>&#xFF09;&#x6302;&#x8F7D;&#x5230;&#x5BB9;&#x5668;&#x4E2D;&#xFF08;<code>/openwrt</code>&#xFF09;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token function">sudo</span> docker run -ti -v /home/openwrt:/openwrt ubuntu-16.04-openwrt
+</pre><p>&#x5207;&#x6362;&#x5230;&#x76EE;&#x5F55;&#x4E0B;&#x5E76;&#x7F16;&#x8BD1;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token builtin class-name">cd</span> /openwrt
+<span class="token function">make</span>
+</pre><p>&#x56E0;&#x4E3A;&#x5BB9;&#x5668;&#x4E2D;&#x9ED8;&#x8BA4;&#x662F;&#x4EE5;root&#x7528;&#x6237;&#x8FDB;&#x884C;&#x64CD;&#x4F5C;&#x7684;&#xFF0C;&#x6709;&#x53EF;&#x80FD;&#x4F1A;&#x9047;&#x5230;OpenWrt&#x4E0D;&#x5141;&#x8BB8;root&#x7F16;&#x8BD1;&#x7684;&#x62A5;&#x9519;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash">you should not run configure as root <span class="token punctuation">(</span>set <span class="token assign-left variable">FORCE_UNSAFE_CONFIGURE</span><span class="token operator">=</span><span class="token number">1</span> <span class="token keyword">in</span> environment to bypass this
+</pre><p>&#x6309;&#x7167;&#x63D0;&#x793A;&#x914D;&#x7F6E;&#x4E00;&#x4E0B;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x5373;&#x53EF;&#xFF1A;</p>
+<pre data-role="codeBlock" data-info="bash" class="language-bash"><span class="token builtin class-name">export</span> <span class="token assign-left variable">FORCE_UNSAFE_CONFIGURE</span><span class="token operator">=</span><span class="token number">1</span>
+</pre><hr class="footnotes-sep">
 <section class="footnotes">
 <ol class="footnotes-list">
 <li id="fn1" class="footnote-item"><p><a href="https://openwrt.org/zh/docs/guide-developer/quickstart-build-images">https://openwrt.org/zh/docs/guide-developer/quickstart-build-images</a> <a href="#fnref1" class="footnote-backref">&#x21A9;&#xFE0E;</a></p>
@@ -971,6 +1067,8 @@ config interface <span class="token string">&apos;wan&apos;</span>
 <li id="fn6" class="footnote-item"><p><a href="https://github.com/openwrt/luci/wiki/ModulesHowTo">https://github.com/openwrt/luci/wiki/ModulesHowTo</a> <a href="#fnref6" class="footnote-backref">&#x21A9;&#xFE0E;</a></p>
 </li>
 <li id="fn7" class="footnote-item"><p><a href="https://blog.csdn.net/qq_28812525/article/details/103870169">https://blog.csdn.net/qq_28812525/article/details/103870169</a> <a href="#fnref7" class="footnote-backref">&#x21A9;&#xFE0E;</a></p>
+</li>
+<li id="fn8" class="footnote-item"><p><a href="https://docs.docker.com/engine/install/ubuntu/">https://docs.docker.com/engine/install/ubuntu/</a> <a href="#fnref8" class="footnote-backref">&#x21A9;&#xFE0E;</a></p>
 </li>
 </ol>
 </section>
